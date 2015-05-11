@@ -156,7 +156,7 @@ private void compute_precision(int k)
 	
 	
 	precision =  (reg_causing_match *100)/total_count;	
-	System.out.println(" Precision for Top "+ k+" = "+precision);
+	System.out.println(" Precision for Top "+ k+" =  "+precision);
 } 
 public static void main(String args[])
   {
