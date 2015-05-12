@@ -343,8 +343,8 @@ public static void main(String args[])
     	itr.initdb();
     	System.out.println( " Please check the number of days: It is 20 currently."); 
         System.out.println( " Steps to Run: \n 1) Run itr.extract_and_insert_ground_truth_info \n 2) Now comment this functin in main \n3) No run itr.extract_other_revids"); 
-    //	itr.extract_and_insert_ground_truth_info();
-    	itr.extract_other_revids();
+    	itr.extract_and_insert_ground_truth_info();
+    	//itr.extract_other_revids();
     	
     	itr.closedb();
     }    
