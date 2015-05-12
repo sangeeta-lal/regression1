@@ -106,7 +106,7 @@ private void extract_and_insert_ground_truth_info()
 	    	  Calendar cal = Calendar.getInstance();
 	    	  cal = Calendar.getInstance(TimeZone.getDefault());
 	          cal.setTime(date);
-	          cal.add(Calendar.DATE, -30);
+	          cal.add(Calendar.DATE, -20);
 	    	  bug_report_30_day_before_T1 = new Timestamp( cal.getTime().getTime());
 	    	  	    	
 	    	  revid_url   =new URL("http://src."+project+".org/viewvc/chrome?revision="+revid+"&view=revision");
