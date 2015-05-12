@@ -33,20 +33,23 @@ import com.google.gdata.data.projecthosting.Label;
 public class identify_training_revids 
 {
 
-    private String url = "jdbc:mysql://localhost:3306/";
+   
     private String driver = "com.mysql.jdbc.Driver";
     
     private String dbName ="regression1" ;   
 	private String project = "chromium";
     private String bugid_table = project  +"_bugid_reg_revids";  
     private String bugid_previous_30_days_revids_table = project+"_bugid_previous_30day_revids";
+   /*
     private String userName = "root";
-    private String password = "1234";  
+    private String password = "1234"; 
+    private String url = "jdbc:mysql://localhost:3306/"; */
     
-    /*
+   // /*
     private String userName = "sangeetal";
     private String password = "sangeetal"; 
-     */
+    private String url = "jdbc:mysql://localhost:3307/";
+    // */
     
     private ProjectHostingService myService = null;
     private Connection conn = null;
