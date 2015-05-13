@@ -42,12 +42,12 @@ public class identify_training_revids
     private int days = -30;
     private int lower_limit = 0;
     private int upper_limit = 348;
-    /*
+   // /*
     private String userName = "root";
     private String password = "1234"; 
-    private String url = "jdbc:mysql://localhost:3306/"; */
+    private String url = "jdbc:mysql://localhost:3306/";// */
     
-   // /*
+   /*
     private String userName = "sangeetal";
     private String password = "sangeetal"; 
     private String url = "jdbc:mysql://localhost:3307/";
@@ -145,24 +145,36 @@ private void extract_and_insert_ground_truth_info()
 private void extract_other_revids()
 {	
 	
-	 String bugid_str = "select bugid, revid, bug_report_time_T2, bug_report_time_minus_30_day_T1  from "+  bugid_previous_30_days_revids_table +
-			 " limit "+lower_limit + ","+ upper_limit;
-     Statement stmt =null;
-     try 
+	 Statement stmt =null;
+	 Statement stmt_time =  null;
+	
+	  try 
       {
-    	 stmt=  conn.createStatement();
-    	 stmt.executeQuery(bugid_str);
-    	 ResultSet result = stmt.getResultSet();
+		  String get_bugid_str =  "select bugid, revid from " + bugid_previous_30_days_revids_table + " where reg_causing=1  limit  " + lower_limit+"," + upper_limit;
+		  stmt=  conn.createStatement();
+		  stmt.executeQuery(get_bugid_str);
+	 
+		  ResultSet result = stmt.getResultSet();
     	 while(result.next())
     	 	{
     		 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
     		 	System.out.println("Bugid="+ result.getInt("bugid"));
     		 	int bugid=  result.getInt("bugid");
-    		 	
     		 	int revid = result.getInt("revid");
     		 	
-    		 	java.sql.Timestamp  bug_report_time_T2 = result.getTimestamp("bug_report_time_T2");
-    		 	java.sql.Timestamp  bug_report_30_day_before_T1 =  result.getTimestamp("bug_report_time_minus_30_day_T1");
+    		 	String timestamp_str = "select bugid, revid, bug_report_time_T2, bug_report_time_minus_30_day_T1  from "+  bugid_previous_30_days_revids_table +
+    		 			              "   where bugid="+bugid + " and revid="+ revid;
+    		    stmt_time =  conn.createStatement();
+    		    stmt_time.executeQuery(timestamp_str);
+    		    ResultSet rs_time=  stmt_time.getResultSet();
+    		    java.sql.Timestamp  bug_report_time_T2 = null;
+    		 	java.sql.Timestamp  bug_report_30_day_before_T1 = null; 
+    		    while (rs_time.next())
+    		    {
+    		 	
+    		 	    bug_report_time_T2 = rs_time.getTimestamp("bug_report_time_T2");
+    		 	    bug_report_30_day_before_T1 =  rs_time.getTimestamp("bug_report_time_minus_30_day_T1");
+    		    }
     		 	boolean flag =  true;
     		 	int temp_revid = revid-1;
     		 	while(flag)
