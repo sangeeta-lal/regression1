@@ -36,11 +36,13 @@ public class identify_training_revids
    
     private String driver = "com.mysql.jdbc.Driver";
     
-    private String dbName ="regression1" ;   
-	private String project = "chromium";
-    private String bugid_table = project  +"_bugid_reg_revids";  
-    private String bugid_previous_30_days_revids_table = project+"_bugid_previous_30day_revids";
-   /*
+    
+   //@Parameters:
+    private String project = "chromium";
+    private int days = -30;
+    private int lower_limit = 0;
+    private int upper_limit = 348;
+    /*
     private String userName = "root";
     private String password = "1234"; 
     private String url = "jdbc:mysql://localhost:3306/"; */
@@ -51,6 +53,9 @@ public class identify_training_revids
     private String url = "jdbc:mysql://localhost:3307/";
     // */
     
+    private String dbName ="regression1" ;	
+    private String bugid_table = project  +"_bugid_reg_revids";  
+    private String bugid_previous_30_days_revids_table = project+"_bugid_previous_30day_revids";
     private ProjectHostingService myService = null;
     private Connection conn = null;
 
@@ -106,7 +111,7 @@ private void extract_and_insert_ground_truth_info()
 	    	  Calendar cal = Calendar.getInstance();
 	    	  cal = Calendar.getInstance(TimeZone.getDefault());
 	          cal.setTime(date);
-	          cal.add(Calendar.DATE, -20);
+	          cal.add(Calendar.DATE, days);
 	    	  bug_report_30_day_before_T1 = new Timestamp( cal.getTime().getTime());
 	    	  	    	
 	    	  revid_url   =new URL("http://src."+project+".org/viewvc/chrome?revision="+revid+"&view=revision");
@@ -140,7 +145,8 @@ private void extract_and_insert_ground_truth_info()
 private void extract_other_revids()
 {	
 	
-	 String bugid_str = "select bugid, revid, bug_report_time_T2, bug_report_time_minus_30_day_T1  from "+  bugid_previous_30_days_revids_table + " limit 0,348";
+	 String bugid_str = "select bugid, revid, bug_report_time_T2, bug_report_time_minus_30_day_T1  from "+  bugid_previous_30_days_revids_table +
+			 " limit "+lower_limit + ","+ upper_limit;
      Statement stmt =null;
      try 
       {
@@ -341,7 +347,7 @@ public static void main(String args[])
     {
     	identify_training_revids itr = new identify_training_revids();
     	itr.initdb();
-    	System.out.println( " Please check the number of days: It is 20 currently."); 
+    	System.out.println( " Please check follwing parameters: \n 1)Days =  10,20,30.. \n 2) Lower limit and Upper limt."); 
         System.out.println( " Steps to Run: \n 1) Run itr.extract_and_insert_ground_truth_info \n 2) Now comment this functin in main \n3) No run itr.extract_other_revids"); 
     	itr.extract_and_insert_ground_truth_info();
     	//itr.extract_other_revids();
