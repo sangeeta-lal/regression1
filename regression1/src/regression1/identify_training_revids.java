@@ -140,7 +140,7 @@ private void extract_and_insert_ground_truth_info()
 private void extract_other_revids()
 {	
 	
-	 String bugid_str = "select bugid, revid, bug_report_time_T2, bug_report_time_minus_30_day_T1  from "+  bugid_previous_30_days_revids_table;
+	 String bugid_str = "select bugid, revid, bug_report_time_T2, bug_report_time_minus_30_day_T1  from "+  bugid_previous_30_days_revids_table + " limit 0,348";
      Statement stmt =null;
      try 
       {
