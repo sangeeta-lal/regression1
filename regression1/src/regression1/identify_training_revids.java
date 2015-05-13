@@ -42,12 +42,12 @@ public class identify_training_revids
     private int days = -30;
     private int lower_limit = 0;
     private int upper_limit = 348;
-   // /*
+    /*
     private String userName = "root";
     private String password = "1234"; 
-    private String url = "jdbc:mysql://localhost:3306/";// */
+    private String url = "jdbc:mysql://localhost:3306/"; */
     
-   /*
+  // /*
     private String userName = "sangeetal";
     private String password = "sangeetal"; 
     private String url = "jdbc:mysql://localhost:3307/";
