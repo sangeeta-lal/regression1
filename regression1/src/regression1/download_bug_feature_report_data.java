@@ -20,18 +20,25 @@ import java.util.List;
 public class download_bug_feature_report_data 
   {
 
-	private String project = "chromium";
-    private String url = "jdbc:mysql://localhost:3306/";
+	private String url = "jdbc:mysql://localhost:3306/";
     private String dbName ="regression1" ;
     private String driver = "com.mysql.jdbc.Driver";
-    private String userName = "root";
-    private String password = "1234";
-    private String TABLE =project+ "_bug_report_features";
-    private String bugid_table = project  +"_bugid_previous_30day_revids";
-    
+      
     private ProjectHostingService myService = null;
     private Connection conn = null;
     
+    private String project = "chromium";
+    /*
+    private String userName = "root";
+    private String password = "1234";
+    //*/
+    
+    ///*
+    private String userName = "sangeetal";
+    private String password = "sangeetal";
+    //*/
+    private String TABLE =project+ "_bug_report_features";
+    private String bugid_table = project  +"_bugid_previous_30day_revids";
   //  private preprocess pobj =  new preprocess();
 
 private void initdb()
