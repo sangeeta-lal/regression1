@@ -28,13 +28,13 @@ public class download_bug_feature_report_data
     private Connection conn = null;
     
     private String project = "chromium";
-    /*
+   // /*
     private String url = "jdbc:mysql://localhost:3306/";
     private String userName = "root";
     private String password = "1234";
     //*/
     
-    ///*
+    /*
     private String url = "jdbc:mysql://localhost:3307/";
     private String userName = "sangeetal";
     private String password = "sangeetal";
@@ -193,7 +193,7 @@ public void extractInformation(ProjectHostingService service, String issueId){
        
         if(state.equalsIgnoreCase("CLOSED"))
           {
-         if( (status.equalsIgnoreCase("Fixed")) || (status.equalsIgnoreCase("Verified")) || (status.equalsIgnoreCase("Duplicate")))
+        // if( (status.equalsIgnoreCase("Fixed")) || (status.equalsIgnoreCase("Verified")) || (status.equalsIgnoreCase("Duplicate")))
             {
             System.out.println("*************************************************************");
             System.out.println("ISSUE ID : " + issueID);
@@ -249,6 +249,7 @@ public void extractInformation(ProjectHostingService service, String issueId){
         }//if
     }catch(Exception e){
       System.out.println(e);
+      e.printStackTrace();
       //interupt();
     }
   }
@@ -257,9 +258,8 @@ public void extractInformation(ProjectHostingService service, String issueId){
   {
     try{
       myService = new ProjectHostingService("Sample Application");
-      //printAllIssues(myService, project);
-      
-     String bugid_str = "select distinct bugid from "+  bugid_table;
+      //printAllIssues(myService, project);      
+     String bugid_str = "select distinct bugid from "+  bugid_table + "  ";
      Statement stmt =  conn.createStatement();
      stmt.executeQuery(bugid_str);
       ResultSet result = stmt.getResultSet();
@@ -290,11 +290,12 @@ public void extractInformation(ProjectHostingService service, String issueId){
     
   }
  
-public static void main(String[] args){
+public static void main(String[] args)
+{
 	download_bug_feature_report_data ite = new download_bug_feature_report_data();
 	ite.initdb();
-ite.process();
-ite.closedb();
+    ite.process();
+    ite.closedb();
 }
 }
 
