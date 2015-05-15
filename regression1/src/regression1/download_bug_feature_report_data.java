@@ -28,13 +28,13 @@ public class download_bug_feature_report_data
     private Connection conn = null;
     
     private String project = "chromium";
-   // /*
+   /*
     private String url = "jdbc:mysql://localhost:3306/";
     private String userName = "root";
     private String password = "1234";
     //*/
     
-    /*
+   // /*
     private String url = "jdbc:mysql://localhost:3307/";
     private String userName = "sangeetal";
     private String password = "sangeetal";
