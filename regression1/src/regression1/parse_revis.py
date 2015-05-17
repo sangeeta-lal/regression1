@@ -21,7 +21,7 @@ password="sangeetal"
 database="regression1"
 file_path="F:\Research\regression1\web_page_data.txt"
 lower_limit = 0
-upper_limt = 100000
+upper_limit = 100000
 """
 port=3306
 user="root"
