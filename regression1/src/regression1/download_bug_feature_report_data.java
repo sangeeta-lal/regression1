@@ -28,13 +28,13 @@ public class download_bug_feature_report_data
     private Connection conn = null;
     
     private String project = "chromium";
-   /*
+   ///*
     private String url = "jdbc:mysql://localhost:3306/";
     private String userName = "root";
     private String password = "1234";
     //*/
     
-   // /*
+    /*
     private String url = "jdbc:mysql://localhost:3307/";
     private String userName = "sangeetal";
     private String password = "sangeetal";
@@ -191,7 +191,7 @@ public void extractInformation(ProjectHostingService service, String issueId){
       String status = entry.getStatus().getValue();
      
        
-        if(state.equalsIgnoreCase("CLOSED"))
+     //   if(state.equalsIgnoreCase("CLOSED"))
           {
         // if( (status.equalsIgnoreCase("Fixed")) || (status.equalsIgnoreCase("Verified")) || (status.equalsIgnoreCase("Duplicate")))
             {
@@ -259,7 +259,7 @@ public void extractInformation(ProjectHostingService service, String issueId){
     try{
       myService = new ProjectHostingService("Sample Application");
       //printAllIssues(myService, project);      
-     String bugid_str = "select distinct bugid from "+  bugid_table + "  ";
+     String bugid_str = "select distinct bugid from "+  bugid_table + " where bugid in (79002, 368532, 384992) ";
      Statement stmt =  conn.createStatement();
      stmt.executeQuery(bugid_str);
       ResultSet result = stmt.getResultSet();

@@ -14,7 +14,7 @@ import python_utility as pu
 project   = "chromium"
 project_basic_url = "http://src.chromium.org"
 
-"""
+#"""
 port=3307
 user="sangeetal"
 password="sangeetal"
@@ -41,16 +41,33 @@ for temp in table_data:
     revid = temp[1]
    
     print  "revid=", revid 
-   # revid = 2270
+    #revid = 2270
         
     fetch_url = "http://src.chromium.org/viewvc/chrome?revision="+(str)(revid)+"&view=revision"
+
     print "fetch url = ",fetch_url
     
     web_page_info = urllib2.urlopen(fetch_url)
     web_page_data = web_page_info.read()
+    flag = 0
+    flag= pu.check_for_show_all(web_page_data, revid)
+   
+    #print "flag=", flag
+    #"""
+    if flag==1:
+        #fetch_url = "http://src.chromium.org/viewvc/chrome?limit_changes=0&view=revision&revision="+(str)(revid)
+        #web_page_info = urllib2.urlopen(fetch_url)
+        #web_page_data = web_page_info.read()
+        file = open("F:\web_page_data.txt",'a')   
+        file.write("Revid = ")
+        file.write((str)(revid))
+        file.write("\n")
+        file.close()
     
+    #print "New Web Page Data = ", web_page_data
     rev_log_message = pu.get_log_message(web_page_data)
     rev_log_message =  pu.remove_html_tags(rev_log_message)
+    rev_log_message = pu.remove_quote (rev_log_message)
     
     rev_is_bug_fix = pu.contains_bug_fix(web_page_data)
     changed_path_count= pu.no_of_files_modified(web_page_data)

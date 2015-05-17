@@ -4,6 +4,15 @@ import xml.etree.ElementTree
 
 
 
+def check_for_show_all(web_page_data, revid):
+    start_index =  web_page_data.index("Changed paths:")
+    end_index = web_page_data.index("</tr>", start_index)
+    substring = web_page_data[start_index:end_index]
+    flag = substring.find("show all")
+    if flag!=-1:
+        return 1
+    else:
+        return 0
 
 def get_log_message(web_page_data):
     index1 =  web_page_data.find("vc_log\">")
@@ -16,7 +25,11 @@ def remove_html_tags(rev_log_message):
    cleanr =re.compile('<.*?>')
    cleantext = re.sub(cleanr,'', rev_log_message)
    print "clean text = ", cleantext
-   return cleantext   
+   return cleantext   
+def remove_quote(rev_log_message):     
+   rev_log_message =  rev_log_message.replace("'", " ")
+   rev_log_message =  rev_log_message.replace("\""," ")
+   return rev_log_message
 
 def contains_bug_fix(web_page_data):
     start_index =  web_page_data.index("Log Message:")
@@ -50,15 +63,15 @@ def test_file_count(web_page_data):
    
    test_file_count = 0    
    index= web_page_data.rfind("Path")
-   #print "index = ", index
-   start_index =web_page_data.find("<tbody>", index) 
-   end_index = web_page_data.find("</tbody>", start_index)
-   change_path =web_page_data[start_index:end_index+8]
-   #print "change path", change_path
+   #print "test index = ",(long)(index)
+   start_index = web_page_data.find("<tbody>", index) 
+   end_index   = web_page_data.find("</tbody>", start_index)
+   change_path = web_page_data[start_index:end_index+8]
+   #print "change path", change_path, "start=", start_index, " end index=", end_index
    index1 = change_path.find("<tr")
    count=0
    while index1!=-1:
-       count=count+1
+       count  = count+1
        index2 = change_path.find("</tr>",  index1)
        substring  =  change_path[index1:index2]
                   
@@ -91,7 +104,7 @@ def get_lines_added_count(web_page_data, web_page_url, project_basic_url):
    count=0
    vc_diff_add_count_total=0
    while index1!=-1:
-       
+       #print "in while" 
        count=count+1
        index2 = change_path.find("</tr>",  index1)
        substring  =  change_path[index1:index2]
@@ -116,7 +129,7 @@ def get_lines_added_count(web_page_data, web_page_url, project_basic_url):
                 #print "modif url = ", modif_file_url
            
                 new_file_url = project_basic_url+modif_file_url           
-                print "new url in added = ", new_file_url
+                #print "new url in added = ", new_file_url
                 modif_page_info =  urllib2.urlopen(new_file_url)
                 modif_page_data =  modif_page_info.read()
                 #print "I can read "
@@ -169,7 +182,7 @@ def get_lines_deleted_count(web_page_data, web_page_url, project_basic_url):
                #print "modif url = ", modif_file_url
            
                new_file_url = project_basic_url+modif_file_url           
-               print "new url = ", new_file_url
+               #sprint "new url = ", new_file_url
                modif_page_info =  urllib2.urlopen(new_file_url)
                modif_page_data =  modif_page_info.read()
         
@@ -222,7 +235,7 @@ def get_lines_changed_count(web_page_data, web_page_url, project_basic_url):
                 #print "modif url = ", modif_file_url
            
                 new_file_url = project_basic_url+modif_file_url           
-                print "new url = ", new_file_url
+                #print "new url = ", new_file_url
                 modif_page_info =  urllib2.urlopen(new_file_url)
                 modif_page_data =  modif_page_info.read()
         
