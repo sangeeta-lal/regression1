@@ -14,12 +14,12 @@ import python_utility as pu
 project   = "chromium"
 project_basic_url = "http://src.chromium.org"
 
-#"""
+"""
 port=3307
 user="sangeetal"
 password="sangeetal"
 database="regression1"
-file_path="E:\Sangeeta\Research\regression1\web_page_data.txt"
+file_path="E:\\Sangeeta\\Research\\regression1\\web_page_data.txt"
 lower_limit = 0
 upper_limit = 100000
 """
@@ -27,7 +27,7 @@ port=3306
 user="root"
 password="1234"
 database="regression1"
-file_path="F:\web_page_data.txt"
+file_path="F:\\web_page_data.txt"
 lower_limit = 0
 upper_limit = 100000
 #"""
