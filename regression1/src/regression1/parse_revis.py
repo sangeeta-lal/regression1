@@ -19,11 +19,17 @@ port=3307
 user="sangeetal"
 password="sangeetal"
 database="regression1"
+file_path="F:\Research\regression1\web_page_data.txt"
+lower_limit = 0
+upper_limt = 100000
 """
 port=3306
 user="root"
 password="1234"
 database="regression1"
+file_path="F:\web_page_data.txt"
+lower_limit = 0
+upper_limit = 100000
 #"""
 table =project+ "_bugid_previous_30day_revids"
 insert_rev_table= project+"_revids_feature"
@@ -33,7 +39,7 @@ select_cursor = db1.cursor()
 insert_cursor =  db1.cursor()
 
 #count = 0 
-str1=  "select bugid, revid from "+ table
+str1=  "select bugid, revid from "+ table + " limit  "+(str)(lower_limit)+","+ (str)(upper_limit)
 select_cursor.execute(str1)
 table_data = select_cursor.fetchall()
 for temp in table_data:
@@ -58,7 +64,7 @@ for temp in table_data:
         #fetch_url = "http://src.chromium.org/viewvc/chrome?limit_changes=0&view=revision&revision="+(str)(revid)
         #web_page_info = urllib2.urlopen(fetch_url)
         #web_page_data = web_page_info.read()
-        file = open("F:\web_page_data.txt",'a')   
+        file = open(file_path,'a')   
         file.write("Revid = ")
         file.write((str)(revid))
         file.write("\n")
