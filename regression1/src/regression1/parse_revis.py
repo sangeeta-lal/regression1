@@ -19,7 +19,7 @@ port=3307
 user="sangeetal"
 password="sangeetal"
 database="regression1"
-file_path="F:\Research\regression1\web_page_data.txt"
+file_path="E:\Sangeeta\Research\regression1\web_page_data.txt"
 lower_limit = 0
 upper_limit = 100000
 """
