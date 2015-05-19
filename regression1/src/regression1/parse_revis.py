@@ -1,5 +1,4 @@
 
-
 """====================================================
 @Author: Sangeeta
 @Uses: This file will be used to parse revision ids to extract data
@@ -40,6 +39,7 @@ insert_cursor =  db1.cursor()
 
 #count = 0 
 str1=  "select bugid, revid from "+ table + " limit  "+(str)(lower_limit)+","+ (str)(upper_limit)
+
 select_cursor.execute(str1)
 table_data = select_cursor.fetchall()
 for temp in table_data:
@@ -77,6 +77,8 @@ for temp in table_data:
     
     rev_is_bug_fix = pu.contains_bug_fix(web_page_data)
     changed_path_count= pu.no_of_files_modified(web_page_data)
+    change_path_file =  pu.get_changed_files(web_page_data)
+    print "change patth file=", change_path_file
     test_file_count  = pu.test_file_count(web_page_data)
     
     lines_added = pu.get_lines_added_count(web_page_data, fetch_url, project_basic_url)

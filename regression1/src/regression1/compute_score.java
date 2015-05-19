@@ -15,30 +15,39 @@ import com.aliasi.tokenizer.Tokenizer;
  * */
 public class compute_score 
 {
+	 private String driver = "com.mysql.jdbc.Driver";	     
 	
 	 private String url = "jdbc:mysql://localhost:3306/";
-	 private String driver = "com.mysql.jdbc.Driver";	    
+	 private String userName = "root";
+	 private String password = "1234"; 
 	 private String dbName ="regression1" ;   
 	 private String project = "chromium";
-	 private String bug_feature_table = project  +"_bug_report_features";  
-	 private String revid_feature_table= project+"_revids_feature";
-	 private String bugid_previous_30_days_revids_table = project+"_bugid_previous_30day_revids";
-	 private String score_table = project  +"_score_table";
-	 private String userName = "root";
-	 private String password = "1234";  
+	
 	 /* 
+	 private String url = "jdbc:mysql://localhost:3306/";
+	 private String dbName ="regression1" ;   
+	 private String project = "chromium";
 	 private String userName = "sangeetal";
 	 private String password = "sangeetal";
 	  */
 	  	 
+	 private String bug_feature_table = project  +"_bug_report_features";  
+	 private String revid_feature_table= project+"_revids_feature";
+	 private String bugid_previous_30_days_revids_table = project+"_bugid_previous_30day_revids";
+	 private String score_table = project  +"_score_table";
 	 private Connection conn = null;
      private Statement stmt = null;
+     
 	 String description = "";
 	 String title = "";
 	 String cr= "";
 	 String area = "";	
 	 String log_message = ""; 
 	
+	String stop_words []= {"hard", "what", "instead","being", "do", "you", "will", "well", "reproduce", "something", "properly", "getting", "basically" };
+	String stop_phrases[]= {"Report ID", "Cumulative Uptime", "Other Browsers Tested", "Meta Information", "Thank You"};
+	String stop_sentences[] = {"What steps will reproduce the problem","What is the expected output", "What do you see instead","Kindly refer the screencast for reference"};
+			
     private void initdb()
      {
         try {

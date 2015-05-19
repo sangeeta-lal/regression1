@@ -2,8 +2,6 @@ import urllib2
 import re
 import xml.etree.ElementTree 
 
-
-
 def check_for_show_all(web_page_data, revid):
     start_index =  web_page_data.index("Changed paths:")
     end_index = web_page_data.index("</tr>", start_index)
@@ -59,8 +57,32 @@ def no_of_files_modified(web_page_data):
     #print "file changed=", file_changed_count
     return file_changed_count
 
-def test_file_count(web_page_data):
-   
+def get_changed_files(web_page_data):
+   changed_files = ""
+   index= web_page_data.rfind("Path")
+   #print "test index = ",(long)(index)
+   start_index = web_page_data.find("<tbody>", index) 
+   end_index   = web_page_data.find("</tbody>", start_index)
+   change_path = web_page_data[start_index:end_index+8]
+   #print "change path", change_path, "start=", start_index, " end index=", end_index
+   index1 = change_path.find("<tr")
+   count=0
+   while index1!=-1:
+       count  = count+1
+       index2 = change_path.find("</tr>",  index1)
+       substring  =  change_path[index1:index2]
+                  
+       start_index = substring.find("/>")
+       end_index =  substring.find("</a>")
+       
+       substring = substring[start_index+2:end_index]
+       changed_files = changed_files+"\n"+substring
+            
+       index1 = change_path.find("<tr", index2)
+     
+   return changed_files
+
+def test_file_count(web_page_data):   
    test_file_count = 0    
    index= web_page_data.rfind("Path")
    #print "test index = ",(long)(index)
@@ -252,7 +274,6 @@ def get_lines_changed_count(web_page_data, web_page_url, project_basic_url):
    print "vc diff change total = ", vc_diff_change_count_total
    return vc_diff_change_count_total
  
-
 
 def get_desired_string_count(string, content):
     count =0

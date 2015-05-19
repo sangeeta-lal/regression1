@@ -259,7 +259,7 @@ public void extractInformation(ProjectHostingService service, String issueId){
     try{
       myService = new ProjectHostingService("Sample Application");
       //printAllIssues(myService, project);      
-     String bugid_str = "select distinct bugid from "+  bugid_table + " where bugid in (79002, 368532, 384992) ";
+     String bugid_str = "select distinct bugid from "+  bugid_table + "  ";
      Statement stmt =  conn.createStatement();
      stmt.executeQuery(bugid_str);
       ResultSet result = stmt.getResultSet();
