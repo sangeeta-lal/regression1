@@ -24,9 +24,10 @@ def remove_html_tags(rev_log_message):
    cleantext = re.sub(cleanr,'', rev_log_message)
    #print "clean text = ", cleantext
    return cleantext   
-def remove_quote(rev_log_message):     
+def remove_quote_new_line(rev_log_message):     
    rev_log_message =  rev_log_message.replace("'", " ")
    rev_log_message =  rev_log_message.replace("\""," ")
+   rev_log_message =  rev_log_message.replace("\n"," ")
    return rev_log_message
 
 def contains_bug_fix(web_page_data):
