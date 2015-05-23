@@ -72,30 +72,32 @@ for temp in table_data:
         file.close()
     
     #print "New Web Page Data = ", web_page_data
-    rev_log_message = pu.get_log_message(web_page_data)
+    rev_log_message, rev_comitter = pu.get_log_message_and_comitter(web_page_data)
     rev_log_message =  pu.remove_html_tags(rev_log_message)
     rev_log_message = pu.remove_quote_new_line (rev_log_message)
-    rev_hour, rev_weakday =  pu.get_time(web_page_data)
-    #print "rev hour = ", rev_hour, " rev_weakday=", rev_weakday
+    rev_day, rev_month, rev_weakday,rev_hour =  pu.get_time(web_page_data) #Time metric
+
     rev_is_bug_fix = pu.contains_bug_fix(web_page_data)
-    changed_path_count= pu.no_of_files_modified(web_page_data)
     changed_path_files =  pu.get_changed_files(web_page_data)
     test_file_count  = pu.test_file_count(web_page_data)
     
+    #Size Metric
     lines_added,lines_deleted, lines_changed, chunks_added, chunks_deleted, chunks_changed= pu.get_lines_added_count(web_page_data, fetch_url, project_basic_url)
-     
-    #lines_deleted =  pu.get_lines_deleted_count(web_page_data, fetch_url, project_basic_url) 
-    #lines_changed =  pu.get_lines_changed_count(web_page_data, fetch_url, project_basic_url) 
-    #print "lines addes = ",lines_added ,  "  lines deleted = ", lines_deleted
-    #count =  count + rev_is_bug_fix
-    #print "rev is bug fix=", rev_is_bug_fix, "count = ",count," \n ----------------------------\n"
-    print "chucks added=", chunks_added
+    churn  =  lines_added + lines_deleted + lines_changed
     
+    #Files Metric
+    changed_path_count= pu.no_of_files_modified(web_page_data)
+    max_devs_in_file, max_change_count  = pu.get_max_no_of_devs_and_change_count(web_page_data,project)
+    
+    #java_file, cpp_files, other_file = pu.get_types_files_modified
+
+    #print "chucks added=", chunks_added    
     insert_str = "insert into "+insert_rev_table+" values("+(str)(bugid)+","+(str)(revid)+",'"+rev_log_message+"',"+(str)(rev_is_bug_fix)+","+(str)(changed_path_count)+","\
-    +(str)(lines_added)+","+  (str)(lines_deleted)+","+(str)(lines_changed)+","+(str)(chunks_added)+","+(str)(chunks_deleted)+","+(str)(chunks_changed)+",'"\
-    +changed_path_files+"',"+(str)(test_file_count)+")"
+    +(str)(lines_added)+","+  (str)(lines_deleted)+","+(str)(lines_changed)+","+(str)(chunks_added)+","+(str)(chunks_deleted)+","+(str)(chunks_changed)+","\
+    +(str)(churn)+",'"+changed_path_files+"',"+(str)(test_file_count)+","+(str)(rev_day)+","+(str)(rev_month)+","+(str)(rev_weakday)+","+(str)(rev_hour)+","\
+    +(str)(max_devs_in_file)+","+(str)(max_change_count)+")"
     
-    print "insert str=",insert_str
+    #print "insert str=",insert_str
     
     insert_cursor.execute(insert_str)
     

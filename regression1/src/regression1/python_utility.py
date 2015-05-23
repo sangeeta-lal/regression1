@@ -1,6 +1,7 @@
 import urllib2
 import re
-import xml.etree.ElementTree 
+import xml.etree.ElementTree
+import pandas 
 
 def check_for_show_all(web_page_data, revid):
     start_index =  web_page_data.index("Changed paths:")
@@ -12,12 +13,19 @@ def check_for_show_all(web_page_data, revid):
     else:
         return 0
 
-def get_log_message(web_page_data):
+def get_log_message_and_comitter(web_page_data):
     index1 =  web_page_data.find("vc_log\">")
     index2 = web_page_data.find("</pre>", index1)
     log_message  =  web_page_data[index1+8:index2]
     #print "log messge= ", log_message
-    return log_message
+    
+    index1 = web_page_data.find("<th>Author:</th>")
+    auth_index1 =  web_page_data.find("<td>", index1)
+    auth_index2 = web_page_data.find("</td>", auth_index1)
+    comitter =  web_page_data[auth_index1+4:auth_index2]
+    comitter =  comitter.strip()
+
+    return log_message, comitter
  
 def remove_html_tags(rev_log_message):     
    cleanr =re.compile('<.*?>')
@@ -54,8 +62,12 @@ def get_time(web_page_data):
     end_index =  web_page_data.find(" UTC", start_index)
     timestamp =  web_page_data[start_index+4:end_index]
     #print "timestamp= ",timestamp
-   # t = pandas.tslib.Timestamp.now()
-    return 1,  2       
+    t = pandas.tslib.Timestamp(timestamp)
+    day = t.day 
+    month = t.month
+    weakday = t.weekday()
+    hour= t.hour
+    return day,month, weakday, hour    
 
 def no_of_files_modified(web_page_data):
     index =  web_page_data.index("Changed paths:")
@@ -123,7 +135,7 @@ def test_file_count(web_page_data):
        
    #print "test file count = ",test_file_count    
    return test_file_count
-#Extract the lines which got addded in the  SVN   
+#Extract the lines which got addded/ deleted /changed as well as chunkcount in the  SVN   
 def get_lines_added_count(web_page_data, web_page_url, project_basic_url):
    index= web_page_data.rfind("Path")
    
@@ -243,6 +255,79 @@ def get_desired_string_count(string, file_content):
         index1= file_content.find(string,index2+1)
           
     return count        
+
+#Find maximum number of developers in a file
+def get_max_no_of_devs_and_change_count(web_page_data, project):
+   changed_files = ""
+   index= web_page_data.rfind("Path")
+   #print "test index = ",(long)(index)
+   start_index = web_page_data.find("<tbody>", index) 
+   end_index   = web_page_data.find("</tbody>", start_index)
+   change_path = web_page_data[start_index:end_index+8]
+   #print "change path", change_path, "start=", start_index, " end index=", end_index
+   index1 = change_path.find("<tr")
+   count=0
+   max_dev_count = 0
+   max_change_count = 0
+   while index1!=-1:
+       dev_count = 0
+       change_count = 0
+       
+       count  = count+1
+       index2 = change_path.find("</tr>",  index1)
+       substring  =  change_path[index1:index2]
+       #print "Substring=", substring    
+            
+       file_modified_index = substring.find(">modified<")
+       if file_modified_index!=-1:
+           dev_count,change_count   =  get_unique_dev_count_and_change_count(substring, project)
+       
+       else:    
+           file_added_index = substring.find(">added<")
+           if file_added_index==-1:
+               dev_count=1  
+               change_count = 1
+               
+       if dev_count >max_dev_count:
+           max_dev_count = dev_count
+       
+       if change_count > max_change_count:
+           max_change_count = change_count    
+            
+       index1 = change_path.find("<tr", index2)
+        
+  # print "max_dev_coun = ", max_dev_count, "  max_change_count=", max_change_count
+   return max_dev_count , max_change_count
+#Rturns count of unique developers in a SVN
+def  get_unique_dev_count_and_change_count(row_detail,project):
+    index= row_detail.rfind("<td")
+    start_index = row_detail.find("<td><a href=\"")
+    end_index =row_detail.find("title")
+    link = row_detail[start_index+13:end_index-2]
+    file_link = link.split("?")
+    complete_file_link ="http://src."+project+".org"+file_link[0]+"?view=log&"+file_link[1]
+    diff_r =  urllib2.urlopen(complete_file_link)
+    diff_data  =  diff_r.read()
+    index1 = diff_data.find("by <em>")
+    
+    all_dev = list()
+    change_count = 0
+    while index1!=-1:
+        change_count =  change_count+1
+        
+        start_index = index1
+        end_index = diff_data.find("</em>", start_index)
+        dev_name = diff_data[start_index+7:end_index]
+        #print "dev name = ", dev_name
+        if not all_dev:
+            all_dev.append(dev_name)
+        else:
+            if dev_name not in all_dev:
+                 all_dev.append(dev_name) 
+                       
+        index1 = diff_data.find("by <em>", end_index)
+    #print "len =", len(all_dev), "change_count = ", change_count
+    return len(all_dev),change_count
 
 """      
 #Extract the lines which got changed in the  SVN   
