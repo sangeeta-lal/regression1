@@ -48,7 +48,8 @@ for temp in table_data:
     revid = temp[1]
    
     print  "revid=", revid 
-    #pytrevid = 2270
+    #revid = 2270
+    #revid = 3028
         
     fetch_url = "http://src.chromium.org/viewvc/chrome?revision="+(str)(revid)+"&view=revision"
 
@@ -81,24 +82,22 @@ for temp in table_data:
     changed_path_files =  pu.get_changed_files(web_page_data)
     test_file_count  = pu.test_file_count(web_page_data)
     
+    print "changd_path_files=", changed_path_files
     #Size Metric
     lines_added,lines_deleted, lines_changed, chunks_added, chunks_deleted, chunks_changed= pu.get_lines_added_count(web_page_data, fetch_url, project_basic_url)
     churn  =  lines_added + lines_deleted + lines_changed
     
-    #Files Metric
+    #Files Metric  and  edv expr
     changed_path_count= pu.no_of_files_modified(web_page_data)
-    max_devs_in_file, max_change_count  = pu.get_max_no_of_devs_and_change_count(web_page_data,project)
-    
-    #java_file, cpp_files, other_file = pu.get_types_files_modified
-
-    #print "chucks added=", chunks_added    
+    max_devs_in_file, max_change_count, avg_rev_comitter_expr  = pu.get_max_no_of_devs_and_change_count_and_avg_comitter_expr(web_page_data,project, rev_comitter)
+        
+    #java_file, cpp_files, other_file = pu.get_types_files_modified          
     insert_str = "insert into "+insert_rev_table+" values("+(str)(bugid)+","+(str)(revid)+",'"+rev_log_message+"',"+(str)(rev_is_bug_fix)+","+(str)(changed_path_count)+","\
     +(str)(lines_added)+","+  (str)(lines_deleted)+","+(str)(lines_changed)+","+(str)(chunks_added)+","+(str)(chunks_deleted)+","+(str)(chunks_changed)+","\
     +(str)(churn)+",'"+changed_path_files+"',"+(str)(test_file_count)+","+(str)(rev_day)+","+(str)(rev_month)+","+(str)(rev_weakday)+","+(str)(rev_hour)+","\
-    +(str)(max_devs_in_file)+","+(str)(max_change_count)+")"
+    +(str)(max_devs_in_file)+","+(str)(max_change_count)+ ","+ (str)(avg_rev_comitter_expr)+")"
     
-    #print "insert str=",insert_str
-    
+    #print "insert str=",insert_str    
     insert_cursor.execute(insert_str)
     
     db1.commit()    

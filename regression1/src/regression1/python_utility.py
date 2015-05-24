@@ -86,7 +86,7 @@ def get_changed_files(web_page_data):
    end_index   = web_page_data.find("</tbody>", start_index)
    change_path = web_page_data[start_index:end_index+8]
    #print "change path", change_path, "start=", start_index, " end index=", end_index
-   index1 = change_path.find("<tr")
+   index1 = change_path.find("<tr class")
    count=0
    while index1!=-1:
        count  = count+1
@@ -97,10 +97,15 @@ def get_changed_files(web_page_data):
        end_index =  substring.find("</a>")
        
        substring = substring[start_index+2:end_index]
-       changed_files = changed_files+"\n"+substring
+       if changed_files=="":
+           changed_files =  substring
+       else:    
+           changed_files = changed_files +"\n" + substring
             
        index1 = change_path.find("<tr", index2)
      
+   change_files =  changed_files.strip()       
+   change_files =  changed_files.lstrip()
    return changed_files
 
 def test_file_count(web_page_data):   
@@ -257,7 +262,7 @@ def get_desired_string_count(string, file_content):
     return count        
 
 #Find maximum number of developers in a file
-def get_max_no_of_devs_and_change_count(web_page_data, project):
+def get_max_no_of_devs_and_change_count_and_avg_comitter_expr(web_page_data, project, rev_comitter):
    changed_files = ""
    index= web_page_data.rfind("Path")
    #print "test index = ",(long)(index)
@@ -269,6 +274,8 @@ def get_max_no_of_devs_and_change_count(web_page_data, project):
    count=0
    max_dev_count = 0
    max_change_count = 0
+   total_rev_comitter_expr = 0.0
+   file_count_modif_added=0
    while index1!=-1:
        dev_count = 0
        change_count = 0
@@ -280,26 +287,32 @@ def get_max_no_of_devs_and_change_count(web_page_data, project):
             
        file_modified_index = substring.find(">modified<")
        if file_modified_index!=-1:
-           dev_count,change_count   =  get_unique_dev_count_and_change_count(substring, project)
-       
+           dev_count,change_count, rev_comitter_expr_file   =  get_unique_dev_count_and_change_count_and_comitter_file_expr(substring, project, rev_comitter)
+           file_count_modif_added = file_count_modif_added +1 
+           
        else:    
            file_added_index = substring.find(">added<")
            if file_added_index==-1:
                dev_count=1  
                change_count = 1
+               file_count_modif_added = file_count_modif_added +1 
+               rev_comitter_expr_file = 100.0
                
        if dev_count >max_dev_count:
            max_dev_count = dev_count
        
        if change_count > max_change_count:
            max_change_count = change_count    
-            
+       
+       total_rev_comitter_expr = total_rev_comitter_expr+ rev_comitter_expr_file     
        index1 = change_path.find("<tr", index2)
         
   # print "max_dev_coun = ", max_dev_count, "  max_change_count=", max_change_count
-   return max_dev_count , max_change_count
+   avg_rev_comitter_expr =  total_rev_comitter_expr/file_count_modif_added
+   print " avg rev comitter expr=", avg_rev_comitter_expr
+   return max_dev_count , max_change_count, avg_rev_comitter_expr
 #Rturns count of unique developers in a SVN
-def  get_unique_dev_count_and_change_count(row_detail,project):
+def  get_unique_dev_count_and_change_count_and_comitter_file_expr(row_detail,project, rev_comitter):
     index= row_detail.rfind("<td")
     start_index = row_detail.find("<td><a href=\"")
     end_index =row_detail.find("title")
@@ -311,6 +324,7 @@ def  get_unique_dev_count_and_change_count(row_detail,project):
     index1 = diff_data.find("by <em>")
     
     all_dev = list()
+    rev_comitter_comits = 0
     change_count = 0
     while index1!=-1:
         change_count =  change_count+1
@@ -324,11 +338,23 @@ def  get_unique_dev_count_and_change_count(row_detail,project):
         else:
             if dev_name not in all_dev:
                  all_dev.append(dev_name) 
-                       
+        
+        #Experince
+        #print "dev name =", dev_name, " rev_comitter=", rev_comitter
+        if dev_name ==  rev_comitter:
+            rev_comitter_comits = rev_comitter_comits +1          
+        
         index1 = diff_data.find("by <em>", end_index)
     #print "len =", len(all_dev), "change_count = ", change_count
-    return len(all_dev),change_count
+    
+    rev_comitter_expr_file =  ((rev_comitter_comits*100)/ change_count)
+    print "rev comitter expr file=", rev_comitter_expr_file
+    return len(all_dev),change_count, rev_comitter_expr_file
 
+
+
+    
+       
 """      
 #Extract the lines which got changed in the  SVN   
 def get_lines_changed_count(web_page_data, web_page_url, project_basic_url):
