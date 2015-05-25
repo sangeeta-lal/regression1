@@ -277,26 +277,29 @@ def get_max_no_of_devs_and_change_count_and_avg_comitter_expr(web_page_data, pro
    total_rev_comitter_expr = 0.0
    file_count_modif_added=0
    while index1!=-1:
+       rev_comitter_expr_file = 0.0
        dev_count = 0
        change_count = 0
        
        count  = count+1
        index2 = change_path.find("</tr>",  index1)
        substring  =  change_path[index1:index2]
-       #print "Substring=", substring    
             
        file_modified_index = substring.find(">modified<")
        if file_modified_index!=-1:
            dev_count,change_count, rev_comitter_expr_file   =  get_unique_dev_count_and_change_count_and_comitter_file_expr(substring, project, rev_comitter)
            file_count_modif_added = file_count_modif_added +1 
            
+           
        else:    
            file_added_index = substring.find(">added<")
-           if file_added_index==-1:
+        
+           if file_added_index!=-1:
                dev_count=1  
                change_count = 1
                file_count_modif_added = file_count_modif_added +1 
                rev_comitter_expr_file = 100.0
+              
                
        if dev_count >max_dev_count:
            max_dev_count = dev_count
@@ -304,9 +307,9 @@ def get_max_no_of_devs_and_change_count_and_avg_comitter_expr(web_page_data, pro
        if change_count > max_change_count:
            max_change_count = change_count    
        
-       total_rev_comitter_expr = total_rev_comitter_expr+ rev_comitter_expr_file     
+       total_rev_comitter_expr = total_rev_comitter_expr+ rev_comitter_expr_file 
        index1 = change_path.find("<tr", index2)
-        
+     
   # print "max_dev_coun = ", max_dev_count, "  max_change_count=", max_change_count
    avg_rev_comitter_expr =  total_rev_comitter_expr/file_count_modif_added
    print " avg rev comitter expr=", avg_rev_comitter_expr
@@ -348,12 +351,8 @@ def  get_unique_dev_count_and_change_count_and_comitter_file_expr(row_detail,pro
     #print "len =", len(all_dev), "change_count = ", change_count
     
     rev_comitter_expr_file =  ((rev_comitter_comits*100)/ change_count)
-    print "rev comitter expr file=", rev_comitter_expr_file
+    print "modif comitter expr file=", rev_comitter_expr_file
     return len(all_dev),change_count, rev_comitter_expr_file
-
-
-
-    
        
 """      
 #Extract the lines which got changed in the  SVN   
