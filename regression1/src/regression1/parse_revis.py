@@ -49,7 +49,8 @@ for temp in table_data:
    
     print  "revid=", revid 
     #revid = 2270
-    revid = 3029
+    #revid = 3029
+    #revid =3047
         
     fetch_url = "http://src.chromium.org/viewvc/chrome?revision="+(str)(revid)+"&view=revision"
 
@@ -82,7 +83,7 @@ for temp in table_data:
     changed_path_files =  pu.get_changed_files(web_page_data)
     test_file_count  = pu.test_file_count(web_page_data)
     
-    print "changd_path_files=", changed_path_files
+    #print "changd_path_files=", changed_path_files
     #Size Metric
     lines_added,lines_deleted, lines_changed, chunks_added, chunks_deleted, chunks_changed= pu.get_lines_added_count(web_page_data, fetch_url, project_basic_url)
     churn  =  lines_added + lines_deleted + lines_changed

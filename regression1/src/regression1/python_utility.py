@@ -276,6 +276,7 @@ def get_max_no_of_devs_and_change_count_and_avg_comitter_expr(web_page_data, pro
    max_change_count = 0
    total_rev_comitter_expr = 0.0
    file_count_modif_added=0
+   only_deleted_files_flag = True
    while index1!=-1:
        rev_comitter_expr_file = 0.0
        dev_count = 0
@@ -289,7 +290,7 @@ def get_max_no_of_devs_and_change_count_and_avg_comitter_expr(web_page_data, pro
        if file_modified_index!=-1:
            dev_count,change_count, rev_comitter_expr_file   =  get_unique_dev_count_and_change_count_and_comitter_file_expr(substring, project, rev_comitter)
            file_count_modif_added = file_count_modif_added +1 
-           
+           only_deleted_files_flag =  False
            
        else:    
            file_added_index = substring.find(">added<")
@@ -299,6 +300,7 @@ def get_max_no_of_devs_and_change_count_and_avg_comitter_expr(web_page_data, pro
                change_count = 1
                file_count_modif_added = file_count_modif_added +1 
                rev_comitter_expr_file = 100.0
+               only_deleted_files_flag = False
               
                
        if dev_count >max_dev_count:
@@ -311,8 +313,14 @@ def get_max_no_of_devs_and_change_count_and_avg_comitter_expr(web_page_data, pro
        index1 = change_path.find("<tr", index2)
      
   # print "max_dev_coun = ", max_dev_count, "  max_change_count=", max_change_count
-   avg_rev_comitter_expr =  total_rev_comitter_expr/file_count_modif_added
-   print " avg rev comitter expr=", avg_rev_comitter_expr
+   if file_count_modif_added!=0:
+       avg_rev_comitter_expr = total_rev_comitter_expr/file_count_modif_added
+       print " avg rev comitter expr=", avg_rev_comitter_expr
+       
+   else:
+       if only_deleted_files_flag == True:
+           avg_rev_comitter_expr = 100.0
+               
    return max_dev_count , max_change_count, avg_rev_comitter_expr
 #Rturns count of unique developers in a SVN
 def  get_unique_dev_count_and_change_count_and_comitter_file_expr(row_detail,project, rev_comitter):
