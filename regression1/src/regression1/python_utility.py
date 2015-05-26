@@ -216,7 +216,7 @@ def get_lines_added_count(web_page_data, web_page_url, project_basic_url):
        index1 = change_path.find("<tr", index2)
    
    vc_diff_changed_count_total = vc_diff_changed_count_total/2
-   print "vc diff add total = ", vc_diff_added_count_total, " remove count=", vc_diff_removed_count_total, "vc_diff_change_count=",  vc_diff_changed_count_total
+   #print "vc diff add total = ", vc_diff_added_count_total, " remove count=", vc_diff_removed_count_total, "vc_diff_change_count=",  vc_diff_changed_count_total
    return vc_diff_added_count_total, vc_diff_removed_count_total, vc_diff_changed_count_total, total_chunks_added, total_chunks_removed, total_chunks_changed
 
 def get_desired_chunk_count(string, file_content):
@@ -315,7 +315,7 @@ def get_max_no_of_devs_and_change_count_and_avg_comitter_expr(web_page_data, pro
   # print "max_dev_coun = ", max_dev_count, "  max_change_count=", max_change_count
    if file_count_modif_added!=0:
        avg_rev_comitter_expr = total_rev_comitter_expr/file_count_modif_added
-       print " avg rev comitter expr=", avg_rev_comitter_expr
+       #print " avg rev comitter expr=", avg_rev_comitter_expr
        
    else:
        if only_deleted_files_flag == True:
@@ -359,7 +359,7 @@ def  get_unique_dev_count_and_change_count_and_comitter_file_expr(row_detail,pro
     #print "len =", len(all_dev), "change_count = ", change_count
     
     rev_comitter_expr_file =  ((rev_comitter_comits*100)/ change_count)
-    print "modif comitter expr file=", rev_comitter_expr_file
+    #print "modif comitter expr file=", rev_comitter_expr_file
     return len(all_dev),change_count, rev_comitter_expr_file
        
 """      
