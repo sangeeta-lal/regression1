@@ -51,7 +51,9 @@ for temp in table_data:
     #revid = 2270
     #revid = 3029
     #revid =3047
-        
+    #revid = 3017
+    #revid= 189174
+            
     fetch_url = "http://src.chromium.org/viewvc/chrome?revision="+(str)(revid)+"&view=revision"
 
     print "fetch url = ",fetch_url

@@ -220,36 +220,35 @@ def get_lines_added_count(web_page_data, web_page_url, project_basic_url):
    return vc_diff_added_count_total, vc_diff_removed_count_total, vc_diff_changed_count_total, total_chunks_added, total_chunks_removed, total_chunks_changed
 
 def get_desired_chunk_count(string, file_content):
-   # print  "desired string in chunks count= ", content
-    
+    #print  "file content= ", file_content
+    #print "chunk_type =", string
+    #print "starting function with (", string,")"
     chunk_count = 0
     flag = 0
-    index1= file_content.find(string)
-   
-    if index1!= -1:
-        flag = 1
-        chunk_count =1
-        
+ 
+    index1 =  file_content.find("<tr>")
+            
     while index1!=-1:
         tr_start_index =  file_content.find("<tr>", index1)
         tr_end_index = file_content.find("</tr>", tr_start_index)
         line_content = file_content[tr_start_index:tr_end_index]
         
         string_index = line_content.find(string)
-        #print "line content = ", line_content
+        #print "line content = ", line_content 
         if string_index!=-1:
             if flag==0:
                 flag = 1
                 chunk_count =  chunk_count+1
         else:
             flag = 0
-               
+            #print "i am in else"
+        
+        #print "  \n chunk count=(",string,")", chunk_count, "flag=", flag     
         index2=  index1
-        index1= file_content.find(string,index2+1)
+        index1= file_content.find("<tr>",index2+1)
      
     #print "chunk count", chunk_count     
-    return chunk_count      
-
+    return chunk_count 
 def get_desired_string_count(string, file_content):
     count =0
     index1= file_content.find(string)
@@ -324,12 +323,15 @@ def get_max_no_of_devs_and_change_count_and_avg_comitter_expr(web_page_data, pro
    return max_dev_count , max_change_count, avg_rev_comitter_expr
 #Rturns count of unique developers in a SVN
 def  get_unique_dev_count_and_change_count_and_comitter_file_expr(row_detail,project, rev_comitter):
+   # print "row detail = ", row_detail
+    
     index= row_detail.rfind("<td")
-    start_index = row_detail.find("<td><a href=\"")
-    end_index =row_detail.find("title")
+    start_index = row_detail.find("<td><a href=\"",index)
+    end_index =row_detail.find("title=\"View Log\">")
     link = row_detail[start_index+13:end_index-2]
-    file_link = link.split("?")
-    complete_file_link ="http://src."+project+".org"+file_link[0]+"?view=log&"+file_link[1]
+    complete_file_link ="http://src."+project+".org/"+link
+    
+    
     diff_r =  urllib2.urlopen(complete_file_link)
     diff_data  =  diff_r.read()
     index1 = diff_data.find("by <em>")
@@ -356,7 +358,7 @@ def  get_unique_dev_count_and_change_count_and_comitter_file_expr(row_detail,pro
             rev_comitter_comits = rev_comitter_comits +1          
         
         index1 = diff_data.find("by <em>", end_index)
-    #print "len =", len(all_dev), "change_count = ", change_count
+    #print "len =", len(all_dev), "change_count = ", change_count, "all dev=", all_dev
     
     rev_comitter_expr_file =  ((rev_comitter_comits*100)/ change_count)
     #print "modif comitter expr file=", rev_comitter_expr_file
