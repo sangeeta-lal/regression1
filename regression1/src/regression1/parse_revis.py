@@ -14,7 +14,7 @@ import python_utility as pu
 project   = "chromium"
 project_basic_url = "http://src.chromium.org"
 
-"""
+#"""
 port=3307
 user="sangeetal"
 password="sangeetal"
@@ -29,7 +29,7 @@ password="1234"
 database="regression1"
 file_path="F:\\web_page_data.txt"
 lower_limit = 0
-upper_limit = 100000
+upper_limit = 1000
 #"""
 table =project+ "_bugid_previous_30day_revids"
 insert_rev_table= project+"_revids_feature"
@@ -38,16 +38,18 @@ db1= MySQLdb.connect(host="localhost",user=user, passwd=password, db=database, p
 select_cursor = db1.cursor()
 insert_cursor =  db1.cursor()
 
-#count = 0 
-str1=  "select bugid, revid from "+ table + " limit  "+(str)(lower_limit)+","+ (str)(upper_limit)
+count = 0 
+str1=  "select distinct revid from "+ table + " limit  "+(str)(lower_limit)+","+ (str)(upper_limit)
 
 select_cursor.execute(str1)
 table_data = select_cursor.fetchall()
 for temp in table_data:
-    bugid = temp[0]
-    revid = temp[1]
+    
+    #bugid = temp[0]
+    revid = temp[0]
    
-    print  "revid=", revid 
+    print  "revid=", revid ,  "count=", count, " lower=", lower_limit, " upper=", upper_limit
+    count = count +1
     #revid = 2270
     #revid = 3029
     #revid =3047
@@ -95,7 +97,7 @@ for temp in table_data:
     max_devs_in_file, max_change_count, avg_rev_comitter_expr  = pu.get_max_no_of_devs_and_change_count_and_avg_comitter_expr(web_page_data,project, rev_comitter)
         
     #java_file, cpp_files, other_file = pu.get_types_files_modified          
-    insert_str = "insert into "+insert_rev_table+" values("+(str)(bugid)+","+(str)(revid)+",'"+rev_log_message+"',"+(str)(rev_is_bug_fix)+","+(str)(changed_path_count)+","\
+    insert_str = "insert into "+insert_rev_table+" values("+(str)(revid)+",'"+rev_log_message+"',"+(str)(rev_is_bug_fix)+","+(str)(changed_path_count)+","\
     +(str)(lines_added)+","+  (str)(lines_deleted)+","+(str)(lines_changed)+","+(str)(chunks_added)+","+(str)(chunks_deleted)+","+(str)(chunks_changed)+","\
     +(str)(churn)+",'"+changed_path_files+"',"+(str)(test_file_count)+","+(str)(rev_day)+","+(str)(rev_month)+","+(str)(rev_weakday)+","+(str)(rev_hour)+","\
     +(str)(max_devs_in_file)+","+(str)(max_change_count)+ ","+ (str)(avg_rev_comitter_expr)+")"
