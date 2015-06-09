@@ -1,13 +1,15 @@
 package regression1;
 
+import java.awt.List;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.aliasi.tokenizer.Tokenizer;
-
 
 /*@Author: Sangeeta
  * This file is used to compute the score of a revision commit with respect to bug report feature
@@ -107,8 +109,8 @@ public class compute_score
 				desc = uti.pre_process(desc);
 			  }
 			  
-			  String[] title_arr =  uti.getngram(title);
-			  String[] desc_arr =  uti.getngram(desc);
+			  String[] title_ngram =  uti.getngram(title);
+			  String[] desc_ngram =  uti.getngram(desc);
 			  
 			  Statement stmt3 = null;
 			  String revid_str  = "select revid from "+ bugid_previous_30_days_revids_table +"  where  bugid="+bugid;
@@ -121,25 +123,43 @@ public class compute_score
 				  int revid = revid_rs.getInt("revid");
 				  double revid_size_score = compute_size_score(revid);
 				  
-				  String rev_feature_str = "select  rev_log_message from " + revid_feature_table +  "  where revid = "+revid;
+				  String rev_feature_str = "select  rev_log_message, changed_files from " + revid_feature_table +  "  where revid = "+revid;
 				  Statement stmt4  = null;
 				  stmt4 =  conn.createStatement();
 				  stmt4.executeQuery(rev_feature_str);
 				  ResultSet rev_feature_val  =  stmt4.getResultSet();
 				  
 				  String log_mess = "";
-				  String change_patth = "";
+				  String top_change_path = "";
+				  String change_path_str = "";
 				  
 				  while(rev_feature_val.next())
 				  {
 					  log_mess =  rev_feature_val.getString("rev_log_message");
+					  change_path_str = rev_feature_val.getString("changed_files");
+					  
 					  log_mess =  uti.pre_process(log_mess);
 				  }
 				  
 				  String[]  log_mess_arr = uti.getngram(log_mess);
 				  
-				  double title_log_sim_score = uti.compute_similiarity(title_arr, log_mess_arr);
-				  double desc_log_mess_score  =  uti.compute_similiarity(desc_arr, log_mess_arr);
+				  String change_path_arr[]= change_path_str.split("\n");
+				  ArrayList<String> change_path_list = new ArrayList<String>();
+				  Object[] change_path_ngram = null;
+				  
+				  for(int i=0; i<change_path_arr.length; i++)
+				  {
+					  String line =  change_path_arr[i];
+					  String []temp_line_ngram  = uti.getngram(line);
+					  change_path_list.addAll(Arrays.asList(temp_line_ngram));
+					  
+				  }
+				  
+				  change_path_ngram = change_path_list.toArray();
+				  
+				  double title_log_sim_score = uti.compute_similiarity(title_ngram, log_mess_arr);
+				  double desc_log_mess_score  =  uti.compute_similiarity(desc_ngram, log_mess_arr);
+				  double title_change_path_score = uti.compute_similiarity(title_ngram, change_path_ngram);
 				  double combined_score = 0.0;
 				  
 				  String insert_str = "insert into "+ score_table + "  values("+ bugid+","+ revid+","+ revid_size_score+ ","+ title_log_sim_score+","+desc_log_mess_score+","+combined_score+")";
@@ -173,7 +193,7 @@ public class compute_score
 	return 1.0;
    }
 
-   // This will be used to combine the scores calcuated by individual componenet
+   // This will be used to combine the scores calculated by individual component
 	private void update_combine_score()
 	{
 		Statement stmt =  null;
@@ -226,8 +246,6 @@ public class compute_score
 	   sc.update_combine_score( );
 	   sc.closedb();
     }//main
-
-
 
 }
 
