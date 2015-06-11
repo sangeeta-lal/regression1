@@ -56,15 +56,18 @@ non_bug_fixing_revids = total_bugs - bug_fixing_revids
 
 BFR = (bug_fixing_revids *100)/total_bugs
 NBFR = (non_bug_fixing_revids *100)/total_bugs
+
 style.use('ggplot')
+
+plt.rcParams.update({'font.size': 20})
 x = [1,2]
 y = [BFR, NBFR]
-plt.bar(x, y,color = 'g',  align='center', width=0.20)
+plt.bar(x, y,color = 'b',  align='center', width=0.20)
 plt.xticks([1, 2], ['Bug Fixing', 'Non Bug Fixing'])
-plt.title('Distribution of Regression Causing Commits: Bug Fixing Vs. Non Bug Fixing')
+#plt.title('Distribution of Regression Causing Commits: Bug Fixing Vs. Non Bug Fixing')
 plt.ylabel('Percentage')
 plt.xlabel('')
-
+plt.grid(True)
 plt.show()
 
 
