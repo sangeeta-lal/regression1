@@ -134,6 +134,16 @@ public class utill
 		return source_freq;
 	}
 
+
+	public void print_ngrams(String[] ngram_array) 
+	{
+		for( String val: ngram_array)
+		{
+			System.out.print("  "+ val);
+		}
+	
+	}
+	
 	public static void main(String args[])
 	{
 		utill u = new utill();
@@ -150,4 +160,5 @@ public class utill
 		System.out.println("sim="+sim);
 		
 	}//main
+
 }

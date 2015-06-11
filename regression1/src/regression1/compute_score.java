@@ -19,19 +19,20 @@ public class compute_score
 {
 	 private String driver = "com.mysql.jdbc.Driver";	     
 	
+	 /*
 	 private String url = "jdbc:mysql://localhost:3306/";
 	 private String userName = "root";
 	 private String password = "1234"; 
 	 private String dbName ="regression1" ;   
-	 private String project = "chromium";
+	 private String project = "chromium"; */
 	
-	 /* 
+	// /* 
 	 private String url = "jdbc:mysql://localhost:3306/";
 	 private String dbName ="regression1" ;   
 	 private String project = "chromium";
 	 private String userName = "sangeetal";
 	 private String password = "sangeetal";
-	  */
+	 // */
 	  	 
 	 private String bug_feature_table = project  +"_bug_report_features";  
 	 private String revid_feature_table= project+"_revids_feature";
@@ -44,7 +45,7 @@ public class compute_score
 	 String title = "";
 	 String cr= "";
 	 String area = "";	
-	 String log_message = ""; 
+	
 	
 	String stop_words []= {"hard", "what", "instead","being", "do", "you", "will", "well", "reproduce", "something", "properly", "getting", "basically" };
 	String stop_phrases[]= {"Report ID", "Cumulative Uptime", "Other Browsers Tested", "Meta Information", "Thank You"};
@@ -91,11 +92,16 @@ public class compute_score
 			  int bugid = bugid_rs.getInt("bugid");
 			  System.out.println("Bugid = "+bugid);
 			  
-			  String bug_feature =  "select title, description from " + bug_feature_table +"  where bugid = "+bugid;
+			  String bug_feature =  "select title, description,cr,area from " + bug_feature_table +"  where bugid = "+bugid;
 			  Statement stmt2 =  null;
 			  ResultSet rs2 =  null;
 			  String title = "";
-		      String desc = "";			  
+		      String desc = "";	
+		      String cr = "";
+		      String area = "";
+		      ArrayList<String>   cr_plus_area = new ArrayList<String>();
+		      //String cr_plus_area = "";
+		      
 			  stmt2 =  conn.createStatement() ; 
 			  stmt2.executeQuery(bug_feature);
 			  rs2 =  stmt2.getResultSet();
@@ -107,10 +113,26 @@ public class compute_score
 				
 				title= uti.pre_process(title);
 				desc = uti.pre_process(desc);
+				
+				cr = rs2.getString("cr");
+				area =  rs2.getString("area");
+				 //System.out.println("CR="+cr+  " Area"+area);
+				//cr_plus_area = cr+" "+area;
 			  }
 			  
 			  String[] title_ngram =  uti.getngram(title);
 			  String[] desc_ngram =  uti.getngram(desc);
+			  
+			  String [] cr_ngram = uti.getngram(cr);
+			  String [] area_ngram = uti.getngram(area);
+			 
+			  cr_plus_area.addAll(Arrays.asList(cr_ngram));
+			  cr_plus_area.addAll(Arrays.asList(area_ngram));
+			  Object cr_plus_area_obj_ngram[] = cr_plus_area.toArray();
+			  String cr_plus_area_ngram[] = Arrays.copyOf(cr_plus_area_obj_ngram, cr_plus_area_obj_ngram.length, String[].class);
+			 
+			  //System.out.println("CR="+cr+  " Area"+area);
+			  //uti.print_ngrams(cr_plus_area_ngram);
 			  
 			  Statement stmt3 = null;
 			  String revid_str  = "select revid from "+ bugid_previous_30_days_revids_table +"  where  bugid="+bugid;
@@ -120,10 +142,14 @@ public class compute_score
 			  
 			  while(revid_rs.next())
 			  {
+				 
 				  int revid = revid_rs.getInt("revid");
-				  double revid_size_score = compute_size_score(revid);
+				  System.out.println("Bugid="+ bugid+ " Revid = "+ revid);
 				  
+				  double revid_size_score = compute_size_score(revid);				  
 				  String rev_feature_str = "select  rev_log_message, changed_files from " + revid_feature_table +  "  where revid = "+revid;
+				  //System.out.println("rev feature str = "+ rev_feature_str);
+				  
 				  Statement stmt4  = null;
 				  stmt4 =  conn.createStatement();
 				  stmt4.executeQuery(rev_feature_str);
@@ -133,36 +159,74 @@ public class compute_score
 				  String top_change_path = "";
 				  String change_path_str = "";
 				  
+				
 				  while(rev_feature_val.next())
 				  {
+					  
 					  log_mess =  rev_feature_val.getString("rev_log_message");
 					  change_path_str = rev_feature_val.getString("changed_files");
-					  
+					  //System.out.println("Log message = "+ log_mess);
 					  log_mess =  uti.pre_process(log_mess);
+					 
 				  }
 				  
 				  String[]  log_mess_arr = uti.getngram(log_mess);
 				  
 				  String change_path_arr[]= change_path_str.split("\n");
 				  ArrayList<String> change_path_list = new ArrayList<String>();
-				  Object[] change_path_ngram = null;
+				  ArrayList<String> change_path_top_level_list = new ArrayList<String>();
+				  
+				  
+				  String[] change_path_ngram = null;
+				  Object [] change_path_obj_ngram =null;
+				  
+				  String [] change_path_top_level_ngram = null;
+				  Object [] change_path_top_level_obj_ngram = null;
+				  
 				  
 				  for(int i=0; i<change_path_arr.length; i++)
 				  {
 					  String line =  change_path_arr[i];
+					  //System.out.println("  line="+line);
 					  String []temp_line_ngram  = uti.getngram(line);
 					  change_path_list.addAll(Arrays.asList(temp_line_ngram));
 					  
+					  //calculation for top level
+					  String new_line = "";
+					  if (null != line && line.length() > 0 )
+					  {
+					      int endIndex = line.lastIndexOf("/");
+					      if (endIndex != -1)  
+					      {
+					          new_line = line.substring(0, endIndex); // not forgot to put check if(endIndex != -1)
+					      }
+					  					      
+					  } 
+					  
+					  //System.out.println("new line = "+ new_line);
+					  String []temp_line_top_level_ngram  = uti.getngram(new_line);
+					  change_path_top_level_list.addAll(Arrays.asList(temp_line_top_level_ngram));					  
+					  
 				  }
 				  
-				  change_path_ngram = change_path_list.toArray();
+				  change_path_obj_ngram = change_path_list.toArray();
+				  change_path_ngram = Arrays.copyOf(change_path_obj_ngram, change_path_obj_ngram.length, String[].class);
+				  
+				  change_path_top_level_obj_ngram = change_path_top_level_list.toArray();
+				  change_path_top_level_ngram = Arrays.copyOf(change_path_top_level_obj_ngram, change_path_top_level_obj_ngram.length, String[].class);
+				  
+				  //System.out.println("cr ="+ cr);
+				 // uti.print_ngrams(cr);
 				  
 				  double title_log_sim_score = uti.compute_similiarity(title_ngram, log_mess_arr);
 				  double desc_log_mess_score  =  uti.compute_similiarity(desc_ngram, log_mess_arr);
 				  double title_change_path_score = uti.compute_similiarity(title_ngram, change_path_ngram);
+				  double cr_area_top_level_change_path_score = uti.compute_similiarity(cr_plus_area_ngram, change_path_top_level_ngram);
+				  
 				  double combined_score = 0.0;
 				  
-				  String insert_str = "insert into "+ score_table + "  values("+ bugid+","+ revid+","+ revid_size_score+ ","+ title_log_sim_score+","+desc_log_mess_score+","+combined_score+")";
+				  String insert_str = "insert into "+ score_table + "  values("+ bugid+","+ revid+","+ revid_size_score+ ","+ title_log_sim_score+","+desc_log_mess_score+","+ title_change_path_score+","+
+				  +cr_area_top_level_change_path_score+","+combined_score+")";
 				  stmt4.execute(insert_str);
 				  
 				  rev_feature_val.close();
@@ -242,7 +306,7 @@ public class compute_score
      {
 	   compute_score  sc =  new compute_score();
 	   sc.initdb();
-	    sc.compute_initial_score();
+	   sc.compute_initial_score();
 	   sc.update_combine_score( );
 	   sc.closedb();
     }//main
