@@ -99,10 +99,9 @@ plt.show()
 boxes=[]
 boxes.append(dev_exp)
 
-plt.boxplot(boxes,vert=0)
-labels=[" "," Debug"]
+plt.boxplot(boxes,vert=1)
+labels=[" "," Average Comitter Experience"]
 plt.xticks(range(len(labels)), labels,  va="top", ha="center", fontsize=14)
-plt.ylabel('Function Size(LOC)',fontsize=14)
 #plt.xlim([0,150])
 #plt.savefig(file_path+"level-vs-loc.eps")
 plt.show()
