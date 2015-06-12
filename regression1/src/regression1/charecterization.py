@@ -73,7 +73,7 @@ plt.show()
 print "bug fixing revs = ", bug_fixing_revids
 
 #Graph 2: Identifying experince of developers with resoec to regression cauing commits
-str_g2  = "select avg_rev_comitter_expr from " + revid_table+ " where revid in (select revid from "+ bugid_revid_table +" )"
+str_g2  = "select avg_rev_comitter_expr from " + revid_table #+ " where revid in (select revid from "+ bugid_revid_table +" )"
 print "str g2=", str_g2
 select_cursor.execute(str_g2)
 g2_data = select_cursor.fetchall()
@@ -87,7 +87,7 @@ for avg_exp  in g2_data:
     dev_list.append(count)
 
 plt.xlabel('Developers')
-plt.ylabel('Average Comitter Experience')
+plt.ylabel('Average Comitter Experience (%)')
 plt.scatter(dev_list, dev_exp,color='green')
 plt.xlim([0,count+10])
 plt.ylim([0,110])
@@ -99,10 +99,7 @@ plt.show()
 boxes=[]
 boxes.append(dev_exp)
 
-plt.boxplot(boxes,vert=1)
-labels=[" "," Average Comitter Experience"]
-plt.xticks(range(len(labels)), labels,  va="top", ha="center", fontsize=14)
-#plt.xlim([0,150])
-#plt.savefig(file_path+"level-vs-loc.eps")
+plt.boxplot(boxes, 0, 'gD')
+plt.ylabel("Average Comitter Experience (%)")
 plt.show()
 
