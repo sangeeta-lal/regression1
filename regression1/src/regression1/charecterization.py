@@ -20,7 +20,7 @@ from matplotlib import *
 
 project   = "chromium"
 
-#"""
+"""
 port=3307
 user="sangeetal"
 password="sangeetal"
@@ -90,6 +90,20 @@ plt.xlabel('Developers')
 plt.ylabel('Average Comitter Experience')
 plt.scatter(dev_list, dev_exp,color='green')
 plt.xlim([0,count+10])
-plt.ylim([0,100])
+plt.ylim([0,110])
 #plt.savefig(file_path+"fun-scatter.eps")
 plt.show()
+
+
+#=======Box plot======#
+boxes=[]
+boxes.append(dev_exp)
+
+plt.boxplot(boxes,vert=0)
+labels=[" "," Debug"]
+plt.yticks(range(len(labels)), labels, rotation=90, va="top", ha="center", fontsize=14)
+plt.xlabel('Function Size(LOC)',fontsize=14)
+#plt.xlim([0,150])
+#plt.savefig(file_path+"level-vs-loc.eps")
+plt.show()
+
