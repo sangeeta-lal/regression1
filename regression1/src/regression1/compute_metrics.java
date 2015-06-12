@@ -87,6 +87,7 @@ private void compute_precision(int k)
 		  while(rs.next())
 		  {
 			  int bugid =  rs.getInt("bugid");
+			  System.out.println(" Bugid="+ bugid);
 			  total_count ++;
 			  
 			  String revid_str =  "select revid from " + bugid_table + " where bugid="+ bugid+" and reg_causing = 1";
