@@ -17,15 +17,22 @@ public class compute_metrics
   private double precision;
   private double map;
   
-  
+ /* 
   private String url = "jdbc:mysql://localhost:3306/";
   private String dbName ="regression1" ;
-  private String driver = "com.mysql.jdbc.Driver";
- 
-  
+  private String driver = "com.mysql.jdbc.Driver";  
   private String userName = "root";
   private String password = "1234";
+  private String project = "chromium"; */
+  
+  private String url = "jdbc:mysql://localhost:3307/";
+  private String dbName ="regression1" ;
+  private String driver = "com.mysql.jdbc.Driver";  
+  private String userName = "sangeetal";
+  private String password = "sangeetal";
   private String project = "chromium";
+  
+  
   private int top10 = 10; 
   private int top20 = 20;  
   private int top30 = 30;  
