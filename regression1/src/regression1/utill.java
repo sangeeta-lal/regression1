@@ -4,6 +4,9 @@
 package regression1;
 import java.util.ArrayList;
 
+import com.aliasi.tokenizer.EnglishStopTokenizerFactory;
+import com.aliasi.tokenizer.IndoEuropeanTokenizerFactory;
+import com.aliasi.tokenizer.LowerCaseTokenizerFactory;
 import com.aliasi.tokenizer.NGramTokenizerFactory;
 import com.aliasi.tokenizer.Tokenizer;
 import com.aliasi.tokenizer.TokenizerFactory;
@@ -17,10 +20,19 @@ public class utill
 	
 	
 	static final TokenizerFactory NGRAM_TOKENIZER_FACTORY = new NGramTokenizerFactory(3,4);
+	//static TokenizerFactory factory ;
+	//static final TokenizerFactory stopTokenizerFactory =  new EnglishStopTokenizerFactory(factory);
+    
+	 static final TokenizerFactory TOKENIZER_FACTORY = tokenizerFactory();
+     static TokenizerFactory tokenizerFactory() 
+     {
+	         TokenizerFactory factory = IndoEuropeanTokenizerFactory.INSTANCE;
+	         factory = new LowerCaseTokenizerFactory(factory);
+	         factory = new EnglishStopTokenizerFactory(factory);
+	        //factory = new PorterStemmerTokenizerFactory(factory);
+	        return factory;
+	    }
 	
-
-	/*NGramTokenizerFactory  tokFact
-	=  new  NGramTokenizerFactory(minNGramInt,maxNGramInt);*/
 	public String pre_process(String source)
 	{
 		
@@ -158,6 +170,7 @@ public class utill
 		double sim = u.compute_similiarity(val1, val2);
 		
 		System.out.println("sim="+sim);
+		String a =  "The bus stop there";
 		
 	}//main
 

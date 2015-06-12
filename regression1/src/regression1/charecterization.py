@@ -20,7 +20,7 @@ from matplotlib import *
 
 project   = "chromium"
 
-"""
+#"""
 port=3307
 user="sangeetal"
 password="sangeetal"
@@ -70,6 +70,26 @@ plt.xlabel('')
 plt.grid(True)
 plt.show()
 
-
-
 print "bug fixing revs = ", bug_fixing_revids
+
+#Graph 2: Identifying experince of developers with resoec to regression cauing commits
+str_g2  = "select avg_rev_comitter_expr from " + revid_table+ " where revid in (select revid from "+ bugid_revid_table +" )"
+print "str g2=", str_g2
+select_cursor.execute(str_g2)
+g2_data = select_cursor.fetchall()
+dev_exp = list()
+dev_list=list()
+count=0
+for avg_exp  in g2_data:
+    print "avg expr = ", avg_exp
+    dev_exp.append(avg_exp)
+    count=count+1
+    dev_list.append(count)
+
+plt.xlabel('Developers')
+plt.ylabel('Average Comitter Experience')
+plt.scatter(dev_list, dev_exp,color='green')
+#plt.xlim([0,count])
+#plt.ylim([-1,25])
+#plt.savefig(file_path+"fun-scatter.eps")
+plt.show()
