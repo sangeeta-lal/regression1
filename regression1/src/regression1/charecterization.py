@@ -20,7 +20,7 @@ from matplotlib import *
 
 project   = "chromium"
 
-"""
+#"""
 port=3307
 user="sangeetal"
 password="sangeetal"
@@ -101,8 +101,8 @@ boxes.append(dev_exp)
 
 plt.boxplot(boxes,vert=0)
 labels=[" "," Debug"]
-plt.yticks(range(len(labels)), labels, rotation=90, va="top", ha="center", fontsize=14)
-plt.xlabel('Function Size(LOC)',fontsize=14)
+plt.xticks(range(len(labels)), labels,  va="top", ha="center", fontsize=14)
+plt.ylabel('Function Size(LOC)',fontsize=14)
 #plt.xlim([0,150])
 #plt.savefig(file_path+"level-vs-loc.eps")
 plt.show()
