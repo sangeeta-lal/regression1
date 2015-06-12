@@ -73,7 +73,7 @@ plt.show()
 print "bug fixing revs = ", bug_fixing_revids
 
 #Graph 2: Identifying experince of developers with resoec to regression cauing commits
-str_g2  = "select avg_rev_comitter_expr from " + revid_table #+ " where revid in (select revid from "+ bugid_revid_table +" )"
+str_g2  = "select avg_rev_comitter_expr from " + revid_table + " where revid in (select revid from "+ bugid_revid_table +" )"
 print "str g2=", str_g2
 select_cursor.execute(str_g2)
 g2_data = select_cursor.fetchall()
