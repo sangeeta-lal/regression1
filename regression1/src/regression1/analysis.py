@@ -50,7 +50,7 @@ for t in temp_data:
     print " bug=", bugid, "  rev=", reg_causing_revid
     
     rank = 0
-    str2 = "select   combined_score, revid from "+ score_table+"  where  bugid="+ (str) ( bugid)+ " order by combined_score desc"
+    str2 = "select   combined_score, revid from "+ score_table+"  where  bugid="+ (str) ( bugid)+ " order by combined_score desc"  
     print "str2=", str2
     
     select_cursor.execute(str2)
