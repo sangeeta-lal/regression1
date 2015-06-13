@@ -20,7 +20,7 @@ from matplotlib import *
 
 project   = "chromium"
 
-"""
+#"""
 port=3307
 user="sangeetal"
 password="sangeetal"
@@ -118,7 +118,7 @@ for file_count  in g3_data:
 boxes = []
 boxes.append(no_of_files)
 plt.boxplot(boxes, 0, 'gD')
-Plt.ylim([0,200])
+plt.ylim([0,200])
 plt.ylabel("Number of Files Changed")
 plt.show()
 
