@@ -20,7 +20,7 @@ from matplotlib import *
 
 project   = "chromium"
 
-#"""
+"""
 port=3307
 user="sangeetal"
 password="sangeetal"
@@ -94,7 +94,7 @@ plt.ylim([0,110])
 #plt.savefig(file_path+"fun-scatter.eps")
 plt.show()
 
-"""
+
 # Graph3 =======Box plot==of the above developer average experience====#
 boxes=[]
 boxes.append(dev_exp)
@@ -102,7 +102,7 @@ boxes.append(dev_exp)
 plt.boxplot(boxes, 0, 'gD')
 plt.ylabel("Average Comitter Experience (%)")
 plt.show()
-"""
+
 
 #Graph4 : Identifying number of files of developers with resoec to regression cauing commits
 str_g3  = "select changed_path_count from " + revid_table + " where revid in (select revid from "+ bugid_revid_table +" )"
@@ -118,6 +118,7 @@ for file_count  in g3_data:
 boxes = []
 boxes.append(no_of_files)
 plt.boxplot(boxes, 0, 'gD')
+Plt.ylim([0,200])
 plt.ylabel("Number of Files Changed")
 plt.show()
 
