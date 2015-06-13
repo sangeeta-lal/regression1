@@ -25,6 +25,7 @@ revid_table = project+"_revids_feature"
 bugid_revid_table = project+"_bugid_reg_revids"
 score_table= project+"_score_table"
 analysis_table1 = "analysis_table1"
+detail_analysis_table = "detail_analysis_table"
 """
 port=3306
 user="root"
@@ -34,6 +35,7 @@ revid_table = project+"_revids_feature"
 bugid_revid_table = project+"_bugid_reg_revids"
 score_table= project+"_score_table"
 analysis_table1 = "analysis_table1"
+detail_analysis_table = "detail_analysis_table"
 #"""
 
 db1= MySQLdb.connect(host="localhost",user=user, passwd=password, db=database, port=port)

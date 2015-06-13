@@ -72,7 +72,7 @@ plt.show()
 
 print "bug fixing revs = ", bug_fixing_revids
 
-#Graph 2: Identifying experince of developers with resoec to regression cauing commits
+#Graph 2 : Identifying experince of developers with resoec to regression cauing commits
 str_g2  = "select avg_rev_comitter_expr from " + revid_table + " where revid in (select revid from "+ bugid_revid_table +" )"
 print "str g2=", str_g2
 select_cursor.execute(str_g2)
@@ -95,7 +95,7 @@ plt.ylim([0,110])
 plt.show()
 
 
-#=======Box plot======#
+# Graph3 =======Box plot==of the above developer average experience====#
 boxes=[]
 boxes.append(dev_exp)
 
@@ -103,3 +103,23 @@ plt.boxplot(boxes, 0, 'gD')
 plt.ylabel("Average Comitter Experience (%)")
 plt.show()
 
+
+#Graph4 : Identifying number of files of developers with resoec to regression cauing commits
+str_g3  = "select changed_path_count from " + revid_table + " where revid in (select revid from "+ bugid_revid_table +" )"
+print "str g3=", str_g3
+select_cursor.execute(str_g3)
+g3_data = select_cursor.fetchall()
+no_of_files = list()
+
+
+for file_count  in g2_data:
+    no_of_files.append(file_count)
+
+boxes = []
+boxes.append(no_of_files)
+plt.boxplot(boxes, 0, 'gD')
+plt.ylabel("Number of Files Changed")
+plt.show()
+
+
+plt.show()
