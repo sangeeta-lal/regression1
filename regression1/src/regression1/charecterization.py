@@ -112,7 +112,7 @@ g3_data = select_cursor.fetchall()
 no_of_files = list()
 
 
-for file_count  in g2_data:
+for file_count  in g3_data:
     no_of_files.append(file_count)
 
 boxes = []
