@@ -226,7 +226,9 @@ public class compute_score
 				  double combined_score = 0.0;
 				  
 				  String insert_str = "insert into "+ score_table + "  values("+ bugid+","+ revid+","+ revid_size_score+ ","+ title_log_sim_score+","+desc_log_mess_score+","+ title_change_path_score+","+
-				  +cr_area_top_level_change_path_score+","+combined_score+")";
+				  +cr_area_top_level_change_path_score+","+combined_score+","+""+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+""+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0.0+")";
+			
+				  
 				  stmt4.execute(insert_str);
 				  
 				  rev_feature_val.close();
