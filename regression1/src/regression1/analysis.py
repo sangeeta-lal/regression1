@@ -42,17 +42,17 @@ db1= MySQLdb.connect(host="localhost",user=user, passwd=password, db=database, p
 select_cursor = db1.cursor()
 insert_cursor = db1.cursor()
 
-str1  = "select bugid, revid from "+ bugid_revid_table
-select_cursor.execute(str1)
-temp_data =  select_cursor.fetchall()
 
+"""
 for t in temp_data:
     bugid  = t[0]
     reg_causing_revid = t[1]
     print " bug=", bugid, "  rev=", reg_causing_revid
     
+    
     rank = 0
-    str2 = "select   combined_score, revid from "+ score_table+"  where  bugid="+ (str) ( bugid)+ " order by combined_score desc"  
+    str2 = "select    revid, title_log_ngram_sim, desc_log_ngram_sim,title_change_path_sim, cr_area_top_level_change_path_sim from "+ score_table+"  where  bugid="\
+    + (str) ( bugid)+ " order by combined_score desc"  
     print "str2=", str2
     
     select_cursor.execute(str2)
@@ -63,11 +63,25 @@ for t in temp_data:
         temp_revid = t2[1]
         rank  =  rank+1
         
+        insert_detail_table = "insert into "
         if temp_revid==reg_causing_revid:
             
             break        
     
     insert_str = " insert into "+ analysis_table1 +" values ("+ (str)(bugid)+","+(str)(reg_causing_revid)+","+(str)(rev_total_sim_score)+ ", "+  (str)(rank)+")"
     insert_cursor.execute(insert_str)   
+ """
  
+str1  = "select bugid, revid, title_log_ngram_sim, desc_log_ngram_sim, title_change_path_sim, cr_area_top_level_change_path_sim  from "+ bugid_revid_table
+select_cursor.execute(str1)
+temp_data =  select_cursor.fetchall()
+ 
+for t in temp_data:
+    bugid  = t[0]
+    reg_causing_revid = t[1]
+    title_log_sim = t[2]
+    desc_log_sim  =t[3]
+    
+    print " bug=", bugid, "  rev=", reg_causing_revid
+    
 db1.commit()   
