@@ -10,7 +10,7 @@ project   = "chromium"
 
 lower_limit = 0
 upper_limit = 10
-#"""
+"""
 port=3307
 user="sangeetal"
 password="sangeetal"
@@ -33,7 +33,7 @@ db1= MySQLdb.connect(host="localhost",user=user, passwd=password, db=database, p
 select_cursor = db1.cursor()
 update_cursor  = db1.cursor()
 
-revid_str = "select distinct revid from " + revid_feature_table  +"  limit "+ lower_limit+","+ upper_limit
+revid_str = "select distinct revid from " + revid_feature_table  +"  limit "+ (str)(lower_limit)+","+ (str)(upper_limit)
 select_cursor.execute(revid_str)
 revid_data = select_cursor.fetchall()
 
