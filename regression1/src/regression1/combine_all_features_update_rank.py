@@ -48,25 +48,25 @@ for rev in revid_data:
     select_cursor.execute(feature_str)
     feature_data =  select_cursor.fetchall()
     for f in feature_data:
-        rev_log_message = (str)( f[0])
-        is_bug_fix  = (str)(f[1])
-        changed_path_count =     (str)( f[2])
-        lines_added  =    (str)( f[3])
-        lines_deleted =    (str)(f[4])
-        lines_changed =    (str)(f[5])
-        chunks_added =     (str)(f[6])
-        chunks_deleted =   (str)( f[7])
-        chunks_modified =  (str)( f[8])
-        churn =           (str)( f[9])
-        changed_files =  (str)(f[10])
-        test_file_count =  (str)(f[11])
-        day =  (str)(f[12])
-        month =  (str)(f[13])
-        weakday  =  (str)(f[14])
-        hour =  (str)(f[15])
-        max_dev_in_file =  (str)(f[16] )
-        max_change_count =  (str)(f[17])
-        avg_rev_comitter_expr =  (str)(f[18])
+        rev_log_message =  f[0]
+        is_bug_fix  =       f[1]
+        changed_path_count =    f[2]
+        lines_added  =    f[3]
+        lines_deleted =   f[4]
+        lines_changed =   f[5]
+        chunks_added =    f[6]
+        chunks_deleted =   f[7]
+        chunks_modified =  f[8]
+        churn =            f[9]
+        changed_files =  f[10]
+        test_file_count =  f[11]
+        day =  f[12]
+        month =  f[13]
+        weakday  =  f[14]
+        hour =  f[15]
+        max_dev_in_file =  f[16]
+        max_change_count =  f[17]
+        avg_rev_comitter_expr = f[18]
     
         update_str = "update " +score_table    +" set  rev_log_message='"+ (str)(rev_log_message) +"', is_bug_fix="+ (str)(is_bug_fix)+""\
         +",changed_path_count=" +(str)(changed_path_count)+ ", lines_added="+(str)(lines_added)+\
@@ -80,7 +80,7 @@ for rev in revid_data:
         update_cursor.execute(update_str)
         count =  count +1
             
-db1.commit()
+        db1.commit()
 
 ######========== Now update Rank=======###   
 
