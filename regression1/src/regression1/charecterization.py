@@ -20,7 +20,7 @@ from matplotlib import *
 
 project   = "chromium"
 
-#"""
+"""
 port=3307
 user="sangeetal"
 password="sangeetal"
@@ -105,14 +105,14 @@ plt.show()
 
 
 #Graph4 : Identifying number of files of developers with resoec to regression cauing commits
-str_g3  = "select changed_path_count from " + revid_table + " where revid in (select revid from "+ bugid_revid_table +" )"
-print "str g3=", str_g3
-select_cursor.execute(str_g3)
-g3_data = select_cursor.fetchall()
+str_g4  = "select changed_path_count from " + revid_table + " where revid in (select revid from "+ bugid_revid_table +" )"
+print "str g3=", str_g4
+select_cursor.execute(str_g4)
+g4_data = select_cursor.fetchall()
 no_of_files = list()
 
 
-for file_count  in g3_data:
+for file_count  in g4_data:
     no_of_files.append(file_count)
 
 boxes = []
@@ -122,5 +122,21 @@ plt.ylim([0,200])
 plt.ylabel("Number of Files Changed")
 plt.show()
 
+#Graph5 : PLot number of files with experience
+str_g5  = "select  changed_path_count, avg_rev_comitter_expr from " + revid_table + " where revid in (select revid from "+ bugid_revid_table +" )  order by changed_path_count desc"
+print "str g5=", str_g5
+select_cursor.execute(str_g5)
+g5_data = select_cursor.fetchall()
+no_of_files = list()
+avg_rev_comitter_expr = list()
 
+for d  in g5_data:
+    file_count = d[0]
+    comitter_expr = d[1]
+    no_of_files.append(file_count)
+    avg_rev_comitter_expr.append(comitter_expr)
+
+plt.plot(no_of_files, avg_rev_comitter_expr, 'ro')
+plt.xlabel("Number of Files Changed")
+plt.ylabel("Average Committer Experience")
 plt.show()
