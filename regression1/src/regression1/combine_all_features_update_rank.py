@@ -44,7 +44,7 @@ for rev in revid_data:
                    day, month, weakday, hour, max_dev_in_file, max_change_count, avg_rev_comitter_expr  from " +  revid_feature_table+ " where revid = "+ (str)(rev[0]) 
     
     # print "revid=",rev[0] 
-    print " lower limit = ", lower_limit, " upper limit = ", upper_limit, "  count =", count
+    print " lower limit = ", lower_limit, " upper limit = ", upper_limit, "  count = ", count
     select_cursor.execute(feature_str)
     feature_data =  select_cursor.fetchall()
     for f in feature_data:
