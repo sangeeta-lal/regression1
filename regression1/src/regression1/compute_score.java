@@ -19,6 +19,10 @@ public class compute_score
 {
 	 private String driver = "com.mysql.jdbc.Driver";	     
 	
+	
+	 
+	 private int lower_limit = 0;
+	 private int upper_limit = 1000 ;  // @@Set as 0-10 , 10-10, 20-10  etc as there are lot of revision ids for each bug report
 	 /*
 	 private String url = "jdbc:mysql://localhost:3306/";
 	 private String userName = "root";
@@ -32,8 +36,9 @@ public class compute_score
 	 private String project = "chromium";
 	 private String userName = "sangeetal";
 	 private String password = "sangeetal";
-	 // */
-	  	 
+	 // */	  	 
+	 
+	 
 	 private String bug_feature_table = project  +"_bug_report_features";  
 	 private String revid_feature_table= project+"_revids_feature";
 	 private String bugid_previous_30_days_revids_table = project+"_bugid_previous_30day_revids";
@@ -80,7 +85,7 @@ public class compute_score
    public void compute_initial_score()
    {
 	   utill uti  =  new utill();
-	   String bugid_str  = "select distinct bugid from "+ bugid_previous_30_days_revids_table;
+	   String bugid_str  = "select distinct bugid from "+ bugid_previous_30_days_revids_table  + "  limit  "+lower_limit+","+ upper_limit;
 	   
 	   try
 	   {
