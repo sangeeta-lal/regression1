@@ -38,11 +38,13 @@ select_cursor.execute(revid_str)
 revid_data = select_cursor.fetchall()
 
 
+count = 0
 for rev in revid_data:
     feature_str = "select rev_log_message, is_bug_fix, changed_path_count, lines_added, lines_deleted, lines_changed, chunks_added, chunks_deleted, chunks_modified, churn, changed_files, test_file_count, \
                    day, month, weakday, hour, max_dev_in_file, max_change_count, avg_rev_comitter_expr  from " +  revid_feature_table+ " where revid = "+ (str)(rev[0]) 
     
-    print "revid=",rev[0] 
+    # print "revid=",rev[0] 
+    print " lower limit = ", lower_limit, " upper limit = ", upper_limit, "  count =", count
     select_cursor.execute(feature_str)
     feature_data =  select_cursor.fetchall()
     for f in feature_data:
@@ -76,7 +78,7 @@ for rev in revid_data:
         
         #print "update str=", update_str
         update_cursor.execute(update_str)
-  
+        count =  count +1
             
 db1.commit()
 
