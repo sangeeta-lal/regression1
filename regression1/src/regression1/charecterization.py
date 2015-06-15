@@ -12,15 +12,14 @@
 import re
 import MySQLdb
 import urllib2
-import python_utility as pu
 from pylab import *
 from matplotlib import pyplot as plt
 from matplotlib import *
-
+import numpy
 
 project   = "chromium"
 
-#"""
+"""
 port=3307
 user="sangeetal"
 password="sangeetal"
@@ -140,4 +139,12 @@ plt.plot(no_of_files, avg_rev_comitter_expr, 'ro')
 plt.xlabel("Number of Files Changed")
 plt.ylabel("Average Committer Experience")
 plt.xlim([0,100])
+
+"""
+#calculating trend line
+z =  numpy.polyfit(no_of_files, avg_rev_comitter_expr,1)
+p=numpy.ploy1d(z)
+plt.plot(no_of_files,p(no_of_files), "r-")
+print   "y=%,6fx+(%.6f)"%(z[0], z[1])
+"""
 plt.show()
