@@ -48,7 +48,7 @@ for rev in revid_data:
     select_cursor.execute(feature_str)
     feature_data =  select_cursor.fetchall()
     for f in feature_data:
-        rev_log_message =  f[0]
+        rev_log_message =""#  f[0]
         is_bug_fix  =       f[1]
         changed_path_count =    f[2]
         lines_added  =    f[3]
@@ -58,7 +58,7 @@ for rev in revid_data:
         chunks_deleted =   f[7]
         chunks_modified =  f[8]
         churn =            f[9]
-        changed_files =  f[10]
+        changed_files = ""#  f[10]
         test_file_count =  f[11]
         day =  f[12]
         month =  f[13]
@@ -80,7 +80,7 @@ for rev in revid_data:
         update_cursor.execute(update_str)
         count =  count +1
             
-        db1.commit()
+db1.commit()
 
 ######========== Now update Rank=======###   
 
