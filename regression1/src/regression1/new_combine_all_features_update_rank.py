@@ -9,7 +9,7 @@ import MySQLdb
 project   = "chromium"
 
 lower_limit = 0
-upper_limit = 1
+upper_limit = 10
 #"""
 port=3307
 user="sangeetal"
