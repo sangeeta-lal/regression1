@@ -35,12 +35,15 @@ select_cursor = db1.cursor()
 insert_cursor  = db1.cursor()
 update_cursor  = db1.cursor()
 
-bugid_str  =  "select bugid, revid  from "+ bugid_revid_table
-print bugid_str
+bugid_str  =  "select bugid, revid  from "+ bugid_revid_table+ " limit lower_limit="+lower_limit+ ","+ upper_limit
+
 select_cursor.execute(bugid_str)
 bugid_data =  select_cursor.fetchall()
 
+count=0
 for temp in bugid_data:
+    count= count+1
+    print "lower=", lower_limit, "  upper limit=", upper_limit, " count=", count
     bugid=  temp[0]
     reg_causing_revid=  temp[1]
     
@@ -107,7 +110,7 @@ for temp in bugid_data:
         insert_cursor.execute(insert_str)
    
             
-db1.commit()
+        db1.commit()
 
 ######========== Now update Rank=======###   
 
