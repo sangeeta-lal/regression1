@@ -33,6 +33,7 @@ combined_score_table = project+"_combined_score_table"
 
 db1= MySQLdb.connect(host="localhost",user=user, passwd=password, db=database, port=port)
 select_cursor = db1.cursor()
+update_cursor= db1.cursor()
 
 ######========== Now update Rank=======###   
 
