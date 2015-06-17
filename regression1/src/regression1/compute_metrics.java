@@ -42,7 +42,8 @@ public class compute_metrics
  
    * */
   private String bugid_table = project  +"_bugid_previous_30day_revids";
-  private String  score_table = project + "_score_table";
+ // private String  score_table = project + "_score_table";
+  private String  score_table  =  project +"_combined_score_table";
   
   private ProjectHostingService myService = null;
   private Connection conn = null;
