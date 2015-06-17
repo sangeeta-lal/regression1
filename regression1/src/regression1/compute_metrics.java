@@ -33,6 +33,8 @@ public class compute_metrics
   private String project = "chromium";
   
   
+  private String []score_type = {"sim_Score", "size_score", "combined_score"};
+
   private int top10 = 10; 
   private int top20 = 20;  
   private int top30 = 30;  
@@ -73,7 +75,7 @@ private void closedb()
       }
 }
 
-private void compute_precision(int k)
+private void compute_precision(int k, String score_type)
 {
 	Statement stmt =  null;
 	String select_str= "select distinct bugid from  "+ bugid_table;
@@ -105,7 +107,7 @@ private void compute_precision(int k)
 				  
 			  }
 			  			  
-			  String  get_ranked_revid =  "select revid , combined_score   from "  + score_table + " where bugid= "+ bugid +" order by combined_score desc limit 0,"+k;
+			  String  get_ranked_revid =  "select revid , "+ score_type +"  from "  + score_table + " where bugid= "+ bugid +" order by "+ score_type +" desc limit 0,"+k;
 			  stmt2.execute(get_ranked_revid);
 			  rs2  =  stmt2.getResultSet();
 			  //System.out.println(" ranked = "+ get_ranked_revid) ;
@@ -115,7 +117,7 @@ private void compute_precision(int k)
 			  while(rs2.next())
 			  {
 				  int temp_revid = rs2.getInt("revid");
-				  min_combined_score = rs2.getDouble("combined_score");
+				  min_combined_score = rs2.getDouble(score_type);
 				  if(temp_revid == reg_causing_revid)
 				  {
 					  flag = true;
@@ -127,7 +129,7 @@ private void compute_precision(int k)
 			  {
 				  //Is any other revid with that score exists
 				  
-				  String  get_other_revids = "select revid  from "+ score_table + " where bugid =  "+ bugid + " and combined_score = "+ min_combined_score;
+				  String  get_other_revids = "select revid  from "+ score_table + " where bugid =  "+ bugid + " and " +  score_type+" = "+ min_combined_score;
 				 // System.out.println(" ranked = "+ get_other_revids) ;
 				  stmt2.execute(get_other_revids);
 				  rs2 = stmt2.getResultSet();
@@ -165,13 +167,16 @@ private void compute_precision(int k)
 	
 	
 	precision =  (reg_causing_match *100)/total_count;	
-	System.out.println(" Precision for Top "+ k+" =  "+precision);
+	System.out.println("Score Type="+ score_type +"  Precision for Top "+ k+" =  "+precision);
 } 
 public static void main(String args[])
   {
 	  compute_metrics cm =  new compute_metrics();
 	  cm.initdb();
-	  cm.compute_precision(cm.top10);
+	  for(int i = 0; i<cm.score_type.length;i++)
+	  {
+	      cm.compute_precision(cm.top10, cm.score_type[i]);
+	  }
 	  cm.closedb();
 	  
 	  
