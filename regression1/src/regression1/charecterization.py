@@ -123,6 +123,7 @@ plt.show()
 
 #Graph5 : PLot number of files with experience
 str_g5  = "select  changed_path_count, avg_rev_comitter_expr from " + revid_table + " where revid in (select revid from "+ bugid_revid_table +" )  order by changed_path_count desc"
+print "g5", str_g5
 print "str g5=", str_g5
 select_cursor.execute(str_g5)
 g5_data = select_cursor.fetchall()
