@@ -15,7 +15,7 @@ public class compute_metrics
 {
  
   private double precision;
-  private double map;
+  private double map ;
   
  /* 
   private String url = "jdbc:mysql://localhost:3306/";
