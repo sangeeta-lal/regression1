@@ -70,6 +70,7 @@ for temp in bugid_data:
             title_change_path_sim = temp_sim[3]
             cr_area_top_level_change_path_sim = temp_sim[4]
             combined_score = temp_sim[5]
+            sim_score = 0.0
             rank=-1
         
         feature_str = "select rev_log_message, is_bug_fix, changed_path_count, lines_added, lines_deleted, lines_changed, chunks_added, chunks_deleted, chunks_modified, churn, changed_files, test_file_count, \
@@ -104,7 +105,7 @@ for temp in bugid_data:
         +(str)(lines_deleted)+","+(str)( lines_changed)+","\
         +(str)(chunks_added)+ ","+(str)(chunks_deleted)+","+ (str)(chunks_modified)+ ","+ (str)(churn) +",'"+ (str)(changed_files)+ "',"+ (str)(test_file_count)+","+ (str)(day) \
         + ","+ (str)(month)+","+ (str)(weakday) + ","+(str)( hour)+ ","+(str)(max_dev_in_file)+","\
-        +(str)(max_change_count)+","+(str)(avg_rev_comitter_expr)+","+(str)(is_reg_causing_revid)+","+(str)(rank)+")"
+        +(str)(max_change_count)+","+(str)(avg_rev_comitter_expr)+","+(str)(is_reg_causing_revid)+","+(str)(rank)+","+(str)(sim_score)+")"
             
         #print "update str=", update_str
         insert_cursor.execute(insert_str)
