@@ -45,9 +45,9 @@ public class identify_training_revids
     /*
     private String userName = "root";
     private String password = "1234"; 
-    private String url = "jdbc:mysql://localhost:3306/"; */
+    private String url = "jdbc:mysql://localhost:3306/"; //*/
     
-  // /*
+   //*
     private String userName = "sangeetal";
     private String password = "sangeetal"; 
     private String url = "jdbc:mysql://localhost:3307/";
@@ -162,6 +162,8 @@ private void extract_other_revids()
     		 	int bugid=  result.getInt("bugid");
     		 	int revid = result.getInt("revid");
     		 	
+    		 	bugid = 39012;
+    		 	System.out.println("revid ="+ revid);
     		 	String timestamp_str = "select bugid, revid, bug_report_time_T2, bug_report_time_minus_30_day_T1  from "+  bugid_previous_30_days_revids_table +
     		 			              "   where bugid="+bugid + " and revid="+ revid;
     		    stmt_time =  conn.createStatement();
