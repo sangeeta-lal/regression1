@@ -163,7 +163,7 @@ private void extract_other_revids()
     		 	int revid = result.getInt("revid");
     		 	
     		 	bugid = 39012;
-    		 	System.out.println("revid ="+ revid);
+    		 	System.out.println(" Regcausing revid ="+ revid);
     		 	String timestamp_str = "select bugid, revid, bug_report_time_T2, bug_report_time_minus_30_day_T1  from "+  bugid_previous_30_days_revids_table +
     		 			              "   where bugid="+bugid + " and revid="+ revid;
     		    stmt_time =  conn.createStatement();
@@ -179,11 +179,14 @@ private void extract_other_revids()
     		    }
     		 	boolean flag =  true;
     		 	int temp_revid = revid-1;
+    		 	int count  = 0 ;
     		 	while(flag)
     		 	{
     		 		////
     		 		 // System.out.println("bugid"+bugid+"  temp revid"+temp_revid);	
     		 		  ////
+    		 		count++;
+    		 		 System.out.println(" other  ="+ temp_revid + "  count = "+count);
     		 		  URL revid_url   =new URL("http://src."+project+".org/viewvc/chrome?revision="+temp_revid+"&view=revision");
     		    	  BufferedReader in = new BufferedReader(new InputStreamReader(revid_url.openStream()));
     	              
