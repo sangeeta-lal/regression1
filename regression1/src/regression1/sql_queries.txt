@@ -11,10 +11,12 @@
 
 q1. To update rank of the combined score table
 
->>  update  chromium_combined_score_table set combined_score = title_log_ngram_sim+ desc_log_ngram_sim + title_change_path_sim+ cr_area_top_level_change_path_sim + is_bug_fix + changed_path_count+lines_added+
-lines_deleted+ lines_changed + chunks_added+chunks_deleted +chunks_modified+max_dev_in_file+max_change_count +avg_rev_comitter_expr 
-
+>>  
+NOTE: Order is important:
+=============================
 update  chromium_combined_score_table set sim_score = title_log_ngram_sim+ desc_log_ngram_sim + title_change_path_sim+ cr_area_top_level_change_path_sim 
 
 update  chromium_combined_score_table set size_score = is_bug_fix + changed_path_count+lines_added+
 lines_deleted+ lines_changed + chunks_added+chunks_deleted +chunks_modified+max_dev_in_file+max_change_count +avg_rev_comitter_expr 
+
+update  chromium_combined_score_table set combined_score =  size_score + sim_score

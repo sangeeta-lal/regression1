@@ -141,6 +141,38 @@ plt.xlabel("Number of Files Changed")
 plt.ylabel("Average Committer Experience")
 plt.xlim([0,100])
 
+
+
+#Graph 6:  Plot number of lines added, deletd, and mmodified
+str_g6  = "select  lines_added, lines_deleted, lines_changed from " + revid_table + " where revid in (select revid from "+ bugid_revid_table +" )  order by changed_path_count desc"
+print "g6", str_g6
+
+select_cursor.execute(str_g6)
+g6_data = select_cursor.fetchall()
+lines_added = list()
+lines_deleted = list()
+lines_changed = list()
+num= list()
+count = 0
+for d  in g6_data:
+    temp_lines_added = d[0]
+    temp_lines_deleted = d[1]
+    temp_lines_changed = d[2]
+    lines_added.append(temp_lines_added)
+    lines_deleted.append(temp_lines_deleted)
+    lines_changed.append(temp_lines_changed)
+    count = count +1
+    num.append(count)
+
+plt.plot(num, lines_added,label = 'Lines Added')
+plt.plot(num, lines_deleted, label =  'Lines Deleted')
+plt.plot(num, lines_changed, label = 'Lines Changed')
+plt.ylabel('Count')
+
+
+plt.show()
+
+
 """
 #calculating trend line
 z =  numpy.polyfit(no_of_files, avg_rev_comitter_expr,1)
