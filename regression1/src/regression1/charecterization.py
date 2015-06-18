@@ -140,7 +140,7 @@ plt.plot(no_of_files, avg_rev_comitter_expr, 'ro')
 plt.xlabel("Number of Files Changed")
 plt.ylabel("Average Committer Experience")
 plt.xlim([0,100])
-
+plt.show()
 
 
 #Graph 6:  Plot number of lines added, deletd, and mmodified
