@@ -238,7 +238,8 @@ private void extract_other_revids()
     		 	while(flag)
     		 	{
     		 		 //System.out.println("bugid"+bugid+"  temp revid"+temp_revid);
-    		 		
+    		 		count++;
+   		 		 System.out.println(" other  ="+ temp_revid + "  count = "+count);
     		 		  URL revid_url   =new URL("http://src."+project+".org/viewvc/chrome?revision="+temp_revid+"&view=revision");
     		    	  BufferedReader in = new BufferedReader(new InputStreamReader(revid_url.openStream()));
     	              
