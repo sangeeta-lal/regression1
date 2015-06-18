@@ -173,6 +173,34 @@ plt.ylabel('Count')
 plt.show()
 
 
+#Graph 7:  Plot number of chunks added, chunks deletd, and  chunksmmodified
+str_g7  = "select  chunks_added, chunks_deleted, chunks_modified from " + revid_table + " where revid in (select revid from "+ bugid_revid_table +" )  order by changed_path_count desc"
+print "g7", str_g7
+
+select_cursor.execute(str_g7)
+g7_data = select_cursor.fetchall()
+chunks_added = list()
+chunks_deleted = list()
+chunks_modified = list()
+num= list()
+count = 0
+for d  in g7_data:
+    temp_chunks_added = d[0]
+    temp_chunks_deleted = d[1]
+    temp_chunks_modified = d[2]
+    chunks_added.append(temp_chunks_added)
+    chunks_deleted.append(temp_chunks_deleted)
+    chunks_modified.append(temp_chunks_modified)
+    count = count +1
+    num.append(count)
+
+plt.plot(num, chunks_added,label = 'chunks Added')
+plt.plot(num, chunks_deleted, label =  'chunks Deleted')
+plt.plot(num, chunks_modified, label = 'chunks Changed')
+plt.ylabel('Count')
+
+
+plt.show()
 """
 #calculating trend line
 z =  numpy.polyfit(no_of_files, avg_rev_comitter_expr,1)
