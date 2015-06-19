@@ -151,9 +151,12 @@ public class compute_score
 				  int revid = revid_rs.getInt("revid");
 				  System.out.println("Bugid="+ bugid+ " Revid = "+ revid);
 				  
-				  double revid_size_score = compute_size_score(revid);				  
-				  String rev_feature_str = "select  rev_log_message, changed_files from " + revid_feature_table +  "  where revid = "+revid;
+							  
+				  String rev_feature_str = "select  rev_log_message, changed_files, is_bug_fix, changed_path_count,lines_added, lines_deleted, lines_changed , chunks_added, chunks_deleted, chunks_modified, churn,"
+				  		+ "test_file_count, day, month, weakday, hour, max_dev_in_file, max_change_count, avg_rev_comitter_expr  "
+				  		+ " from " + revid_feature_table +  "  where revid = "+revid;
 				  //System.out.println("rev feature str = "+ rev_feature_str);
+				  
 				  
 				  Statement stmt4  = null;
 				  stmt4 =  conn.createStatement();
@@ -164,25 +167,60 @@ public class compute_score
 				  String top_change_path = "";
 				  String change_path_str = "";
 				  
-				
+				  int is_bug_fix = 0;
+				  int changed_path_count=0;
+				  int lines_added=0;
+				  int lines_deleted= 0 ;
+				  int lines_changed=0;
+				  int chunks_added=0;
+				  int chunks_deleted=0;
+				  int chunks_modified=0;
+				  int churn=0;
+				  int changed_files=0;
+			      int test_file_count=0;
+				  int day = -1;
+				  int month=-1;
+				  int weakday=-1;
+				  int hour=-1;
+				  int max_dev_in_file =0;
+				  int max_change_count=0;
+				  double avg_rev_comitter_expr=0.0;
+						 
+				  
 				  while(rev_feature_val.next())
 				  {
 					  
 					  log_mess =  rev_feature_val.getString("rev_log_message");
-					  change_path_str = rev_feature_val.getString("changed_files");
-					  //System.out.println("Log message = "+ log_mess);
 					  log_mess =  uti.pre_process(log_mess);
-					 
-				  }
+					  change_path_str = rev_feature_val.getString("changed_files");
+					  
+					  is_bug_fix = rev_feature_val.getInt("is_bug_fix");
+					  changed_path_count=rev_feature_val.getInt("chnaged_path_count");
+					  lines_added=rev_feature_val.getInt("lines_added");
+					  lines_deleted= rev_feature_val.getInt("lines_deleted");
+					  lines_changed=rev_feature_val.getInt("lines_changed");
+					  chunks_added=rev_feature_val.getInt("chunks_added");
+					  chunks_deleted=rev_feature_val.getInt("chunks_deleted");
+					  chunks_modified=rev_feature_val.getInt("chunks_modified");
+					  churn=rev_feature_val.getInt("churn");
+				      test_file_count=rev_feature_val.getInt("test_file_count");
+					  day = rev_feature_val.getInt("day");
+					  month=rev_feature_val.getInt("month");
+					  weakday=rev_feature_val.getInt("weakday");
+					  hour=rev_feature_val.getInt("hour");
+					  max_dev_in_file =rev_feature_val.getInt("max_dev_in_file");
+					  max_change_count=rev_feature_val.getInt("max_change_count");
+					  avg_rev_comitter_expr=rev_feature_val.getDouble("avg_rev_comitter_expr");
+					  
+					}
 				  
 				  String[]  log_mess_arr = uti.getngram(log_mess);
-				  
 				  String change_path_arr[]= change_path_str.split("\n");
 				  ArrayList<String> change_path_list = new ArrayList<String>();
 				  ArrayList<String> change_path_top_level_list = new ArrayList<String>();
 				  
 				  
-				  String[] change_path_ngram = null;
+				  String [] change_path_ngram = null;
 				  Object [] change_path_obj_ngram =null;
 				  
 				  String [] change_path_top_level_ngram = null;
@@ -208,9 +246,9 @@ public class compute_score
 					  					      
 					  } 
 					  
-					  //System.out.println("new line = "+ new_line);
-					  String []temp_line_top_level_ngram  = uti.getngram(new_line);
-					  change_path_top_level_list.addAll(Arrays.asList(temp_line_top_level_ngram));					  
+					   //System.out.println("new line = "+ new_line);
+					   String []temp_line_top_level_ngram  = uti.getngram(new_line);
+					   change_path_top_level_list.addAll(Arrays.asList(temp_line_top_level_ngram));					  
 					  
 				  }
 				  
@@ -228,11 +266,23 @@ public class compute_score
 				  double title_change_path_score = uti.compute_similiarity(title_ngram, change_path_ngram);
 				  double cr_area_top_level_change_path_score = uti.compute_similiarity(cr_plus_area_ngram, change_path_top_level_ngram);
 				  
-				  double combined_score = 0.0;
 				  
-				  String insert_str = "insert into "+ score_table + "  values("+ bugid+","+ revid+","+ revid_size_score+ ","+ title_log_sim_score+","+desc_log_mess_score+","+ title_change_path_score+","+
-				  +cr_area_top_level_change_path_score+","+combined_score+","+"''"+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+"''"+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0.0+","+0+","+-1+")";
+				  //**Make Function for All of Them**//
+				  double sim_score =  title_log_sim_score + desc_log_mess_score + title_change_path_score + cr_area_top_level_change_path_score;
+				  double his_score  = is_bug_fix  + changed_path_count  +lines_added+ lines_deleted + lines_changed + chunks_added+ chunks_deleted + chunks_modified +test_file_count + day + month+ weakday+ hour+
+						              max_dev_in_file  + max_change_count +  avg_rev_comitter_expr ;						  
+						  					
+				  double combined_score = sim_score + his_score;
+				  
+				  
+				  String insert_str = "insert into "+ score_table + "  values("+ bugid+","+ revid+ ","+ title_log_sim_score+","+desc_log_mess_score+","+ title_change_path_score+","+
+				  +cr_area_top_level_change_path_score+",'"+rev_log_message+"',"+is_bug_fix+","+change_path_count+","+lines_added+","+lines_deleted+","+lines_changed+","+chunks_added+","+chunks_deleted+","
+						  +chunks_modified+","+churn+",'"+changed_files+"',"+test_file_count+","+day+","+month+","+weakday+","+hour+","+max_dev_in_file+","+max_change_count+","+avg_rev_comitter_expr+","
+				         +reg_causing+","+-1+","+his_score+","+sim_score+","+combined_score+")";
 			
+				
+				 
+				  
 				  
 				  stmt4.execute(insert_str);
 				  

@@ -26,6 +26,7 @@ password="sangeetal"
 database="regression1"
 revid_table = project+"_revids_feature"
 bugid_revid_table = project+"_bugid_reg_revids"
+training_revid_table =project +"_bugid_previous_30day_revids"
 """
 port=3306
 user="root"
@@ -33,6 +34,7 @@ password="1234"
 database="regression1"
 revid_table = project+"_revids_feature"
 bugid_revid_table = project+"_bugid_reg_revids"
+training_revid_table =project +"_bugid_previous_30day_revids"
 #"""
 
 db1= MySQLdb.connect(host="localhost",user=user, passwd=password, db=database, port=port)
@@ -198,9 +200,52 @@ plt.plot(num, chunks_added,label = 'chunks Added')
 plt.plot(num, chunks_deleted, label =  'chunks Deleted')
 plt.plot(num, chunks_modified, label = 'chunks Changed')
 plt.ylabel('Count')
-
-
 plt.show()
+
+
+#Graph 8:  Number of commits before 10, 20, 30 days of regression bug report
+day_10_before = list()
+day_20_before = list()
+day_30_before = list()
+
+str_10  = "select  bugid, count(*) from " + training_revid_table + " where  bugid_revid_day_diff<=10.0 group by bugid"
+print "10 days = ", str_10
+select_cursor.execute(str_10)
+data_10 = select_cursor.fetchall()
+
+for d in data_10:
+    count = d[1]
+    day_10_before.append(count)
+
+str_20  = "select  bugid, count(*) from " + training_revid_table + " where  bugid_revid_day_diff<=20.0  group by bugid"
+print "20 days = ", str_20
+select_cursor.execute(str_20)
+
+data_20 = select_cursor.fetchall()
+for d in data_20:
+    count = d[1]
+    day_20_before.append(count)
+    
+
+str_30  = "select  bugid, count(*) from " + training_revid_table + " where  bugid_revid_day_diff<=30.0  group by bugid"
+print "day 30=", str_30
+select_cursor.execute(str_30)
+data_30 = select_cursor.fetchall()
+for d in data_30:
+    count = d[1]
+    day_30_before.append(count)
+
+boxes=[]
+boxes.append(day_10_before)
+boxes.append(day_20_before)
+boxes.append(day_30_before)
+
+plt.boxplot(boxes, 0, 'gD')
+plt.ylabel("Commit Count in SVN")
+plt.xlabel("Before 10 Days", "Before 20 Days", "Before 30 Days")
+plt.show()
+
+
 """
 #calculating trend line
 z =  numpy.polyfit(no_of_files, avg_rev_comitter_expr,1)

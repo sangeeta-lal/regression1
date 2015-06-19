@@ -42,12 +42,12 @@ public class identify_training_revids
     private int days = -30;
     private int lower_limit = 0;
     private int upper_limit = 348;
-    /*
+   ///*
     private String userName = "root";
     private String password = "1234"; 
     private String url = "jdbc:mysql://localhost:3306/"; //*/
     
-   //*
+   /*
     private String userName = "sangeetal";
     private String password = "sangeetal"; 
     private String url = "jdbc:mysql://localhost:3307/";
@@ -162,7 +162,8 @@ private void extract_other_revids()
     		 	int bugid=  result.getInt("bugid");
     		 	int revid = result.getInt("revid");
     		 	
-    		 	bugid = 39012;
+    		 	//bugid = 39012;
+    		 	//revid= 42133;
     		 	System.out.println(" Regcausing revid ="+ revid);
     		 	String timestamp_str = "select bugid, revid, bug_report_time_T2, bug_report_time_minus_30_day_T1  from "+  bugid_previous_30_days_revids_table +
     		 			              "   where bugid="+bugid + " and revid="+ revid;
@@ -180,7 +181,9 @@ private void extract_other_revids()
     		 	boolean flag =  true;
     		 	int temp_revid = revid-1;
     		 	int count  = 0 ;
-    		 	while(flag)
+    		 	Boolean second_chance_given = false;
+    		 	
+    		 	while(flag )// flag will me made false after second chance
     		 	{
     		 		////
     		 		 // System.out.println("bugid"+bugid+"  temp revid"+temp_revid);	
@@ -213,33 +216,48 @@ private void extract_other_revids()
     		          if(temp_revid_commit_time.before(bug_report_time_T2) )
     		    	  {
     		        	  System.out.println("condition satisfied");
-    		    	  }*/
+    		    	  }
+    		          
+    		          
+    		          System.out.println("revid commit time = "+  temp_revid_commit_time);
+    		          System.out.println(" bug report time ="+ bug_report_time_T2);
+    		          if(temp_revid_commit_time.after(bug_report_30_day_before_T1) )
+    		    	  {
+    		        	  System.out.println("condition satisfied");
+    		    	  }//*/
     		          
     		    	  if((temp_revid_commit_time.before(bug_report_time_T2) )&&(temp_revid_commit_time.after(bug_report_30_day_before_T1)))
     		    	  {
     		    		  
     		    		  insert_infor_in_db(bugid, temp_revid, bug_report_time_T2, bug_report_30_day_before_T1, temp_revid_commit_time, reg_causing_commit, temp_bugid_revid_day_diff);
     			    	  
-    		    		  temp_revid--;
-    		    		  
+    		    		    		    		  
     		    	  }
     		    	  else
     		    	  {
-    		    	  
-    		 		     flag =  false;
+    		    	     //Give second chance, as their are some  revid like rev1, rev2 and rev3. [Rev1 = march, rev2 = october, and rev3 = march]
+    		    		  if(second_chance_given)
+    		    		  {
+    		    			  flag =  false;
+    		    		  }
+    		    	         second_chance_given =  true;
     		    	  }
-    		 	
+    		    	  
+    		    	  
+    		    	  temp_revid--;    		 	
     		 	}//while
     		 	
     		 	
     		 	//Now increment revid 
     		 	flag =  true;
+    		 	second_chance_given = false;
+    		 	
     		 	temp_revid = revid+1;
     		 	while(flag)
     		 	{
     		 		 //System.out.println("bugid"+bugid+"  temp revid"+temp_revid);
-    		 		count++;
-   		 		 System.out.println(" other  ="+ temp_revid + "  count = "+count);
+    		 		  count++;
+   		 		      System.out.println(" other  ="+ temp_revid + "  count = "+count);
     		 		  URL revid_url   =new URL("http://src."+project+".org/viewvc/chrome?revision="+temp_revid+"&view=revision");
     		    	  BufferedReader in = new BufferedReader(new InputStreamReader(revid_url.openStream()));
     	              
@@ -267,21 +285,34 @@ private void extract_other_revids()
     		    	  {
     		        	  System.out.println("condition satisfied");
     		    	  }
-    		          */
+    		          
+    		          
+    		          System.out.println("revid commit time = "+  temp_revid_commit_time);
+    		          System.out.println(" bug report time ="+ bug_report_time_T2);
+    		          if(temp_revid_commit_time.after(bug_report_30_day_before_T1) )
+    		    	  {
+    		        	  System.out.println("condition satisfied");
+    		    	  }//*/
     		          
     		          if((temp_revid_commit_time.before(bug_report_time_T2) )&&(temp_revid_commit_time.after(bug_report_30_day_before_T1)))
     		    	  {
     		    		  
     		    		  insert_infor_in_db(bugid, temp_revid, bug_report_time_T2, bug_report_30_day_before_T1, temp_revid_commit_time, reg_causing_commit, temp_bugid_revid_day_diff);
     			    	  
-    		    		  temp_revid++;
+    		    		
     		    		  
     		    	  }
     		    	  else
     		    	  {
-    		    	  
-    		 		   flag =  false;
+    		    	   //
+    		    		  if(second_chance_given)
+    		    		  {
+    		    			  flag =  false;
+    		    		  }
+    		    	         second_chance_given =  true;
     		    	  }
+    		          
+    		          temp_revid++;
     		 	
     		 	}//while   		 	
     		 	
@@ -367,8 +398,8 @@ public static void main(String args[])
     	itr.initdb();
     	System.out.println( " Please check follwing parameters: \n 1)Days =  10,20,30.. \n 2) Lower limit and Upper limt."); 
         System.out.println( " Steps to Run: \n 1) Run itr.extract_and_insert_ground_truth_info \n 2) Now comment this functin in main \n3) No run itr.extract_other_revids"); 
-    	itr.extract_and_insert_ground_truth_info();
-    	//itr.extract_other_revids();
+    	//itr.extract_and_insert_ground_truth_info();
+    	itr.extract_other_revids();
     	
     	itr.closedb();
     }    
