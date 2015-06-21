@@ -242,7 +242,9 @@ boxes.append(day_30_before)
 
 plt.boxplot(boxes, 0, 'gD')
 plt.ylabel("Commit Count in SVN")
-plt.xlabel("Before 10 Days", "Before 20 Days", "Before 30 Days")
+label = [" ","10 Days", "20 Days", "30 Days"]
+plt.xticks(range(len(label)), label)
+
 plt.show()
 
 
