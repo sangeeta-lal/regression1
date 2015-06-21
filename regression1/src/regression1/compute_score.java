@@ -23,12 +23,12 @@ public class compute_score
 	 
 	 private int lower_limit = 0;
 	 private int upper_limit = 1000 ;  // @@Set as 0-10 , 10-10, 20-10  etc as there are lot of revision ids for each bug report
-	 /*
+	/*
 	 private String url = "jdbc:mysql://localhost:3306/";
 	 private String userName = "root";
 	 private String password = "1234"; 
 	 private String dbName ="regression1" ;   
-	 private String project = "chromium"; */
+	 private String project = "chromium"; //*/
 	
 	// /* 
 	 private String url = "jdbc:mysql://localhost:3307/";
@@ -42,7 +42,7 @@ public class compute_score
 	 private String bug_feature_table = project  +"_bug_report_features";  
 	 private String revid_feature_table= project+"_revids_feature";
 	 private String bugid_previous_30_days_revids_table = project+"_bugid_previous_30day_revids";
-	 private String score_table = project  +"_score_table";
+	 private String combined_score_table = project  +"_combined_score_table";
 	 private Connection conn = null;
      private Statement stmt = null;
      
@@ -140,7 +140,7 @@ public class compute_score
 			  //uti.print_ngrams(cr_plus_area_ngram);
 			  
 			  Statement stmt3 = null;
-			  String revid_str  = "select revid from "+ bugid_previous_30_days_revids_table +"  where  bugid="+bugid;
+			  String revid_str  = "select revid , reg_causing from "+ bugid_previous_30_days_revids_table +"  where  bugid="+bugid;
 			  stmt3= conn.createStatement();
 			  stmt3.executeQuery(revid_str) ;
 			  ResultSet revid_rs  = stmt3.getResultSet();
@@ -151,7 +151,9 @@ public class compute_score
 				  int revid = revid_rs.getInt("revid");
 				  System.out.println("Bugid="+ bugid+ " Revid = "+ revid);
 				  
-							  
+				  int reg_causing = 0;
+				  reg_causing =  revid_rs.getInt("reg_causing");
+				  
 				  String rev_feature_str = "select  rev_log_message, changed_files, is_bug_fix, changed_path_count,lines_added, lines_deleted, lines_changed , chunks_added, chunks_deleted, chunks_modified, churn,"
 				  		+ "test_file_count, day, month, weakday, hour, max_dev_in_file, max_change_count, avg_rev_comitter_expr  "
 				  		+ " from " + revid_feature_table +  "  where revid = "+revid;
@@ -163,7 +165,7 @@ public class compute_score
 				  stmt4.executeQuery(rev_feature_str);
 				  ResultSet rev_feature_val  =  stmt4.getResultSet();
 				  
-				  String log_mess = "";
+				  String rev_log_mess = "";
 				  String top_change_path = "";
 				  String change_path_str = "";
 				  
@@ -190,12 +192,12 @@ public class compute_score
 				  while(rev_feature_val.next())
 				  {
 					  
-					  log_mess =  rev_feature_val.getString("rev_log_message");
-					  log_mess =  uti.pre_process(log_mess);
+					  rev_log_mess =  rev_feature_val.getString("rev_log_message");
+					  rev_log_mess =  uti.pre_process(rev_log_mess);
 					  change_path_str = rev_feature_val.getString("changed_files");
 					  
 					  is_bug_fix = rev_feature_val.getInt("is_bug_fix");
-					  changed_path_count=rev_feature_val.getInt("chnaged_path_count");
+					  changed_path_count=rev_feature_val.getInt("changed_path_count");
 					  lines_added=rev_feature_val.getInt("lines_added");
 					  lines_deleted= rev_feature_val.getInt("lines_deleted");
 					  lines_changed=rev_feature_val.getInt("lines_changed");
@@ -214,18 +216,17 @@ public class compute_score
 					  
 					}
 				  
-				  String[]  log_mess_arr = uti.getngram(log_mess);
+				  String[]  log_mess_arr = uti.getngram(rev_log_mess);
 				  String change_path_arr[]= change_path_str.split("\n");
+				  int change_path_count = change_path_arr.length; //   change path count
 				  ArrayList<String> change_path_list = new ArrayList<String>();
 				  ArrayList<String> change_path_top_level_list = new ArrayList<String>();
-				  
-				  
+				  				  
 				  String [] change_path_ngram = null;
 				  Object [] change_path_obj_ngram =null;
 				  
 				  String [] change_path_top_level_ngram = null;
 				  Object [] change_path_top_level_obj_ngram = null;
-				  
 				  
 				  for(int i=0; i<change_path_arr.length; i++)
 				  {
@@ -275,15 +276,12 @@ public class compute_score
 				  double combined_score = sim_score + his_score;
 				  
 				  
-				  String insert_str = "insert into "+ score_table + "  values("+ bugid+","+ revid+ ","+ title_log_sim_score+","+desc_log_mess_score+","+ title_change_path_score+","+
-				  +cr_area_top_level_change_path_score+",'"+rev_log_message+"',"+is_bug_fix+","+change_path_count+","+lines_added+","+lines_deleted+","+lines_changed+","+chunks_added+","+chunks_deleted+","
+				  String insert_str = "insert into "+ combined_score_table + "  values("+ bugid+","+ revid+ ","+ title_log_sim_score+","+desc_log_mess_score+","+ title_change_path_score+","+
+				  +cr_area_top_level_change_path_score+",'"+rev_log_mess+"',"+is_bug_fix+","+change_path_count+","+lines_added+","+lines_deleted+","+lines_changed+","+chunks_added+","+chunks_deleted+","
 						  +chunks_modified+","+churn+",'"+changed_files+"',"+test_file_count+","+day+","+month+","+weakday+","+hour+","+max_dev_in_file+","+max_change_count+","+avg_rev_comitter_expr+","
 				         +reg_causing+","+-1+","+his_score+","+sim_score+","+combined_score+")";
-			
-				
-				 
 				  
-				  
+				  System.out.println("Insert Str="+ insert_str);
 				  stmt4.execute(insert_str);
 				  
 				  rev_feature_val.close();
@@ -308,7 +306,7 @@ public class compute_score
    }
     
    // Used to compute the score of revid using size score
-   private double compute_size_score(int revid) 
+   private double compute_his_score(int revid) 
    {
 	
 	return 1.0;
@@ -323,7 +321,7 @@ public class compute_score
 		  {
 			  stmt =  conn.createStatement();
 			  stmt2 =  conn.createStatement();
-			  String str =  "select  bugid, revid, size_score, title_log_ngram_sim, desc_log_ngram_sim from " + score_table;
+			  String str =  "select  bugid, revid, size_score, title_log_ngram_sim, desc_log_ngram_sim from " + combined_score_table;
 			  stmt.executeQuery(str) ; 
 			  ResultSet rs =  stmt.getResultSet();
 			  while(rs.next())
@@ -336,7 +334,7 @@ public class compute_score
 				  double desc_log_ngram_sim =  rs.getDouble("desc_log_ngram_sim");
 				  double combined_score = calculate_combine_score(size_score, title_log_ngram_sim, desc_log_ngram_sim);
 		          
-				  String update_str =  "update  "+ score_table + " set combined_score = " + combined_score + " where bugid=" + bugid+" and revid = "+ revid;
+				  String update_str =  "update  "+ combined_score_table + " set combined_score = " + combined_score + " where bugid=" + bugid+" and revid = "+ revid;
 				  stmt2.executeUpdate(update_str);
 				  System.out.println("update str = "+ update_str);
 				  
@@ -364,7 +362,7 @@ public class compute_score
 	   compute_score  sc =  new compute_score();
 	   sc.initdb();
 	   sc.compute_initial_score();
-	   sc.update_combine_score( );
+	  // sc.update_combine_score( );
 	   sc.closedb();
     }//main
 
