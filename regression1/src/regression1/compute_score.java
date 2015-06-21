@@ -22,7 +22,7 @@ public class compute_score
 	
 	 
 	 private int lower_limit = 0;
-	 private int upper_limit = 1000 ;  // @@Set as 0-10 , 10-10, 20-10  etc as there are lot of revision ids for each bug report
+	 private int upper_limit = 1000 ;  // @@Set as 0-10 , 10-10, 20-10  etc as there are lot of revision ids for each bug report 
 	/*
 	 private String url = "jdbc:mysql://localhost:3306/";
 	 private String userName = "root";
