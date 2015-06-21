@@ -281,7 +281,7 @@ public class compute_score
 						  +chunks_modified+","+churn+",'"+changed_files+"',"+test_file_count+","+day+","+month+","+weakday+","+hour+","+max_dev_in_file+","+max_change_count+","+avg_rev_comitter_expr+","
 				         +reg_causing+","+-1+","+his_score+","+sim_score+","+combined_score+")";
 				  
-				  System.out.println("Insert Str="+ insert_str);
+				  //System.out.println("Insert Str="+ insert_str);
 				  stmt4.execute(insert_str);
 				  
 				  rev_feature_val.close();
