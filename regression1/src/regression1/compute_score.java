@@ -31,7 +31,7 @@ public class compute_score
 	 private String project = "chromium"; //*/
 	
 	// /* 
-	 private String url = "jdbc:mysql://localhost:3307/";
+	 private String url = "jdbc:mysql://localhost:3307/" ;
 	 private String dbName ="regression1" ;   
 	 private String project = "chromium";
 	 private String userName = "sangeetal";
