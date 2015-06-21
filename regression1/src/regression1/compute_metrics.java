@@ -17,23 +17,24 @@ public class compute_metrics
   private double precision;
   private double map ;
   
- /* 
+ ///* 
   private String url = "jdbc:mysql://localhost:3306/";
   private String dbName ="regression1" ;
   private String driver = "com.mysql.jdbc.Driver";  
   private String userName = "root";
   private String password = "1234";
-  private String project = "chromium"; */
+  private String project = "chromium"; //*/
   
+  /*
   private String url = "jdbc:mysql://localhost:3307/";
   private String dbName ="regression1" ;
   private String driver = "com.mysql.jdbc.Driver";  
   private String userName = "sangeetal";
   private String password = "sangeetal";
-  private String project = "chromium";
+  private String project = "chromium"; //*/
   
   
-  private String []score_type = {"sim_Score", "size_score", "combined_score"};
+  private String []score_type = {"sim_Score", "his_score", "combined_score"};
 
   private int top10 = 10; 
   private int top20 = 20;  
@@ -90,7 +91,7 @@ private void compute_precision(int k, String score_type)
 		  while(rs.next())
 		  {
 			  int bugid =  rs.getInt("bugid");
-			  System.out.println(" Bugid="+ bugid);
+			  //System.out.println(" Bugid="+ bugid);
 			  total_count ++;
 			  
 			  String revid_str =  "select revid from " + bugid_table + " where bugid="+ bugid+" and reg_causing = 1";
