@@ -1,11 +1,9 @@
 
 
-
 """
 @Author: Sangeeta
 @Aim: This file will be used to compute the rank of the revision ids.
 """
-
 
 import MySQLdb
 
@@ -65,6 +63,5 @@ for t in temp_data:
             
         update_str = " update "+ score_table +" set  rank="+(str)(rank)+", reg_causing ="+ (str)(reg_causing_TF) +"  where bugid="+(str)(bugid)+ "  and revid="+ (str)(temp_revid)
         update_cursor.execute(update_str)   
-
 
 db1.commit() 
