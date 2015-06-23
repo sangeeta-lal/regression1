@@ -16,7 +16,7 @@ password="sangeetal"
 database="regression1"
 revid_feature_table = project+"_revids_feature"
 bugid_revid_table = project+"_bugid_reg_revids"
-score_table= project+"_score_table"
+#score_table= project+"_score_table"
 combined_score_table = project+"_combined_score_table"
 """
 port=3306
@@ -25,7 +25,7 @@ password="1234"
 database="regression1"
 revid_feature_table = project+"_revids_feature"
 bugid_revid_table = project+"_bugid_reg_revids"
-score_table= project+"_score_table"
+#score_table= project+"_score_table"
 combined_score_table = project+"_combined_score_table"
 #"""
 
@@ -44,7 +44,7 @@ for t in temp_data:
     print " bug=", bugid, "  rev=", reg_causing_revid
     reg_causing = 0    
     rank = 0
-    str2 = "select  combined_score,  revid  from "+ score_table+"  where  bugid="\
+    str2 = "select  combined_score,  revid  from "+ combined_score_table+"  where  bugid="\
     + (str) ( bugid)+ " order by combined_score desc"  
     print "str2=", str2
     
@@ -61,7 +61,7 @@ for t in temp_data:
             reg_causing_TF = 1
             
             
-        update_str = " update "+ score_table +" set  rank="+(str)(rank)+", reg_causing ="+ (str)(reg_causing_TF) +"  where bugid="+(str)(bugid)+ "  and revid="+ (str)(temp_revid)
+        update_str = " update "+ combined_score_table +" set  rank="+(str)(rank)+", reg_causing ="+ (str)(reg_causing_TF) +"  where bugid="+(str)(bugid)+ "  and revid="+ (str)(temp_revid)
         update_cursor.execute(update_str)   
 
 db1.commit() 
