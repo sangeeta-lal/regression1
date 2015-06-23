@@ -46,7 +46,7 @@ for t in temp_data:
     rank = 0
     str2 = "select  combined_score,  revid  from "+ combined_score_table+"  where  bugid="\
     + (str) ( bugid)+ " order by combined_score desc"  
-    print "str2=", str2
+    #print "str2=", str2
     
     select_cursor.execute(str2)
     temp2_data = select_cursor.fetchall()
@@ -56,12 +56,10 @@ for t in temp_data:
         rev_total_sim_score = t2[0] 
         temp_revid = t2[1]
         rank  =  rank+1
-        
-        if  reg_causing_revid == temp_revid:
-            reg_causing_TF = 1
+     
             
             
-        update_str = " update "+ combined_score_table +" set  rank="+(str)(rank)+", reg_causing ="+ (str)(reg_causing_TF) +"  where bugid="+(str)(bugid)+ "  and revid="+ (str)(temp_revid)
+        update_str = " update "+ combined_score_table +" set  rank="+(str)(rank) +"  where bugid="+(str)(bugid)+ "  and revid="+ (str)(temp_revid)
         update_cursor.execute(update_str)   
 
 db1.commit() 
