@@ -92,7 +92,7 @@ for id in bug_data:
     
     reg_causing_revid = 0
     for r in temp_revs:
-        print "r is =",r
+        #print "r is =",r
         candidate_revid_list.append(r[0])  
                
         if r[1]==1:
