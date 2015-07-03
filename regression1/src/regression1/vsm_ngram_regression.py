@@ -53,7 +53,7 @@ def get_rank(sim_matrix, threshold, reg_causing_revid_sim):
     rank = 0
     print  " get rank=", sim_matrix 
     
-    turn  = 1  # becuase on first position bug report-bug report similiarrity is store which is "1.0" and will always be greater than bug report- revison log similiarity
+    turn  = 1  # because on first position bug report-bug report similiarrity is store which is "1.0" and will always be greater than bug report-revision log similiarity
     for sim_val in sim_matrix[0]:
        if turn!=1:       
            print "sim val=", sim_val
@@ -63,8 +63,6 @@ def get_rank(sim_matrix, threshold, reg_causing_revid_sim):
        
     return rank
         
-
-
 
 str_bug = "select distinct bugid   from chromium_bugid_reg_revids"
 select_cursor.execute(str_bug)
@@ -81,7 +79,9 @@ for id in bug_data:
     select_cursor.execute(str_bug_info)
     bug_title_info  =  select_cursor.fetchall()
     bug_title = bug_title_info[0][0]
-       
+    
+    ## utf 8 encoding
+    bug_title = bug_title.encode('utf8')   
     all_docs.append(bug_title)
      
     candidate_revid_list = list()   
@@ -109,6 +109,8 @@ for id in bug_data:
         rev_log_mess_info  =  select_cursor.fetchall()
         
         rev_log_mess =  rev_log_mess_info[0][0]
+        ## utf 8 encoding
+        rev_log_mess = rev_log_mess.encode('utf8') 
         all_docs.append(rev_log_mess)
         
         count= count + 1
