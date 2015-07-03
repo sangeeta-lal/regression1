@@ -51,12 +51,12 @@ total_revids_found = 0
 
 def get_rank(sim_matrix, threshold, reg_causing_revid_sim):
     rank = 0
-    print  " get rank=", sim_matrix 
+    #print  " get rank=", sim_matrix 
     
     turn  = 1  # because on first position bug report-bug report similiarrity is store which is "1.0" and will always be greater than bug report-revision log similiarity
     for sim_val in sim_matrix[0]:
        if turn!=1:       
-           print "sim val=", sim_val
+           #print "sim val=", sim_val
            if sim_val > reg_causing_revid_sim:
                rank  = rank + 1
        turn  = turn +1       
@@ -75,7 +75,7 @@ for id in bug_data:
     bugid = id[0]
     
     str_bug_info = "select title from  "+bug_report_feature_table+ " where bugid="+(str)(bugid)
-    print "str bug str=", str_bug_info
+    print "bugid=", bugid, "  total bugs=", total_bugs,  "  found=", total_revids_found
     select_cursor.execute(str_bug_info)
     bug_title_info  =  select_cursor.fetchall()
     bug_title = bug_title_info[0][0]
@@ -86,7 +86,7 @@ for id in bug_data:
      
     candidate_revid_list = list()   
     str_revs =   "select revid, reg_causing  from "+ bugid_previous_30_days_revids_table +"  where  bugid="+(str)(bugid)
-    print "str revs=", str_revs
+    #print "str revs=", str_revs
     select_cursor.execute(str_revs)
     temp_revs = select_cursor.fetchall()
     
@@ -104,7 +104,7 @@ for id in bug_data:
     for temp_rev in candidate_revid_list:
        # temp_rev=3017
         str_rev_info = "select  rev_log_message from "+revid_feature_table+ " where revid="+(str)(temp_rev)
-        print "str=", str_rev_info
+        #print "str=", str_rev_info
         select_cursor.execute(str_rev_info)
         rev_log_mess_info  =  select_cursor.fetchall()
         
@@ -118,14 +118,14 @@ for id in bug_data:
             reg_causing_revid_pos = count
                   
             
-    print "all docs=", all_docs , " pos=", reg_causing_revid_pos
+    #print "all docs=", all_docs , " pos=", reg_causing_revid_pos
     tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore()')
     tfidf_matrix = tfidf_vectorizer.fit_transform(all_docs)
     #print tfidf_matrix.shape
     
     sim_matrix = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix)
     reg_causing_revid_sim = sim_matrix[0][reg_causing_revid_pos]
-    print sim_matrix
+    #print sim_matrix
     
     rank = get_rank(sim_matrix, threshold, reg_causing_revid_sim)
     if rank<=threshold:
