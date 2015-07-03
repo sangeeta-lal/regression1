@@ -102,7 +102,7 @@ for id in bug_data:
     reg_causing_revid_pos = 0
     count = 0
     for temp_rev in candidate_revid_list:
-        temp_rev=3017
+       # temp_rev=3017
         str_rev_info = "select  rev_log_message from "+revid_feature_table+ " where revid="+(str)(temp_rev)
         print "str=", str_rev_info
         select_cursor.execute(str_rev_info)
