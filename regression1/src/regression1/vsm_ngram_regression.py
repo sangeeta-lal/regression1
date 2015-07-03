@@ -130,8 +130,10 @@ for id in bug_data:
        total_revids_found = total_revids_found +1
     
 
-    break   
+    #break   
 
+print "Total bug found=", total_bugs
+print  "total revids =", total_revids_found
 precision =  (total_revids_found*100)/total_bugs
 print "precsion = ", precision
     
