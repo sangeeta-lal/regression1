@@ -44,7 +44,7 @@ db1= MySQLdb.connect(host="localhost",user=user, passwd=password, db=database, p
 select_cursor = db1.cursor()
 
 precision_percentage = 0
-threshold = 100
+threshold = 50
 total_bugs = 0
 total_revids_found = 0
 
