@@ -23,9 +23,16 @@ update  chromium_combined_score_table set combined_score =  size_score + sim_sco
 
 
 Q2: Query to file left_revids table, in case there are some revsion ids are left in the chromum_bugids_previous_30day_revids table
->>
+====================================================================================================================================
 mysql> select distinct revid from  chromium_bugid_previous_30day_revids  where revid not in (select distinct revid from chromium_revids_feature);
 
 Q3: Check: Whether the revids in the are consistent with that of chromium_bugids_previous_30day_revids
 >> select distinct  revid from chromium_revids_feature where revid not in (select distinct revid from chromium_bugid
 _previous_30day_revids);
+
+ 
+q2: Queries for performing analysis of the queries 
+===================================================
+>>select *  from chromium_combined_score_table  where    bugid =  3476   order by combined_score desc limit 0,10
+>>select *  from chromium_combined_score_table  where    reg_causing=1 
+>>select *  from chromium_combined_score_table  where    rank = 1
