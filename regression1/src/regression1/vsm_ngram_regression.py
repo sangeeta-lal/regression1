@@ -81,7 +81,7 @@ for id in bug_data:
     bug_title = bug_title_info[0][0]
     
     ## utf 8 encoding
-    bug_title = bug_title.encode('utf8')   
+    #bug_title = bug_title.encode('utf8')   @2Not working
     all_docs.append(bug_title)
      
     candidate_revid_list = list()   
@@ -110,7 +110,7 @@ for id in bug_data:
         
         rev_log_mess =  rev_log_mess_info[0][0]
         ## utf 8 encoding
-        rev_log_mess = rev_log_mess.encode('utf8') 
+        #rev_log_mess = rev_log_mess.encode('utf8') 
         all_docs.append(rev_log_mess)
         
         count= count + 1
@@ -119,7 +119,7 @@ for id in bug_data:
                   
             
     print "all docs=", all_docs , " pos=", reg_causing_revid_pos
-    tfidf_vectorizer = TfidfVectorizer()
+    tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore()')
     tfidf_matrix = tfidf_vectorizer.fit_transform(all_docs)
     #print tfidf_matrix.shape
     
