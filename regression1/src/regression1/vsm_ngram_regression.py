@@ -4,7 +4,7 @@
 @Sangeeta: This file is used to compute the similarity between regression bug report and revision causing commit
 Link :
 http://blog.christianperone.com/?p=2497
-http://aimotion.blogspot.in/2011/12/machine-learning-with-python-meeting-tf.html
+http://aimotion.blogspot.in/2011/12/machine-learning-with-python-meeting-tf.html 
 """
 
 """
