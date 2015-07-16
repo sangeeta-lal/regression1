@@ -61,21 +61,6 @@ threshold = 50
 total_bugs = 0
 total_revids_found = 0
 
-"""
-def get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix, threshold, reg_causing_revid_sim, w1, w2, w3, w4):
-    rank = 0
-    #print  " get rank=", sim_matrix 
-    
-    turn  = 1  # because on first position bug report-bug report similiarrity is store which is "1.0" and will always be greater than bug report-revision log similiarity
-    for sim_val in sim_matrix[0]:
-       if turn!=1:       
-           #print "sim val=", sim_val
-           if sim_val > reg_causing_revid_sim:
-               rank  = rank + 1
-       turn  = turn +1       
-       
-    return rank
-    """
 
 def get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix, threshold, reg_causing_revid_sim, w1, w2, w3, w4):
     rank = 0
@@ -123,6 +108,8 @@ while w1 <=0.9:
 
                     total_sim_reg_causing=0.0
                     total_bugs = 0
+                    total_revids_found = 0
+                    
                     str_bug = "select distinct bugid   from " + train_bugid_revid_table
                     select_cursor.execute(str_bug)
                     bug_data =  select_cursor.fetchall()
