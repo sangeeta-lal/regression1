@@ -36,3 +36,10 @@ q2: Queries for performing analysis of the queries
 >>select *  from chromium_combined_score_table  where    bugid =  3476   order by combined_score desc limit 0,10
 >>select *  from chromium_combined_score_table  where    reg_causing=1 
 >>select *  from chromium_combined_score_table  where    rank = 1
+
+
+#===============================================#
+                   HOW TO RUN
+#===============================================#
+1. Create training and testin dataset: run create_training_test_dataset.py
+2.
