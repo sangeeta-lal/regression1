@@ -204,7 +204,7 @@ while w1 <=0.9:
                             count= count + 1
                             if temp_rev == reg_causing_revid:
                                 reg_causing_revid_pos = count
-                            "pos = ", reg_causing_revid_pos
+                            print "pos = ", reg_causing_revid_pos
                         #print "all docs=", all_docs , " pos=", reg_causing_revid_pos
                         tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
                         title_rev_log_tfidf_matrix     = tfidf_vectorizer.fit_transform(title_rev_log)
