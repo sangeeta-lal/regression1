@@ -36,7 +36,7 @@ database="regression1"
 bug_report_feature_table             = "temp"  + "_bug_report_features"
 bugid_previous_30_days_revids_table  = "temp"  +"_30_day"
 revid_feature_table                  = "temp"  +"_revid_feature"
-train_bugid_revid_table              = "temp"  +"_training_revids"
+train_bugid_revid_table              = "temp"  
 
 
 combined_score_table = project+"_combined_score_table"
