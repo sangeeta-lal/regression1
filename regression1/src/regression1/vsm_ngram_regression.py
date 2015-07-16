@@ -213,12 +213,12 @@ while w1 <=0.9:
                         cr_area_top_level_tfidf_matrix = tfidf_vectorizer.fit_transform(cr_area_top_level)
                         title_file_name_tfidf_matrix   = tfidf_vectorizer.fit_transform(title_file_name)
     
-                        print  "size=", title_rev_log_tfidf_matrix.shape,  desc_rev_log_tfidf_matrix.shape,  cr_area_top_level_tfidf_matrix.shape, title_file_name_tfidf_matrix.shape
+                        #print  "size=", title_rev_log_tfidf_matrix.shape,  desc_rev_log_tfidf_matrix.shape,  cr_area_top_level_tfidf_matrix.shape, title_file_name_tfidf_matrix.shape
                         
-                        print  "Title Rev Log=",  title_rev_log_tfidf_matrix
-                        print "Desc rev log = ",  desc_rev_log_tfidf_matrix
-                        print "cr area top level=", cr_area_top_level_tfidf_matrix
-                        print  "title file name=", title_file_name_tfidf_matrix
+                        #print  "Title Rev Log=",  title_rev_log_tfidf_matrix
+                        #print "Desc rev log = ",  desc_rev_log_tfidf_matrix
+                        #print "cr area top level=", cr_area_top_level_tfidf_matrix
+                        #print  "title file name=", title_file_name_tfidf_matrix
                         
     
                         title_rev_log_sim_matrix      = cosine_similarity(title_rev_log_tfidf_matrix[0:1], title_rev_log_tfidf_matrix)
@@ -226,6 +226,12 @@ while w1 <=0.9:
                         cr_area_top_level_sim_matrix  = cosine_similarity(cr_area_top_level_tfidf_matrix[0:1], cr_area_top_level_tfidf_matrix)
                         title_file_name_sim_matrix    = cosine_similarity( title_file_name_tfidf_matrix[0:1],  title_file_name_tfidf_matrix)
     
+                        print "sim title-rev log", title_rev_log_sim_matrix    
+                        print "desc rev log", desc_rev_log_sim_matrix      
+                        print "cr area top", cr_area_top_level_sim_matrix 
+                        print "title file name", title_file_name_sim_matrix 
+    
+                        
                         title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
                         desc_rev_log_sim        =  desc_rev_log_sim_matrix[0][reg_causing_revid_pos]
                         cr_area_top_level_sim   =  cr_area_top_level_sim_matrix[0][reg_causing_revid_pos]
