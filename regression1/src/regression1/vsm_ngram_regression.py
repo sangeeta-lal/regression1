@@ -22,7 +22,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 project   = "chromium"
 model =  "VEC"
 
-"""
+#"""
 port=3307
 user="sangeetal"
 password="sangeetal"
@@ -162,8 +162,8 @@ while w1 <=0.9:
                         #print "str revs=", str_revs
                         select_cursor.execute(str_revs)
                         temp_revs = select_cursor.fetchall()
-                        print  "total revids = ", lem(temp_revs)
-                        break
+                        print  "total revids = ", len(temp_revs)
+                        #break
                         
                         reg_causing_revid = 0
                         for r in temp_revs:
@@ -173,7 +173,10 @@ while w1 <=0.9:
                             if r[1]==1:
                                 reg_causing_revid = r[0]  
     
+                            
+                        print "reg causing revdi = ", reg_causing_revid
                         #Identify reg-causing revids and their log message
+                        
                         reg_causing_revid_pos = 0
                         count = 0
                         for temp_rev in candidate_revid_list:
@@ -198,7 +201,7 @@ while w1 <=0.9:
                                 top_level_names = changed_files_arr[i].split("/")[dir_depth-2] +" "+top_level_names
                                 i=i+1
             
-                            #print " log mess", rev_log_mess, "  files=", changed_files_with_path,  " fie name=", changed_file_names, " \n top level", top_level_names
+                            print " log mess", rev_log_mess, "  files=", changed_files_with_path,  " fie name=", changed_file_names, " \n top level=", top_level_names
                             ## utf 8 encoding
                             #rev_log_mess = rev_log_mess.encode('utf8') 
                             title_rev_log.append(rev_log_mess)
@@ -210,7 +213,7 @@ while w1 <=0.9:
                             if temp_rev == reg_causing_revid:
                                 reg_causing_revid_pos = count
                   
-            
+                        print "count = ", count
                         #print "all docs=", all_docs , " pos=", reg_causing_revid_pos
                         tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
                         title_rev_log_tfidf_matrix     = tfidf_vectorizer.fit_transform(title_rev_log)
