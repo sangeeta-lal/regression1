@@ -205,6 +205,7 @@ while w1 <=0.9:
                             if temp_rev == reg_causing_revid:
                                 reg_causing_revid_pos = count
                             print "pos = ", reg_causing_revid_pos
+                            
                         #print "all docs=", all_docs , " pos=", reg_causing_revid_pos
                         tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
                         title_rev_log_tfidf_matrix     = tfidf_vectorizer.fit_transform(title_rev_log)
@@ -232,7 +233,7 @@ while w1 <=0.9:
                             total_revids_found = total_revids_found +1
     
 
-                        break   
+                        #break   
 
                         print "Total bug found=", total_bugs
                         print  "total revids =", total_revids_found
