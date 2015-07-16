@@ -27,12 +27,18 @@ port=3307
 user="sangeetal"
 password="sangeetal"
 database="regression1"
-bug_report_feature_table = project + "_bug_report_features"
-bugid_previous_30_days_revids_table = project +"_bugid_previous_30day_revids"
-revid_feature_table = project+"_revids_feature"
-train_bugid_revid_table = project+"_train_bugid_reg_revids"
-test_bugid_revid_table = project+"_test_bugid_reg_revids"
-#score_table= project+"_score_table"
+#bug_report_feature_table = project + "_bug_report_features"
+#bugid_previous_30_days_revids_table = project +"_bugid_previous_30day_revids"
+#revid_feature_table = project+"_revids_feature"
+#train_bugid_revid_table = project+"_train_bugid_reg_revids"
+#test_bugid_revid_table = project+"_test_bugid_reg_revids"
+
+bug_report_feature_table             = "temp"  + "_bug_report_features"
+bugid_previous_30_days_revids_table  = "temp"  +"_30_day"
+revid_feature_table                  = "temp"  +"_revid_feature"
+train_bugid_revid_table              = "temp"  +"_training_revids"
+
+
 combined_score_table = project+"_combined_score_table"
 """
 port=3306
@@ -44,7 +50,6 @@ bugid_previous_30_days_revids_table = project +"_bugid_previous_30day_revids"
 revid_feature_table = project+"_revids_feature"
 train_bugid_revid_table = project+"_train_bugid_reg_revids"
 test_bugid_revid_table = project+"_test_bugid_reg_revids"
-#score_table= project+"_score_table"
 combined_score_table = project+"_combined_score_table"
 #"""
 
@@ -186,7 +191,7 @@ while w1 <=0.9:
                             select_cursor.execute(str_rev_info)
                             rev_info  =  select_cursor.fetchall()
                             
-                            print " rev info = ", rev_info
+                            #print " rev info = ", rev_info
                             rev_log_mess =  rev_info[0][0]
                             changed_files_with_path=  rev_info[0][1]
         
@@ -201,7 +206,7 @@ while w1 <=0.9:
                                 top_level_names = changed_files_arr[i].split("/")[dir_depth-2] +" "+top_level_names
                                 i=i+1
             
-                            print " log mess", rev_log_mess, "  files=", changed_files_with_path,  " fie name=", changed_file_names, " \n top level=", top_level_names
+                            #print " log mess", rev_log_mess, "  files=", changed_files_with_path,  " fie name=", changed_file_names, " \n top level=", top_level_names
                             ## utf 8 encoding
                             #rev_log_mess = rev_log_mess.encode('utf8') 
                             title_rev_log.append(rev_log_mess)
@@ -223,10 +228,10 @@ while w1 <=0.9:
     
                         print  "size=", title_rev_log_tfidf_matrix.shape,  desc_rev_log_tfidf_matrix.shape,  cr_area_top_level_tfidf_matrix.shape, title_file_name_tfidf_matrix.shape
     
-                        title_rev_log_sim_matrix = cosine_similarity(title_rev_log_tfidf_matrix[0:1], title_rev_log_tfidf_matrix)
-                        desc_rev_log_sim_matrix= cosine_similarity(desc_rev_log_tfidf_matrix[0:1], desc_rev_log_tfidf_matrix)
-                        cr_area_top_level_sim_matrix = cosine_similarity(cr_area_top_level_tfidf_matrix[0:1], cr_area_top_level_tfidf_matrix)
-                        title_file_name_sim_matrix = cosine_similarity( title_file_name_tfidf_matrix[0:1],  title_file_name_tfidf_matrix)
+                        title_rev_log_sim_matrix      = cosine_similarity(title_rev_log_tfidf_matrix[0:1], title_rev_log_tfidf_matrix)
+                        desc_rev_log_sim_matrix       = cosine_similarity(desc_rev_log_tfidf_matrix[0:1], desc_rev_log_tfidf_matrix)
+                        cr_area_top_level_sim_matrix  = cosine_similarity(cr_area_top_level_tfidf_matrix[0:1], cr_area_top_level_tfidf_matrix)
+                        title_file_name_sim_matrix    = cosine_similarity( title_file_name_tfidf_matrix[0:1],  title_file_name_tfidf_matrix)
     
                         title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
                         desc_rev_log_sim        =  desc_rev_log_sim_matrix[0][reg_causing_revid_pos]
