@@ -214,6 +214,12 @@ while w1 <=0.9:
                         title_file_name_tfidf_matrix   = tfidf_vectorizer.fit_transform(title_file_name)
     
                         print  "size=", title_rev_log_tfidf_matrix.shape,  desc_rev_log_tfidf_matrix.shape,  cr_area_top_level_tfidf_matrix.shape, title_file_name_tfidf_matrix.shape
+                        
+                        print  "Title Rev Log=",  title_rev_log_tfidf_matrix
+                        print "Desc rev log = ",  desc_rev_log_tfidf_matrix
+                        print "cr area top level=", cr_area_top_level_tfidf_matrix
+                        print  "title file name=", title_file_name_tfidf_matrix
+                        
     
                         title_rev_log_sim_matrix      = cosine_similarity(title_rev_log_tfidf_matrix[0:1], title_rev_log_tfidf_matrix)
                         desc_rev_log_sim_matrix       = cosine_similarity(desc_rev_log_tfidf_matrix[0:1], desc_rev_log_tfidf_matrix)
