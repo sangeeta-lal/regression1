@@ -17,7 +17,9 @@ port=3307
 user="sangeetal"
 password="sangeetal"
 database="regression1"
-
+main_table = project +"_bugid_reg_revids"
+train_table = project +"_train_bug_reg_revids"
+test_table = project+"_test_bug_reg_revids"
 """
 port=3306
 user="root"
