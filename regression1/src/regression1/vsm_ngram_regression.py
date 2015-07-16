@@ -193,9 +193,9 @@ while w1 <=0.9:
                                 top_level_names = changed_files_arr[i].split("/")[dir_depth-2] +" "+top_level_names
                                 i=i+1
             
-                            #print " log mess", rev_log_mess, "  files=", changed_files_with_path,  " fie name=", changed_file_names, " \n top level=", top_level_names
-                            ## utf 8 encoding
-                            #rev_log_mess = rev_log_mess.encode('utf8') 
+                            print "revid=", temp_rev,  "log mess", rev_log_mess, "  files=", changed_files_with_path,  " fie name=", changed_file_names, " \n top level=", top_level_names
+                        
+                            
                             title_rev_log.append(rev_log_mess)
                             desc_rev_log.append(rev_log_mess)
                             cr_area_top_level.append(top_level_names)
@@ -204,8 +204,7 @@ while w1 <=0.9:
                             count= count + 1
                             if temp_rev == reg_causing_revid:
                                 reg_causing_revid_pos = count
-                  
-                        print "count = ", count
+                            "pos = ", reg_causing_revid_pos
                         #print "all docs=", all_docs , " pos=", reg_causing_revid_pos
                         tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
                         title_rev_log_tfidf_matrix     = tfidf_vectorizer.fit_transform(title_rev_log)
