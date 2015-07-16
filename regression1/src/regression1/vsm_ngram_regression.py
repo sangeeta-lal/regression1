@@ -117,7 +117,7 @@ while w1 <=0.9:
                  
 
                     total_sim_reg_causing=0.0
-                
+                    total_bugs = 0
                     str_bug = "select distinct bugid   from " + train_bugid_revid_table
                     select_cursor.execute(str_bug)
                     bug_data =  select_cursor.fetchall()
@@ -131,18 +131,18 @@ while w1 <=0.9:
                         cr_area_top_level=list()
                         title_file_name = list()
     
-                        bugid = id[0]
+                        bugid   = id[0]
     
-                        str_bug_info = "select title, description, cr, area from  "+bug_report_feature_table+ " where bugid="+(str)(bugid)
+                        str_bug_info  = "select title, description, cr, area from  "+bug_report_feature_table+ " where bugid="+(str)(bugid)
                         print "bugid=", bugid, "  total bugs=", total_bugs,  "  found=", total_revids_found
-                        break
+                        #break
                         select_cursor.execute(str_bug_info)
                         bug_feature_info  =  select_cursor.fetchall()
     
-                        bug_title = bug_feature_info[0][0]
-                        bug_desc = bug_feature_info[0][1]
-                        bug_cr =  bug_feature_info[0][2]
-                        bug_area = bug_feature_info[0][3]
+                        bug_title  =  bug_feature_info[0][0]
+                        bug_desc   =  bug_feature_info[0][1]
+                        bug_cr     =  bug_feature_info[0][2]
+                        bug_area   =  bug_feature_info[0][3]
     
                         bug_cr_and_area =  bug_cr+ " "+ bug_area
                         #bug_all_features =  bug_title+ " "+ bug_description+ " "+ bug_cr+" "+ bug_area
@@ -162,7 +162,9 @@ while w1 <=0.9:
                         #print "str revs=", str_revs
                         select_cursor.execute(str_revs)
                         temp_revs = select_cursor.fetchall()
-    
+                        print  "total revids = ", lem(temp_revs)
+                        break
+                        
                         reg_causing_revid = 0
                         for r in temp_revs:
                             #print "r is =",r
