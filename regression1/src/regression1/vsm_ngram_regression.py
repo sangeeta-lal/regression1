@@ -205,61 +205,60 @@ while w1 <=0.9:
                                 reg_causing_revid_pos = count
                             print "pos = ", reg_causing_revid_pos
                             
-                        #print "all docs=", all_docs , " pos=", reg_causing_revid_pos
-                        tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
-                        title_rev_log_tfidf_matrix     = tfidf_vectorizer.fit_transform(title_rev_log)
-                        desc_rev_log_tfidf_matrix      = tfidf_vectorizer.fit_transform(desc_rev_log)
-                        cr_area_top_level_tfidf_matrix = tfidf_vectorizer.fit_transform(cr_area_top_level)
-                        title_file_name_tfidf_matrix   = tfidf_vectorizer.fit_transform(title_file_name)
+                    #print "all docs=", all_docs , " pos=", reg_causing_revid_pos
+                    tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
+                    title_rev_log_tfidf_matrix     = tfidf_vectorizer.fit_transform(title_rev_log)
+                    desc_rev_log_tfidf_matrix      = tfidf_vectorizer.fit_transform(desc_rev_log)
+                    cr_area_top_level_tfidf_matrix = tfidf_vectorizer.fit_transform(cr_area_top_level)
+                    title_file_name_tfidf_matrix   = tfidf_vectorizer.fit_transform(title_file_name)
     
-                        #print  "size=", title_rev_log_tfidf_matrix.shape,  desc_rev_log_tfidf_matrix.shape,  cr_area_top_level_tfidf_matrix.shape, title_file_name_tfidf_matrix.shape
+                    #print  "size=", title_rev_log_tfidf_matrix.shape,  desc_rev_log_tfidf_matrix.shape,  cr_area_top_level_tfidf_matrix.shape, title_file_name_tfidf_matrix.shape
                         
-                        #print  "Title Rev Log=",  title_rev_log_tfidf_matrix
-                        #print "Desc rev log = ",  desc_rev_log_tfidf_matrix
-                        #print "cr area top level=", cr_area_top_level_tfidf_matrix
-                        #print  "title file name=", title_file_name_tfidf_matrix
+                    #print  "Title Rev Log=",  title_rev_log_tfidf_matrix
+                    #print "Desc rev log = ",  desc_rev_log_tfidf_matrix
+                    #print "cr area top level=", cr_area_top_level_tfidf_matrix
+                    #print  "title file name=", title_file_name_tfidf_matrix
                         
     
-                        title_rev_log_sim_matrix      = cosine_similarity(title_rev_log_tfidf_matrix[0:1], title_rev_log_tfidf_matrix)
-                        desc_rev_log_sim_matrix       = cosine_similarity(desc_rev_log_tfidf_matrix[0:1], desc_rev_log_tfidf_matrix)
-                        cr_area_top_level_sim_matrix  = cosine_similarity(cr_area_top_level_tfidf_matrix[0:1], cr_area_top_level_tfidf_matrix)
-                        title_file_name_sim_matrix    = cosine_similarity( title_file_name_tfidf_matrix[0:1],  title_file_name_tfidf_matrix)
+                    title_rev_log_sim_matrix      = cosine_similarity(title_rev_log_tfidf_matrix[0:1], title_rev_log_tfidf_matrix)
+                    desc_rev_log_sim_matrix       = cosine_similarity(desc_rev_log_tfidf_matrix[0:1], desc_rev_log_tfidf_matrix)
+                    cr_area_top_level_sim_matrix  = cosine_similarity(cr_area_top_level_tfidf_matrix[0:1], cr_area_top_level_tfidf_matrix)
+                    title_file_name_sim_matrix    = cosine_similarity( title_file_name_tfidf_matrix[0:1],  title_file_name_tfidf_matrix)
     
-                        print "sim title-rev log", title_rev_log_sim_matrix    
-                        print "desc rev log", desc_rev_log_sim_matrix      
-                        print "cr area top", cr_area_top_level_sim_matrix 
-                        print "title file name", title_file_name_sim_matrix 
+                    print "sim title-rev log", title_rev_log_sim_matrix    
+                    print "desc rev log", desc_rev_log_sim_matrix      
+                    print "cr area top", cr_area_top_level_sim_matrix 
+                    print "title file name", title_file_name_sim_matrix 
     
                         
-                        title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
-                        desc_rev_log_sim        =  desc_rev_log_sim_matrix[0][reg_causing_revid_pos]
-                        cr_area_top_level_sim   =  cr_area_top_level_sim_matrix[0][reg_causing_revid_pos]
-                        title_file_name_sim     =  title_file_name_sim_matrix[0][reg_causing_revid_pos]
+                    title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
+                    desc_rev_log_sim        =  desc_rev_log_sim_matrix[0][reg_causing_revid_pos]
+                    cr_area_top_level_sim   =  cr_area_top_level_sim_matrix[0][reg_causing_revid_pos]
+                    title_file_name_sim     =  title_file_name_sim_matrix[0][reg_causing_revid_pos]
                         
-                        print "reg causing t-r",  title_rev_log_sim
-                        print "desc rev-log",     desc_rev_log_sim
-                        print "cr area",          cr_area_top_level_sim   
-                        print "titel file",       title_file_name_sim
+                    print "reg causing t-r",  title_rev_log_sim
+                    print "desc rev-log",     desc_rev_log_sim
+                    print "cr area",          cr_area_top_level_sim   
+                    print "titel file",       title_file_name_sim
     
-                        total_sim_reg_causing =  w1*title_rev_log_sim + w2*desc_rev_log_sim + w3*cr_area_top_level_sim + w4*title_file_name_sim
-                        #print sim_matrix
+                    total_sim_reg_causing =  w1*title_rev_log_sim + w2*desc_rev_log_sim + w3*cr_area_top_level_sim + w4*title_file_name_sim
+                    #print sim_matrix
     
-                        rank = get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix,title_file_name_sim_matrix, threshold, total_sim_reg_causing,w1, w2, w3, w4)
-                        if rank<=threshold:
-                            total_revids_found = total_revids_found +1
-    
-
+                    rank = get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix,title_file_name_sim_matrix, threshold, total_sim_reg_causing,w1, w2, w3, w4)
+                    if rank<=threshold:
+                        total_revids_found = total_revids_found +1
                         #break   
 
-                        print "Total bug found=", total_bugs
-                        print  "total revids =", total_revids_found
-                        precision =  (total_revids_found*100)/total_bugs
-                        print "precsion = ", precision
+                    print "Total bug found=", total_bugs
+                    print  "total revids =", total_revids_found
+                    precision =  (total_revids_found*100)/total_bugs
+                    print "precsion = ", precision
                          
-                        insert_str =  "insert into "+learning_table+   " values ("+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+","+ model+","+(str)(threshold)\
+                    insert_str =  "insert into "+learning_table+   " values ("+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+","+ model+","+(str)(threshold)\
                         +","+(str)(precision)+","+(str)(total_bugs)+","+(str)(total_revids_found)+")" 
                         
-                        insert_cursor.execute(insert_str)
-                        db1.commit()
+                    print "insert str=", insert_str
+                    insert_cursor.execute(insert_str)
+                    db1.commit()
 
                     
