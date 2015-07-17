@@ -53,7 +53,7 @@ learning_table = project +"_"+model+"weight_learning"
 
 db1= MySQLdb.connect(host="localhost",user=user, passwd=password, db=database, port=port)
 select_cursor = db1.cursor()
-insert_cursor =  d1.cursor()
+insert_cursor = db1.cursor()
 
 precision_percentage = 0
 threshold = 50
