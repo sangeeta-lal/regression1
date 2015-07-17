@@ -53,6 +53,7 @@ learning_table = project +"_"+model+"weight_learning"
 
 db1= MySQLdb.connect(host="localhost",user=user, passwd=password, db=database, port=port)
 select_cursor = db1.cursor()
+insert_cursor =  d1.cursor()
 
 precision_percentage = 0
 threshold = 50
@@ -257,5 +258,8 @@ while w1 <=0.9:
                          
                         insert_str =  "insert into "+learning_table+   " values ("+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+","+ model+","+(str)(threshold)\
                         +","+(str)(precision)+","+(str)(total_bugs)+","+(str)(total_revids_found)+")" 
+                        
+                        insert_cursor.execute(insert_str)
+                        db1.commit()
 
                     
