@@ -255,7 +255,7 @@ while w1 <=0.9:
                     print "precsion = ", precision
                          
                     insert_str =  "insert into "+learning_table+   " values ("+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+","+ model+","+(str)(threshold)\
-                        +","+(str)(precision)+","+(str)(total_bugs)+","+(str)(total_revids_found)+")" 
+                        +","+(str)(precision)+","+(str)(total_bugs)+","+(str)(total_revids_found)+ ")" 
                         
                     print "insert str=", insert_str
                     insert_cursor.execute(insert_str)
