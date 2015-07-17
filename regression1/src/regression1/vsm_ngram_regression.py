@@ -125,7 +125,7 @@ while w1 <=0.9:
                         bugid   = id[0]
     
                         str_bug_info  = "select title, description, cr, area from  "+bug_report_feature_table+ " where bugid="+(str)(bugid)
-                        print "bugid=", bugid, "  total bugs=", total_bugs,  "  found=", total_revids_found
+                        print "bugid=", bugid #, "  total bugs=", total_bugs,  "  found=", total_revids_found
                         #break
                         select_cursor.execute(str_bug_info)
                         bug_feature_info  =  select_cursor.fetchall()
@@ -138,7 +138,7 @@ while w1 <=0.9:
                         bug_cr_and_area =  bug_cr+ " "+ bug_area
                         #bug_all_features =  bug_title+ " "+ bug_description+ " "+ bug_cr+" "+ bug_area
                         #bug_all_feature =  utill.clean(bug_all_features)
-                        print " title", bug_title, "  dec=", bug_desc, "  cr=",bug_cr, " area=", bug_area
+                        #print " title", bug_title, "  dec=", bug_desc, "  cr=",bug_cr, " area=", bug_area
     
                         ## utf 8 encoding
                         #bug_title = bug_title.encode('utf8')   @Not working
@@ -153,7 +153,7 @@ while w1 <=0.9:
                         #print "str revs=", str_revs
                         select_cursor.execute(str_revs)
                         temp_revs = select_cursor.fetchall()
-                        print  "total revids = ", len(temp_revs)
+                        #print  "total revids = ", len(temp_revs)
                         #break
                         
                         reg_causing_revid = 0
@@ -171,7 +171,7 @@ while w1 <=0.9:
                         reg_causing_revid_pos = 0
                         count = 0
                         for temp_rev in candidate_revid_list:
-                            #temp_rev=3017
+                        
                             str_rev_info = "select  rev_log_message, changed_files from "+revid_feature_table+ " where revid="+(str)(temp_rev)
                             #print "str=", str_rev_info
                             select_cursor.execute(str_rev_info)
@@ -192,7 +192,7 @@ while w1 <=0.9:
                                 top_level_names = changed_files_arr[i].split("/")[dir_depth-2] +" "+top_level_names
                                 i=i+1
             
-                            print "revid=", temp_rev,  "log mess", rev_log_mess, "  files=", changed_files_with_path,  " fie name=", changed_file_names, " \n top level=", top_level_names
+                           # print "revid=", temp_rev,  "log mess", rev_log_mess, "  files=", changed_files_with_path,  " fie name=", changed_file_names, " \n top level=", top_level_names
                         
                             
                             title_rev_log.append(rev_log_mess)
@@ -203,7 +203,7 @@ while w1 <=0.9:
                             count= count + 1
                             if temp_rev == reg_causing_revid:
                                 reg_causing_revid_pos = count
-                            print "pos = ", reg_causing_revid_pos
+                            #print "pos = ", reg_causing_revid_pos
                             
                     #print "all docs=", all_docs , " pos=", reg_causing_revid_pos
                     tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
@@ -225,10 +225,10 @@ while w1 <=0.9:
                     cr_area_top_level_sim_matrix  = cosine_similarity(cr_area_top_level_tfidf_matrix[0:1], cr_area_top_level_tfidf_matrix)
                     title_file_name_sim_matrix    = cosine_similarity( title_file_name_tfidf_matrix[0:1],  title_file_name_tfidf_matrix)
     
-                    print "sim title-rev log", title_rev_log_sim_matrix    
-                    print "desc rev log", desc_rev_log_sim_matrix      
-                    print "cr area top", cr_area_top_level_sim_matrix 
-                    print "title file name", title_file_name_sim_matrix 
+                    #print "sim title-rev log", title_rev_log_sim_matrix    
+                    #print "desc rev log", desc_rev_log_sim_matrix      
+                    #print "cr area top", cr_area_top_level_sim_matrix 
+                    #print "title file name", title_file_name_sim_matrix 
     
                         
                     title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
@@ -236,10 +236,10 @@ while w1 <=0.9:
                     cr_area_top_level_sim   =  cr_area_top_level_sim_matrix[0][reg_causing_revid_pos]
                     title_file_name_sim     =  title_file_name_sim_matrix[0][reg_causing_revid_pos]
                         
-                    print "reg causing t-r",  title_rev_log_sim
-                    print "desc rev-log",     desc_rev_log_sim
-                    print "cr area",          cr_area_top_level_sim   
-                    print "titel file",       title_file_name_sim
+                    #print "reg causing t-r",  title_rev_log_sim
+                    #print "desc rev-log",     desc_rev_log_sim
+                    #print "cr area",          cr_area_top_level_sim   
+                    #print "titel file",       title_file_name_sim
     
                     total_sim_reg_causing =  w1*title_rev_log_sim + w2*desc_rev_log_sim + w3*cr_area_top_level_sim + w4*title_file_name_sim
                     #print sim_matrix
@@ -257,7 +257,7 @@ while w1 <=0.9:
                     insert_str =  "insert into "+learning_table+   " values ("+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+","+ model+","+(str)(threshold)\
                         +","+(str)(precision)+","+(str)(total_bugs)+","+(str)(total_revids_found)+ ")" 
                         
-                    print "insert str=", insert_str
+                    #print "insert str=", insert_str
                     insert_cursor.execute(insert_str)
                     db1.commit()
 
