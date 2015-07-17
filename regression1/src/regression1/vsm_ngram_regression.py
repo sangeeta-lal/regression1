@@ -255,6 +255,7 @@ while w1 <=0.9:
                         precision =  (total_revids_found*100)/total_bugs
                         print "precsion = ", precision
                          
-                        insert_str =  "insert into "+learning_table+   " values ("+ w1+","+ w2+","+w3+","+w4+","+ model+","+threshold+","+precision+","+total_bugs+","+total_revids_found+")" 
+                        insert_str =  "insert into "+learning_table+   " values ("+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+","+ model+","+(str)(threshold)\
+                        +","+(str)(precision)+","+(str)(total_bugs)+","+(str)(total_revids_found)+")" 
 
                     
