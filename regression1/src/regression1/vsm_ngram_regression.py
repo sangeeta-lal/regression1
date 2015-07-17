@@ -20,7 +20,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 project   = "chromium"
-model =  "VEC"
+model =  "VCB"
 
 #"""
 port=3307
@@ -37,9 +37,7 @@ bug_report_feature_table             = "temp"  + "_bug_report_features"
 bugid_previous_30_days_revids_table  = "temp"  +"_30_day"
 revid_feature_table                  = "temp"  +"_revid_feature"
 train_bugid_revid_table              = "temp"  
-
-
-combined_score_table = project+"_combined_score_table"
+learning_table = project +"_"+model+"weight_learning"
 """
 port=3306
 user="root"
@@ -50,7 +48,7 @@ bugid_previous_30_days_revids_table = project +"_bugid_previous_30day_revids"
 revid_feature_table = project+"_revids_feature"
 train_bugid_revid_table = project+"_train_bugid_reg_revids"
 test_bugid_revid_table = project+"_test_bugid_reg_revids"
-combined_score_table = project+"_combined_score_table"
+learning_table = project +"_"+model+"weight_learning"
 #"""
 
 db1= MySQLdb.connect(host="localhost",user=user, passwd=password, db=database, port=port)
@@ -256,5 +254,7 @@ while w1 <=0.9:
                         print  "total revids =", total_revids_found
                         precision =  (total_revids_found*100)/total_bugs
                         print "precsion = ", precision
-    
+                         
+                        insert_str =  "insert into "+learning_table+   " values ("+ w1+","+ w2+","+w3+","+w4+","+ model+","+threshold+","+precision+","+total_bugs+","+total_revids_found+")" 
 
+                    
