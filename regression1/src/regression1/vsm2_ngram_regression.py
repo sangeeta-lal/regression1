@@ -157,7 +157,7 @@ def get_rev_info(bugid,title_rev_log,  desc_rev_log, cr_area_top_level,  title_f
                 reg_causing_revid_pos = count
 
 
-    return title_rev_log, desc_rev_log, cr_area_top_level, title_file_name,  rev_causing_revid_pos
+    return title_rev_log, desc_rev_log, cr_area_top_level, title_file_name,  reg_causing_revid_pos
 
 def create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name):
     tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
