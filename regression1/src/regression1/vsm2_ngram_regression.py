@@ -246,6 +246,8 @@ while w4<=0.9:
                         rank = get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix,title_file_name_sim_matrix, threshold, total_sim_reg_causing,w1, w2, w3, w4)
                         if rank<=threshold:
                             total_revids_found = total_revids_found +1
+                        
+                        print " @debug total revids found=", total_revids_found
                             #break   
 
                     print "Total bug found=", total_bugs
