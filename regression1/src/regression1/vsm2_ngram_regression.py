@@ -32,10 +32,10 @@ revid_feature_table = project+"_revids_feature"
 train_bugid_revid_table = project+"_train_bugid_reg_revids"
 test_bugid_revid_table = project+"_test_bugid_reg_revids"
 
-#bug_report_feature_table             = "temp"  + "_bug_report_features"
-#bugid_previous_30_days_revids_table  = "temp"  +"_30_day"
-#revid_feature_table                  = "temp"  +"_revid_feature"
-#train_bugid_revid_table              = "temp"  
+bug_report_feature_table             = "temp"  + "_bug_report_features"
+bugid_previous_30_days_revids_table  = "temp"  +"_30_day"
+revid_feature_table                  = "temp"  +"_revid_feature"
+train_bugid_revid_table              = "temp"  
 learning_table = project +"_"+model+"_weight_learning"
 """
 port=3306
@@ -147,14 +147,14 @@ def get_rev_info(bugid,title_rev_log,  desc_rev_log, cr_area_top_level,  title_f
             
             # print "revid=", temp_rev,  "log mess", rev_log_mess, "  files=", changed_files_with_path,  " fie name=", changed_file_names, " \n top level=", top_level_names      
                             
-            title_rev_log.append(rev_log_mess)
-            desc_rev_log.append(rev_log_mess)
-            cr_area_top_level.append(top_level_names)
-            title_file_name.append(changed_file_names)
+        title_rev_log.append(rev_log_mess)
+        desc_rev_log.append(rev_log_mess)
+        cr_area_top_level.append(top_level_names)
+        title_file_name.append(changed_file_names)
         
-            count= count + 1
-            if temp_rev == reg_causing_revid:
-                reg_causing_revid_pos = count
+        count= count + 1
+        if temp_rev == reg_causing_revid:
+             reg_causing_revid_pos = count
 
 
     return title_rev_log, desc_rev_log, cr_area_top_level, title_file_name,  reg_causing_revid_pos
@@ -166,7 +166,7 @@ def create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_fil
     cr_area_top_level_tfidf_matrix = tfidf_vectorizer.fit_transform(cr_area_top_level)
     title_file_name_tfidf_matrix   = tfidf_vectorizer.fit_transform(title_file_name)
     
-    #print  "size=", title_rev_log_tfidf_matrix.shape,  desc_rev_log_tfidf_matrix.shape,  cr_area_top_level_tfidf_matrix.shape, title_file_name_tfidf_matrix.shape         
+    print  "size=", title_rev_log_tfidf_matrix.shape,  desc_rev_log_tfidf_matrix.shape,  cr_area_top_level_tfidf_matrix.shape, title_file_name_tfidf_matrix.shape         
     #print  "Title Rev Log=",  title_rev_log_tfidf_matrix
     #print "Desc rev log = ",  desc_rev_log_tfidf_matrix
     #print "cr area top level=", cr_area_top_level_tfidf_matrix
