@@ -92,6 +92,7 @@ def get_bug_feature_info(bugid):
     bug_cr     =  bug_feature_info[0][2]
     bug_area   =  bug_feature_info[0][3]
     
+    bug_cr_and_area =  bug_cr+ " "+ bug_area
     #============@Make List==================#
     title_rev_log =  list()
     desc_rev_log = list()
@@ -100,7 +101,7 @@ def get_bug_feature_info(bugid):
     
     title_rev_log.append(bug_title)     
     desc_rev_log.append(bug_desc)
-    cr_area_top_level.append(cr_area_top_level)
+    cr_area_top_level.append(bug_cr_and_area)
     title_file_name.append(bug_title)
     
     return title_rev_log, desc_rev_log, cr_area_top_level, title_file_name 
