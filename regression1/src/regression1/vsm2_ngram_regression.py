@@ -160,6 +160,11 @@ def get_rev_info(bugid,title_rev_log,  desc_rev_log, cr_area_top_level,  title_f
     return title_rev_log, desc_rev_log, cr_area_top_level, title_file_name,  reg_causing_revid_pos
 
 def create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name):
+    print "Title- rev", title_rev_log
+    print "Desc-rev", desc_rev_log
+    print "cr_area_top_level", cr_area_top_level
+    print "title_file_name", title_file_name
+    
     tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
     title_rev_log_tfidf_matrix     = tfidf_vectorizer.fit_transform(title_rev_log)
     desc_rev_log_tfidf_matrix      = tfidf_vectorizer.fit_transform(desc_rev_log)
