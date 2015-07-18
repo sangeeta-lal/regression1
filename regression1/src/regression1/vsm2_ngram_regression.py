@@ -100,7 +100,7 @@ def get_bug_feature_info(bugid):
     
     title_rev_log.append(bug_title)     
     desc_rev_log.append(bug_desc)
-    cr_area_top_level.append(bug_cr_and_area)
+    cr_area_top_level.append(cr_area_top_level)
     title_file_name.append(bug_title)
     
     return title_rev_log, desc_rev_log, cr_area_top_level, title_file_name 
