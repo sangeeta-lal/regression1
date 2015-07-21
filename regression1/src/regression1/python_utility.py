@@ -2,6 +2,7 @@ import urllib2
 import re
 import xml.etree.ElementTree
 import pandas 
+from nltk.stem.porter import PorterStemmer
 
 def check_for_show_all(web_page_data, revid):
     start_index =  web_page_data.index("Changed paths:")
@@ -32,6 +33,34 @@ def remove_html_tags(rev_log_message):
    cleantext = re.sub(cleanr,'', rev_log_message)
    #print "clean text = ", cleantext
    return cleantext   
+
+def remove_operator_camel_stem(input_str):
+    #====remove operator====#
+    input_str = re.sub(r"[\+\*%-/&|^=!]", " ", input_str)
+    input_str = re.sub(r"[<>\{\}\(\)\[\]]", " ", input_str)
+    input_str = re.sub(r"[@#$_\\\'\":;\.,\?0-9]", " ", input_str)
+    input_str = re.sub(r" +"," ", input_str)
+    
+    #====camel casing=======#
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', input_str)
+    s1= re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+    s2 = s1.split("_")
+    
+    final= " "
+    for s in s2:
+        final = final+" "+s
+    final = final.strip()
+    
+   
+    #===stemming==========#
+    temp = " ".join(PorterStemmer().stem_word(word) for word in final.split(" "))
+    #print "temp=", temp
+    return temp 
+    
+    
+    
+    
+
 def remove_quote_new_line(rev_log_message):     
    rev_log_message =  rev_log_message.replace("'", " ")
    rev_log_message =  rev_log_message.replace("\""," ")

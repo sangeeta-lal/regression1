@@ -83,9 +83,9 @@ for temp in table_data:
     rev_log_message = pu.remove_quote_new_line (rev_log_message)
     rev_day, rev_month, rev_weakday,rev_hour =  pu.get_time(web_page_data) #Time metric
 
-    rev_is_bug_fix = pu.contains_bug_fix(web_page_data)
+    rev_is_bug_fix =      pu.contains_bug_fix(web_page_data)
     changed_path_files =  pu.get_changed_files(web_page_data)
-    test_file_count  = pu.test_file_count(web_page_data)
+    test_file_count  =    pu.test_file_count(web_page_data)
     
     #print "changd_path_files=", changed_path_files
     #Size Metric
