@@ -318,7 +318,7 @@ def testing():
     print "@debug: Total bugs=", len(bug_data)
 
     for id in bug_data:
-        total_bugs =  total_bugs+1
+        total_testing_bugs =  total_testing_bugs+1
         bugid   = id[0]
          
         #***************** This will give me already clean features *****************#
