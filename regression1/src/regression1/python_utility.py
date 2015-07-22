@@ -41,6 +41,7 @@ def remove_operator_camel_stem(input_str):
     input_str = re.sub(r"[@#$_\\\'\":;\.,\?0-9]", " ", input_str)
     input_str = re.sub(r" +"," ", input_str)
     
+    """
     #====camel casing=======#
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', input_str)
     s1= re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
@@ -50,16 +51,19 @@ def remove_operator_camel_stem(input_str):
     for s in s2:
         final = final+" "+s
     final = final.strip()
+    """    
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', input_str)
+    s1= re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+    final = " ".join(word for word in s1.split("_"))
     
-   
     #===stemming==========#
     temp = " ".join(PorterStemmer().stem_word(word) for word in final.split(" "))
     #print "temp=", temp
     return temp 
     
     
-    
-    
+# string = "abcXYZ   +remove operator_camel_stem(input_str)remove_operator_camel_stem(input_str) cameCasing ABCXyz"    
+# print " output", remove_operator_camel_stem(string)    
 
 def remove_quote_new_line(rev_log_message):     
    rev_log_message =  rev_log_message.replace("'", " ")

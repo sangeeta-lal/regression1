@@ -20,7 +20,18 @@ from sklearn.metrics.pairwise import cosine_similarity
 import python_utility as pu
 
 project   = "chromium"
+
+#"""
+model =  "VCE"
+w1=w2=w3=w4=1.0
+days = 30
+#"""
+
+"""
 model =  "VCB"
+w1=w2=w3=w4=
+days = 30
+#"""
 
 #"""
 port=3307
@@ -32,12 +43,12 @@ bugid_previous_30_days_revids_table = project +"_bugid_previous_30day_revids"
 revid_feature_table = project+"_revids_feature"
 train_bugid_revid_table = project+"_train_bugid_reg_revids"
 test_bugid_revid_table = project+"_test_bugid_reg_revids"
-
 #bug_report_feature_table             = "temp"  + "_bug_report_features"
 #bugid_previous_30_days_revids_table  = "temp"  +"_30_day"
 #revid_feature_table                  = "temp"  +"_revid_feature"
 #train_bugid_revid_table              = "temp"  
 learning_table = project +"_"+model+"_weight_learning"
+result_table_all="result_table_all"
 """
 port=3306
 user="root"
@@ -49,6 +60,7 @@ revid_feature_table = project+"_revids_feature"
 train_bugid_revid_table = project+"_train_bugid_reg_revids"
 test_bugid_revid_table = project+"_test_bugid_reg_revids"
 learning_table = project +"_"+model+"weight_learning"
+result_table_all="result_table_all"
 #"""
 
 db1= MySQLdb.connect(host="localhost",user=user, passwd=password, db=database, port=port)
@@ -289,7 +301,65 @@ def  training():
 
                  
 
-##
+#===========================@Testing Phase====================================#
+#============================================================================#
+def testing():
+    w1=1.0
+    w2=1.0
+    w3=1.0
+    w4=1.0
+    
+    total_sim_reg_causing=0.0
+    total_testing_bugs = 0
+    total_revids_found = 0
+    str_bug = "select distinct bugid   from " + test_bugid_revid_table
+    select_cursor.execute(str_bug)
+    bug_data =  select_cursor.fetchall()
+    print "@debug: Total bugs=", len(bug_data)
+
+    for id in bug_data:
+        total_bugs =  total_bugs+1
+        bugid   = id[0]
+         
+        #***************** This will give me already clean features *****************#
+        title_rev_log, desc_rev_log,  cr_area_top_level, title_file_name = get_cleaned_bug_feature_info(bugid)              
+        title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )                      
+        title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
+       
+        #==============Get this data for reg causing revid==========================#
+        title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
+        desc_rev_log_sim        =  desc_rev_log_sim_matrix[0][reg_causing_revid_pos]
+        cr_area_top_level_sim   =  cr_area_top_level_sim_matrix[0][reg_causing_revid_pos]
+        title_file_name_sim     =  title_file_name_sim_matrix[0][reg_causing_revid_pos]
+                  
+        #print "reg causing t-r",  title_rev_log_sim
+        #print "desc rev-log",     desc_rev_log_sim
+        #print "cr area",          cr_area_top_level_sim   
+        #print "titel file",       title_file_name_sim
+    
+        total_sim_reg_causing =  w1*title_rev_log_sim + w2*desc_rev_log_sim + w3*cr_area_top_level_sim + w4*title_file_name_sim
+        #print sim_matrix
+        rank = get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix,title_file_name_sim_matrix, threshold, total_sim_reg_causing,w1, w2, w3, w4)
+        if rank<=threshold:
+            total_revids_found = total_revids_found +1
+               
+            print " @debug total revids found=", total_revids_found
+               
+
+    print "Total bug found=", total_testing_bugs
+    print  "total revids =", total_revids_found
+    precision =  (total_revids_found*100)/total_bugs
+    print "precsion = ", precision
+                     
+    insert_str =  "insert into "+result_table_all+   " values ('"+project+"','"+model+"',"+(str)(days)+","+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+","+ model+","+(str)(threshold)\
+                        +","+(str)(precision)+","+(str)(total_testing_bugs)+","+(str)(total_revids_found)+ ")" 
+        
+    #print "insert str=", insert_str
+    insert_cursor.execute(insert_str)
+    db1.commit()
+    
+    
+#===========#
 print " doing training.......... to stop training comment the training function....."
 training()
 
