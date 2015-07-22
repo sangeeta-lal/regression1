@@ -361,7 +361,7 @@ def testing():
     
 #===========#
 print " doing training.......... to stop training comment the training function....."
-training()
+#training()
 
 print " doing testing............ check the w1, w2, w3 and w4 weights............."
 testing()                   
