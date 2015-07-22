@@ -110,10 +110,10 @@ def get_cleaned_bug_feature_info(bugid):
     #=============@clean====================#
     
     bug_title  = pu.remove_operator_camel_stem(bug_title)
-    print " bug desc before= ", bug_desc
+    #print " bug desc before= ", bug_desc
     bug_desc   = pu.remove_operator_camel_stem(bug_desc)
-    print "bug desc after====", bug_desc
-    print "******************************"
+    #print "bug desc after====", bug_desc
+    #print "******************************"
     bug_cr_and_area = pu.remove_operator_camel_stem(bug_cr_and_area)
                        
     
