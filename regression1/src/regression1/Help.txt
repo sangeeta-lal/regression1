@@ -7,6 +7,7 @@
 """
 
 
+ re.sub(r'[\xa0\s]+', ' ', input_str)
 
 
 q1. To update rank of the combined score table
