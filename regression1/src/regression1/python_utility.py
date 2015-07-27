@@ -6,6 +6,8 @@ from nltk.stem.porter import PorterStemmer
 from nltk.util import ngrams
 from nltk.tokenize import RegexpTokenizer
 from collections import Counter
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 import math
 
 
