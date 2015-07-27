@@ -299,8 +299,6 @@ def  training():
        
 
 
-                 
-
 #===========================@Testing Phase====================================#
 #============================================================================#
 def testing():
@@ -350,8 +348,8 @@ def testing():
     print  "total revids =", total_revids_found
     precision =  (total_revids_found*100)/total_bugs
     print "precsion = ", precision
-                     
-    insert_str =  "insert into "+result_table_all+   " values ('"+project+"','"+model+"',"+(str)(days)+","+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+","+ model+","+(str)(threshold)\
+    
+    insert_str =  "insert into "+result_table_all+   " values ('"+project+"','"+model+"',"+(str)(days)+","+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+","+(str)(threshold)\
                         +","+(str)(precision)+","+(str)(total_testing_bugs)+","+(str)(total_revids_found)+ ")" 
         
     #print "insert str=", insert_str

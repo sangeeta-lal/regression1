@@ -3,6 +3,60 @@ import re
 import xml.etree.ElementTree
 import pandas 
 from nltk.stem.porter import PorterStemmer
+from nltk.util import ngrams
+from nltk.tokenize import RegexpTokenizer
+from collections import Counter
+import math
+
+def compute_ngram(string1, n1, n2):
+    ngram_str1 = list()
+    while n1<=n2:
+        temp= [string1[i:i+n1] for i in range(len(string1)-n1+1)]
+        for t in temp:
+            ngram_str1.append(t) 
+         
+        n1= n1+1    
+    
+    return ngram_str1
+
+def compute_len(ngram_list):
+    counts = Counter(ngram_list)
+    value= 0.0
+        
+    #print "counter=", counts
+    for val in counts.values():
+        value= value + val*val
+        
+    length= math.sqrt(value) 
+    #print "len=", length   
+    return length
+        
+
+def calculate_ngram_and_khattar_sim(string1, string2, size1, size2):
+    n1= size1
+    n2= size2
+    
+    sim = 0.0  #sim value
+    
+    ngram_str1_list = compute_ngram(string1, n1, n2)
+    ngram_str2_list = compute_ngram(string2, n1, n2)
+ 
+    for t1 in ngram_str1_list:
+        for t2 in ngram_str2_list:
+            if t1==t2:
+                sim = sim+ len(t1)
+    
+    len_ngram_str1 = compute_len(ngram_str1_list)
+    len_ngram_str2 = compute_len(ngram_str2_list)
+    
+    #print "sim=", sim            
+    #print "str1", ngram_str1_list
+    #print "str2", ngram_str2_list
+    sim = sim/(len_ngram_str1* len_ngram_str2) 
+    print " final sim=", sim
+    return sim   
+    
+calculate_ngram_and_khattar_sim("str str", "string2", 2, 4)
 
 def check_for_show_all(web_page_data, revid):
     start_index =  web_page_data.index("Changed paths:")
@@ -61,9 +115,6 @@ def remove_operator_camel_stem(input_str):
     #print "temp=", temp
     return temp 
     
-    
-# string = "abcXYZ   +remove operator_camel_stem(input_str)remove_operator_camel_stem(input_str) cameCasing ABCXyz"    
-# print " output", remove_operator_camel_stem(string)    
 
 def remove_quote_new_line(rev_log_message):     
    rev_log_message =  rev_log_message.replace("'", " ")
