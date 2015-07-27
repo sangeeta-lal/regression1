@@ -78,7 +78,6 @@ total_revids_found = 0
 def get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix, threshold, reg_causing_revid_sim, w1, w2, w3, w4):
     rank = 0
     #print  " get rank=", sim_matrix 
-    
     #turn  = 1  # because on first position bug report-bug report similiarrity is store which is "1.0" and will always be greater than bug report-revision log similiarity
     matrix_len=  len(title_rev_log_sim_matrix[0]) 
     
@@ -93,8 +92,7 @@ def get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_leve
         if total_temp_sim > reg_causing_revid_sim:
             rank =  rank+1
         
-    return rank
-  
+    return rank  
   
 # This function used to extract the features of bug id 
 def get_cleaned_bug_feature_info(bugid):
@@ -225,6 +223,8 @@ def create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_fil
 
 #===========================@Testing Phase====================================#
 #============================================================================#
+#@Create this matrix: title-rev matrxi [[ 1.          0.62791376  0.          0.          0.        ]]
+
 def testing():
     w1=1.0
     w2=1.0
@@ -247,7 +247,8 @@ def testing():
         title_rev_log, desc_rev_log,  cr_area_top_level, title_file_name = get_cleaned_bug_feature_info(bugid)              
         title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )  
                             
-        title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
+        #title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
+        title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=create_ngram_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
        
         print "title-rev matrxi",  title_rev_log_sim_matrix
          

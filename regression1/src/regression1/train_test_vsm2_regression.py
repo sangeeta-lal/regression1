@@ -71,27 +71,6 @@ precision_percentage = 0
 threshold = 50
 total_bugs = 0
 total_revids_found = 0
-
-
-def get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix, threshold, reg_causing_revid_sim, w1, w2, w3, w4):
-    rank = 0
-    #print  " get rank=", sim_matrix 
-    
-    #turn  = 1  # because on first position bug report-bug report similiarrity is store which is "1.0" and will always be greater than bug report-revision log similiarity
-    matrix_len=  len(title_rev_log_sim_matrix[0]) 
-    
-    ##@Not starting from 1 at ist position we have bug report it self
-    for i in range(1, matrix_len): 
-        temp_title_rev_log_sim = title_rev_log_sim_matrix[0][i]
-        temp_desc_rev_log_sim = desc_rev_log_sim_matrix[0][i]
-        temp_cr_area_top_level_sim = cr_area_top_level_sim_matrix[0][i]
-        temp_title_file_name_sim = title_file_name_sim_matrix[0][i]
-        total_temp_sim =  w1*temp_title_rev_log_sim + w2*temp_desc_rev_log_sim+ w3*temp_cr_area_top_level_sim + w4*temp_title_file_name_sim
-        
-        if total_temp_sim > reg_causing_revid_sim:
-            rank =  rank+1
-        
-    return rank
   
   
 # This function used to extract the features of bug id 
@@ -190,35 +169,6 @@ def get_cleaned_rev_info(bugid,title_rev_log,  desc_rev_log, cr_area_top_level, 
 
     return title_rev_log, desc_rev_log, cr_area_top_level, title_file_name,  reg_causing_revid_pos
 
-def create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name):
-    #print "Title- rev", title_rev_log
-    #print "Desc-rev", desc_rev_log
-    #print "cr_area_top_level", cr_area_top_level
-    #print "title_file_name", title_file_name
-    
-    tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore()')
-    title_rev_log_tfidf_matrix     = tfidf_vectorizer.fit_transform(title_rev_log)
-    desc_rev_log_tfidf_matrix      = tfidf_vectorizer.fit_transform(desc_rev_log)
-    cr_area_top_level_tfidf_matrix = tfidf_vectorizer.fit_transform(cr_area_top_level)
-    title_file_name_tfidf_matrix   = tfidf_vectorizer.fit_transform(title_file_name)
-    
-    #print  "size=", title_rev_log_tfidf_matrix.shape,  desc_rev_log_tfidf_matrix.shape,  cr_area_top_level_tfidf_matrix.shape, title_file_name_tfidf_matrix.shape         
-    #print  "Title Rev Log=",  title_rev_log_tfidf_matrix
-    #print "Desc rev log = ",  desc_rev_log_tfidf_matrix
-    #print "cr area top level=", cr_area_top_level_tfidf_matrix
-    #print  "title file name=", title_file_name_tfidf_matrix
-                        
-    title_rev_log_sim_matrix      = cosine_similarity(title_rev_log_tfidf_matrix[0:1], title_rev_log_tfidf_matrix)
-    desc_rev_log_sim_matrix       = cosine_similarity(desc_rev_log_tfidf_matrix[0:1], desc_rev_log_tfidf_matrix)
-    cr_area_top_level_sim_matrix  = cosine_similarity(cr_area_top_level_tfidf_matrix[0:1], cr_area_top_level_tfidf_matrix)
-    title_file_name_sim_matrix    = cosine_similarity( title_file_name_tfidf_matrix[0:1],  title_file_name_tfidf_matrix)
-    
-    #print "sim title-rev log", title_rev_log_sim_matrix    
-    #print "desc rev log", desc_rev_log_sim_matrix      
-    #print "cr area top", cr_area_top_level_sim_matrix 
-    #print "title file name", title_file_name_sim_matrix
-    
-    return   title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix
   
 #========================TRAINING PART==============================#
 #===================================================================#        
@@ -263,7 +213,7 @@ def  training():
                         
                             title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )
                             
-                            title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
+                            title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
     
                             #Get this data for reg causing revid 
                             title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
@@ -278,7 +228,7 @@ def  training():
     
                             total_sim_reg_causing =  w1*title_rev_log_sim + w2*desc_rev_log_sim + w3*cr_area_top_level_sim + w4*title_file_name_sim
                             #print sim_matrix
-                            rank = get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix,title_file_name_sim_matrix, threshold, total_sim_reg_causing,w1, w2, w3, w4)
+                            rank = pu.get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix,title_file_name_sim_matrix, threshold, total_sim_reg_causing,w1, w2, w3, w4)
                             if rank<=threshold:
                                 total_revids_found = total_revids_found +1
                         
@@ -322,7 +272,7 @@ def testing():
         #***************** This will give me already clean features *****************#
         title_rev_log, desc_rev_log,  cr_area_top_level, title_file_name = get_cleaned_bug_feature_info(bugid)              
         title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )                      
-        title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
+        title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
        
         #==============Get this data for reg causing revid==========================#
         title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
@@ -337,7 +287,7 @@ def testing():
     
         total_sim_reg_causing =  w1*title_rev_log_sim + w2*desc_rev_log_sim + w3*cr_area_top_level_sim + w4*title_file_name_sim
         #print sim_matrix
-        rank = get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix,title_file_name_sim_matrix, threshold, total_sim_reg_causing,w1, w2, w3, w4)
+        rank = pu.get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix,title_file_name_sim_matrix, threshold, total_sim_reg_causing,w1, w2, w3, w4)
         if rank<=threshold:
             total_revids_found = total_revids_found +1
                
