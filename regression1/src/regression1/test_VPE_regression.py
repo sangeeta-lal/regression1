@@ -43,10 +43,12 @@ bugid_previous_30_days_revids_table = project +"_bugid_previous_30day_revids"
 revid_feature_table = project+"_revids_feature"
 train_bugid_revid_table = project+"_train_bugid_reg_revids"
 test_bugid_revid_table = project+"_test_bugid_reg_revids"
-#bug_report_feature_table             = "temp"  + "_bug_report_features"
-#bugid_previous_30_days_revids_table  = "temp"  +"_30_day"
-#revid_feature_table                  = "temp"  +"_revid_feature"
-#train_bugid_revid_table              = "temp"  
+
+bug_report_feature_table             = "temp"  + "_bug_report_features"
+bugid_previous_30_days_revids_table  = "temp"  +"_30_day"
+revid_feature_table                  = "temp"  +"_revid_feature"
+train_bugid_revid_table              = "temp"  
+
 learning_table = project +"_"+model+"_weight_learning"
 result_table_all="result_table_all"
 """
@@ -219,84 +221,6 @@ def create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_fil
     #print "title file name", title_file_name_sim_matrix
     
     return   title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix
-  
-#========================TRAINING PART==============================#
-#===================================================================#        
-def  training():
-    w1=-0.1
-    w2 =- 0.1
-    w3 =-0.1
-    w4=-0.1
-
-    while w4<=0.9:
-        w4=w4+0.1
-        w3=-0.1
-        while w3 <=0.9:
-            w3=w3+0.1
-            w2=-0.1
-            while w2<=0.9:
-                w2=w2+0.1
-                w1=-0.1
-                while w1<=0.9:
-                    w1= w1+0.1
-                    print w1, " ", w2, " ", w3," ", w4
-                    if(w1+w2+w3+w4)==1.0:
-                        print "yes"
-
-                    
-                        total_sim_reg_causing=0.0
-                        total_bugs = 0
-                        total_revids_found = 0
-                    
-                        str_bug = "select distinct bugid   from " + train_bugid_revid_table
-                        select_cursor.execute(str_bug)
-                        bug_data =  select_cursor.fetchall()
-                        print "@debug: Total bugs=", len(bug_data)
-
-                        for id in bug_data:
-                            total_bugs =  total_bugs+1
-                            bugid   = id[0]
-                        
-                            ##=== This will give me already clean features =========##
-                            title_rev_log, desc_rev_log,  cr_area_top_level, title_file_name = get_cleaned_bug_feature_info(bugid)
-                  
-                        
-                            title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )
-                            
-                            title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
-    
-                            #Get this data for reg causing revid 
-                            title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
-                            desc_rev_log_sim        =  desc_rev_log_sim_matrix[0][reg_causing_revid_pos]
-                            cr_area_top_level_sim   =  cr_area_top_level_sim_matrix[0][reg_causing_revid_pos]
-                            title_file_name_sim     =  title_file_name_sim_matrix[0][reg_causing_revid_pos]
-                        
-                            #print "reg causing t-r",  title_rev_log_sim
-                            #print "desc rev-log",     desc_rev_log_sim
-                            #print "cr area",          cr_area_top_level_sim   
-                            #print "titel file",       title_file_name_sim
-    
-                            total_sim_reg_causing =  w1*title_rev_log_sim + w2*desc_rev_log_sim + w3*cr_area_top_level_sim + w4*title_file_name_sim
-                            #print sim_matrix
-                            rank = get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix,title_file_name_sim_matrix, threshold, total_sim_reg_causing,w1, w2, w3, w4)
-                            if rank<=threshold:
-                                total_revids_found = total_revids_found +1
-                        
-                            print " @debug total revids found=", total_revids_found
-                            #break   
-
-                        print "Total bug found=", total_bugs
-                        print  "total revids =", total_revids_found
-                        precision =  (total_revids_found*100)/total_bugs
-                        print "precsion = ", precision
-                      
-                        insert_str =  "insert into "+learning_table+   " values ("+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+","+ model+","+(str)(threshold)\
-                        +","+(str)(precision)+","+(str)(total_bugs)+","+(str)(total_revids_found)+ ")" 
-        
-                        #print "insert str=", insert_str
-                        insert_cursor.execute(insert_str)
-                        db1.commit()
-       
 
 
 #===========================@Testing Phase====================================#
@@ -321,9 +245,12 @@ def testing():
          
         #***************** This will give me already clean features *****************#
         title_rev_log, desc_rev_log,  cr_area_top_level, title_file_name = get_cleaned_bug_feature_info(bugid)              
-        title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )                      
+        title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )  
+                            
         title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=create_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
        
+        print "title-rev matrxi",  title_rev_log_sim_matrix
+         
         #==============Get this data for reg causing revid==========================#
         title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
         desc_rev_log_sim        =  desc_rev_log_sim_matrix[0][reg_causing_revid_pos]
@@ -358,10 +285,10 @@ def testing():
     
     
 #===========#
-print " doing training.......... to stop training comment the training function....."
+print " No Training..... is required as it is...........Equal weight model..."  
 #training()
 
-print " doing testing............ check the w1, w2, w3 and w4 weights............."
+print " doing testing............ check the w1= w2= w3=w4=1.0 weights............."
 testing()                   
 
                     
