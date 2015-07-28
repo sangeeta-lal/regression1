@@ -36,7 +36,7 @@ def compute_len(ngram_list):
     #print "len=", length   
     return length
         
-
+##======@Compute the similiarity using Khattar Matrix==============#
 def calculate_ngram_and_khattar_sim(string1, string2, size1, size2):
     n1= size1
     n2= size2
@@ -94,7 +94,7 @@ def create_tf_idf_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, ti
     #print "cr_area_top_level", cr_area_top_level
     #print "title_file_name", title_file_name
     
-    tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore()')
+    tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
     title_rev_log_tfidf_matrix     = tfidf_vectorizer.fit_transform(title_rev_log)
     desc_rev_log_tfidf_matrix      = tfidf_vectorizer.fit_transform(desc_rev_log)
     cr_area_top_level_tfidf_matrix = tfidf_vectorizer.fit_transform(cr_area_top_level)

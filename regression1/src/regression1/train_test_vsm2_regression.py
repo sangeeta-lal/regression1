@@ -195,7 +195,7 @@ def  training():
 
                     
                         total_sim_reg_causing=0.0
-                        total_bugs = 0
+                        total_trainin_bugs = 0
                         total_revids_found = 0
                     
                         str_bug = "select distinct bugid   from " + train_bugid_revid_table
@@ -204,7 +204,7 @@ def  training():
                         print "@debug: Total bugs=", len(bug_data)
 
                         for id in bug_data:
-                            total_bugs =  total_bugs+1
+                            total_training_bugs =  total_training_bugs+1
                             bugid   = id[0]
                         
                             ##=== This will give me already clean features =========##
@@ -235,9 +235,9 @@ def  training():
                             print " @debug total revids found=", total_revids_found
                             #break   
 
-                        print "Total bug found=", total_bugs
+                        print "Total bug found=", total_training_bugs
                         print  "total revids =", total_revids_found
-                        precision =  (total_revids_found*100)/total_bugs
+                        precision =  (total_revids_found*100)/total_training_bugs
                         print "precsion = ", precision
                       
                         insert_str =  "insert into "+learning_table+   " values ("+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+","+ model+","+(str)(threshold)\
@@ -296,7 +296,7 @@ def testing():
 
     print "Total bug found=", total_testing_bugs
     print  "total revids =", total_revids_found
-    precision =  (total_revids_found*100)/total_bugs
+    precision =  (total_revids_found*100)/total_testing_bugs
     print "precsion = ", precision
     
     insert_str =  "insert into "+result_table_all+   " values ('"+project+"','"+model+"',"+(str)(days)+","+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+","+(str)(threshold)\
