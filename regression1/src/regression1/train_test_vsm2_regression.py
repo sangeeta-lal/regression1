@@ -221,7 +221,7 @@ def  training():
                             cr_area_top_level_sim   =  cr_area_top_level_sim_matrix[0][reg_causing_revid_pos]
                             title_file_name_sim     =  title_file_name_sim_matrix[0][reg_causing_revid_pos]
                         
-                            #print "reg causing t-r",  title_rev_log_sim
+                            #print "reg causing t-r",  title_rev_log_sim 
                             #print "desc rev-log",     desc_rev_log_sim
                             #print "cr area",          cr_area_top_level_sim   
                             #print "titel file",       title_file_name_sim
