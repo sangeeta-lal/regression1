@@ -215,7 +215,7 @@ def  training():
                         
                             title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )
                             
-                            title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_all_khattar_sim_matrix_normalized( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
+                            title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_khattar_all_sim_matrix_normalized( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
     
                             #Get this data for reg causing revid 
                             title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
@@ -274,12 +274,12 @@ def testing():
         #***************** This will give me already clean features *****************#
         title_rev_log, desc_rev_log,  cr_area_top_level, title_file_name = get_cleaned_bug_feature_info(bugid)              
         title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )                      
-        title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_all_khattar_sim_matrix_normalized( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
+        title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_khattar_all_sim_matrix_normalized( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
        
-        print  "matrxi",  title_rev_log_sim_matrix
-        print  "matrxi",  desc_rev_log_sim_matrix
-        print  "matrxi",  cr_area_top_level_sim_matrix
-        print  "matrxi",  title_file_name_sim_matrix
+        print  "matrix",  title_rev_log_sim_matrix
+        print  "matrix",  desc_rev_log_sim_matrix
+        print  "matrix",  cr_area_top_level_sim_matrix
+        print  "matrix",  title_file_name_sim_matrix
       
         
         #==============Get this data for reg causing revid==========================#
@@ -317,7 +317,7 @@ def testing():
     
 #===========#
 print " doing training.......... to stop training comment the training function....."
-#training()
+training()
 
 print " doing testing............ check the w1, w2, w3 and w4 weights............."
 testing()                   
