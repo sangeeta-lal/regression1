@@ -28,13 +28,13 @@ def compute_len(ngram_list):
     counts = Counter(ngram_list)
     value= 0.0
         
-    print "counter=", counts
+    #print "counter=", counts
     for val in counts.values():
         value= value + val*val
      
         
     length= math.sqrt(value) 
-    print "len=", length   , "  value =", value
+    #print "len=", length   , "  value =", value
     return length
         
 ##======@Compute the similiarity using Khattar Matrix==============#
@@ -56,13 +56,13 @@ def calculate_normalized_ngram_and_khattar_sim(string1, string2, size1, size2):
     len_ngram_str2 = compute_len(ngram_str2_list)
     
    
-    print "sim=", sim 
+    #print "sim=", sim 
     sim = sim/(len_ngram_str1* len_ngram_str2) 
            
-    print "str1", ngram_str1_list
-    print "str2", ngram_str2_list
+    #print "str1", ngram_str1_list
+    #print "str2", ngram_str2_list
     
-    print " final sim=", sim
+   # print " final sim=", sim
     
     return sim  
 

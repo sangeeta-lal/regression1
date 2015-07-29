@@ -44,10 +44,10 @@ revid_feature_table = project+"_revids_feature"
 train_bugid_revid_table = project+"_train_bugid_reg_revids"
 test_bugid_revid_table = project+"_test_bugid_reg_revids"
 
-bug_report_feature_table             = "temp"  + "_bug_report_features"
-bugid_previous_30_days_revids_table  = "temp"  +"_30_day"
-revid_feature_table                  = "temp"  +"_revid_feature"
-train_bugid_revid_table              = "temp"  
+#bug_report_feature_table             = "temp"  + "_bug_report_features"
+#bugid_previous_30_days_revids_table  = "temp"  +"_30_day"
+#revid_feature_table                  = "temp"  +"_revid_feature"
+#train_bugid_revid_table              = "temp"  
 
 learning_table = project +"_"+model+"_weight_learning"
 result_table_all="result_table_all"
@@ -218,10 +218,10 @@ def  training():
                             title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_khattar_all_sim_matrix_normalized( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name,3,10)
     
                             
-                            print  "matrix",  title_rev_log_sim_matrix
-                            print  "matrix",  desc_rev_log_sim_matrix
-                            print  "matrix",  cr_area_top_level_sim_matrix
-                            print  "matrix",  title_file_name_sim_matrix
+                            #print  "matrix",  title_rev_log_sim_matrix
+                            #print  "matrix",  desc_rev_log_sim_matrix
+                            #print  "matrix",  cr_area_top_level_sim_matrix
+                            #print  "matrix",  title_file_name_sim_matrix
                             
                             #Get this data for reg causing revid 
                             title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
@@ -229,10 +229,10 @@ def  training():
                             cr_area_top_level_sim   =  cr_area_top_level_sim_matrix[0][reg_causing_revid_pos]
                             title_file_name_sim     =  title_file_name_sim_matrix[0][reg_causing_revid_pos]
                         
-                            print "reg causing t-r",  title_rev_log_sim 
-                            print "desc rev-log",     desc_rev_log_sim
-                            print "cr area",          cr_area_top_level_sim   
-                            print "titel file",       title_file_name_sim
+                            #print "reg causing t-r",  title_rev_log_sim 
+                            #print "desc rev-log",     desc_rev_log_sim
+                            #print "cr area",          cr_area_top_level_sim   
+                            #print "titel file",       title_file_name_sim
     
                             total_sim_reg_causing =  w1*title_rev_log_sim + w2*desc_rev_log_sim + w3*cr_area_top_level_sim + w4*title_file_name_sim
                             #print sim_matrix
@@ -282,10 +282,10 @@ def testing():
         title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )                      
         title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_khattar_all_sim_matrix_normalized( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, 3, 10)
        
-        print  "matrix",  title_rev_log_sim_matrix
-        print  "matrix",  desc_rev_log_sim_matrix
-        print  "matrix",  cr_area_top_level_sim_matrix
-        print  "matrix",  title_file_name_sim_matrix
+        #print  "matrix",  title_rev_log_sim_matrix
+        #print  "matrix",  desc_rev_log_sim_matrix
+        #print  "matrix",  cr_area_top_level_sim_matrix
+        #print  "matrix",  title_file_name_sim_matrix
       
         
         #==============Get this data for reg causing revid==========================#
@@ -294,10 +294,10 @@ def testing():
         cr_area_top_level_sim   =  cr_area_top_level_sim_matrix[0][reg_causing_revid_pos]
         title_file_name_sim     =  title_file_name_sim_matrix[0][reg_causing_revid_pos]
                   
-        print "reg causing t-r",  title_rev_log_sim
-        print "desc rev-log",     desc_rev_log_sim
-        print "cr area",          cr_area_top_level_sim   
-        print "titel file",       title_file_name_sim
+        #print "reg causing t-r",  title_rev_log_sim
+        #print "desc rev-log",     desc_rev_log_sim
+        #print "cr area",          cr_area_top_level_sim   
+        #print "titel file",       title_file_name_sim
     
         total_sim_reg_causing =  w1*title_rev_log_sim + w2*desc_rev_log_sim + w3*cr_area_top_level_sim + w4*title_file_name_sim
         #print sim_matrix
@@ -323,7 +323,7 @@ def testing():
     
 #===========#
 print " doing training.......... to stop training comment the training function....."
-training()
+#training()
 
 print " doing testing............ check the w1, w2, w3 and w4 weights............."
 testing()                   
