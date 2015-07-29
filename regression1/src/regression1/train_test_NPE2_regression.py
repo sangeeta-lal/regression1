@@ -215,7 +215,7 @@ def  training():
                         
                             title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )
                             
-                            title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_khattar_all_sim_matrix_normalized( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
+                            title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_khattar_all_sim_matrix_normalized( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name,3,10)
     
                             #Get this data for reg causing revid 
                             title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
@@ -274,7 +274,7 @@ def testing():
         #***************** This will give me already clean features *****************#
         title_rev_log, desc_rev_log,  cr_area_top_level, title_file_name = get_cleaned_bug_feature_info(bugid)              
         title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )                      
-        title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_khattar_all_sim_matrix_normalized( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
+        title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_khattar_all_sim_matrix_normalized( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, 3, 10)
        
         print  "matrix",  title_rev_log_sim_matrix
         print  "matrix",  desc_rev_log_sim_matrix
