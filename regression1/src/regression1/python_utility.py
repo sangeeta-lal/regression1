@@ -136,7 +136,7 @@ def create_tf_idf_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, ti
     #print "title_file_name", title_file_name
     
    # tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
-    tfidf_vectorizer = TfidfVectorizer()
+    tfidf_vectorizer = TfidfVectorizer(decode_error='ignore')
     title_rev_log_tfidf_matrix     = tfidf_vectorizer.fit_transform(title_rev_log)
     desc_rev_log_tfidf_matrix      = tfidf_vectorizer.fit_transform(desc_rev_log)
     cr_area_top_level_tfidf_matrix = tfidf_vectorizer.fit_transform(cr_area_top_level)
@@ -214,13 +214,14 @@ def remove_operator_camel_stem(input_str):
     s1= re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
     final = " ".join(word for word in s1.split("_"))
     
-    #===stemming==========#
-    temp = " ".join(PorterStemmer().stem_word(word) for word in final.split(" "))
-    #print "temp=", temp
-    
     #========stop words============#
     stop = stopwords.words('english')
-    new_temp =" ".join(i for i in temp.split() if i not in stop)
+    temp =" ".join(i for i in final.split() if i not in stop)
+    
+    #===stemming==========#
+    new_temp = " ".join(PorterStemmer().stem_word(word) for word in temp.split(" "))
+    #print "temp=", temp
+      
      
     #======@ remove hexa decimal===========#
     re.sub('\\\\x\d\d', ' ', new_temp)
