@@ -127,7 +127,7 @@ def get_rank(title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_leve
     return rank
 
 
-"""#######========================@Tf-idf sim matrix=====================================================####
+"""#######========================@Tf-idf sim matrix===================================================== ####
 #=======================================================================================================# """
 def create_tf_idf_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name):
     #print "Title- rev", title_rev_log
