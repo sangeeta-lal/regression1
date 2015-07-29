@@ -224,6 +224,8 @@ def remove_operator_camel_stem(input_str):
      
     #======@ remove hexa decimal===========#
     re.sub('\\\\x\d\d', ' ', new_temp)
+    
+    new_temp = re.sub(r" +"," ", new_temp) #@ remove extra spaces
        
     return new_temp 
 

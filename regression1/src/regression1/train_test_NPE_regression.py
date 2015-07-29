@@ -22,14 +22,14 @@ import python_utility as pu
 project   = "chromium"
 
 #"""
-model =  "NPE"
+model =  "VCE"
 w1=w2=w3=w4=1.0
 days = 30
 #"""
 
 """
-model =  "NPB"
-w1=w2=w3=w4=NOT gIVEN
+model =  "VCB"
+w1=w2=w3=w4=
 days = 30
 #"""
 
@@ -195,7 +195,7 @@ def  training():
 
                     
                         total_sim_reg_causing=0.0
-                        total_trainin_bugs = 0
+                        total_training_bugs = 0
                         total_revids_found = 0
                     
                         str_bug = "select distinct bugid   from " + train_bugid_revid_table
@@ -213,7 +213,7 @@ def  training():
                         
                             title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )
                             
-                            title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_khattar_all_sim_matrix_normalized( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
+                            title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_tf_df_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
     
                             #Get this data for reg causing revid 
                             title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
@@ -260,7 +260,6 @@ def testing():
     total_sim_reg_causing=0.0
     total_testing_bugs = 0
     total_revids_found = 0
-    
     str_bug = "select distinct bugid   from " + test_bugid_revid_table
     select_cursor.execute(str_bug)
     bug_data =  select_cursor.fetchall()
@@ -273,7 +272,7 @@ def testing():
         #***************** This will give me already clean features *****************#
         title_rev_log, desc_rev_log,  cr_area_top_level, title_file_name = get_cleaned_bug_feature_info(bugid)              
         title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, reg_causing_revid_pos = get_cleaned_rev_info(bugid, title_rev_log, desc_rev_log, cr_area_top_level, title_file_name )                      
-        title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_all_khattar_sim_matrix_normalized( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
+        title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_tf_idf_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name)
        
         #==============Get this data for reg causing revid==========================#
         title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
