@@ -97,12 +97,12 @@ def create_khattar_all_sim_matrix_normalized(title_rev_log, desc_rev_log, cr_are
 
     return  title_rev_log_sim_matrix , desc_rev_log_sim_matrix , cr_area_top_level_sim_matrix, title_file_name_sim_matrix
  
-"""   
+#"""   
 temp = list()
 temp.append("anan")
 temp.append("san")
 output = create_khattar_all_sim_matrix_normalized(temp, temp, temp, temp,  2, 4)
-print "output", output """
+print "output", output  # """
 
 
 #####@=========== get rank()======================================================================================================================================#######
