@@ -217,6 +217,12 @@ def  training():
                             
                             title_rev_log_sim_matrix, desc_rev_log_sim_matrix, cr_area_top_level_sim_matrix, title_file_name_sim_matrix=pu.create_khattar_all_sim_matrix_normalized( title_rev_log, desc_rev_log, cr_area_top_level, title_file_name,3,10)
     
+                            
+                            print  "matrix",  title_rev_log_sim_matrix
+                            print  "matrix",  desc_rev_log_sim_matrix
+                            print  "matrix",  cr_area_top_level_sim_matrix
+                            print  "matrix",  title_file_name_sim_matrix
+                            
                             #Get this data for reg causing revid 
                             title_rev_log_sim       =  title_rev_log_sim_matrix[0][reg_causing_revid_pos]
                             desc_rev_log_sim        =  desc_rev_log_sim_matrix[0][reg_causing_revid_pos]
