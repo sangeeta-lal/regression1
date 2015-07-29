@@ -88,7 +88,7 @@ def compute_normalized_khattar_sim_matrix(string_list, initial_size, final_size)
 def create_khattar_all_sim_matrix_normalized(title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, initial_size, final_size):
         
    # tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
-    tfidf_vectorizer = TfidfVectorizer()
+    #tfidf_vectorizer = TfidfVectorizer()
                          
     title_rev_log_sim_matrix      = compute_normalized_khattar_sim_matrix(title_rev_log,   initial_size, final_size)
     desc_rev_log_sim_matrix       = compute_normalized_khattar_sim_matrix(desc_rev_log,    initial_size, final_size)
@@ -96,12 +96,13 @@ def create_khattar_all_sim_matrix_normalized(title_rev_log, desc_rev_log, cr_are
     title_file_name_sim_matrix    = compute_normalized_khattar_sim_matrix(title_file_name,  initial_size, final_size)
 
     return  title_rev_log_sim_matrix , desc_rev_log_sim_matrix , cr_area_top_level_sim_matrix, title_file_name_sim_matrix
-    
+ 
+"""   
 temp = list()
 temp.append("anan")
 temp.append("san")
 output = create_khattar_all_sim_matrix_normalized(temp, temp, temp, temp,  2, 4)
-print "output", output
+print "output", output """
 
 
 #####@=========== get rank()======================================================================================================================================#######
@@ -134,7 +135,8 @@ def create_tf_idf_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, ti
     #print "cr_area_top_level", cr_area_top_level
     #print "title_file_name", title_file_name
     
-    tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
+   # tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
+    tfidf_vectorizer = TfidfVectorizer()
     title_rev_log_tfidf_matrix     = tfidf_vectorizer.fit_transform(title_rev_log)
     desc_rev_log_tfidf_matrix      = tfidf_vectorizer.fit_transform(desc_rev_log)
     cr_area_top_level_tfidf_matrix = tfidf_vectorizer.fit_transform(cr_area_top_level)
@@ -225,7 +227,7 @@ def remove_operator_camel_stem(input_str):
        
     return new_temp 
 
-#print remove_operator_camel_stem("HelloSangeeta")   
+#print remove_operator_camel_stem("HelloSangeeta the and if what san")   
 
 def remove_quote_new_line(rev_log_message):     
    rev_log_message =  rev_log_message.replace("'", " ")

@@ -195,7 +195,7 @@ def  training():
 
                     
                         total_sim_reg_causing=0.0
-                        total_trainin_bugs = 0
+                        total_training_bugs = 0
                         total_revids_found = 0
                     
                         str_bug = "select distinct bugid   from " + train_bugid_revid_table
