@@ -9,7 +9,7 @@ from collections import Counter
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import math
-
+from nltk.corpus import stopwords
 
 #@===To Compute the ngram of a string=====#
 def compute_ngram(string1, n1, n2):
@@ -28,16 +28,17 @@ def compute_len(ngram_list):
     counts = Counter(ngram_list)
     value= 0.0
         
-    #print "counter=", counts
+    print "counter=", counts
     for val in counts.values():
         value= value + val*val
+     
         
     length= math.sqrt(value) 
-    #print "len=", length   
+    print "len=", length   , "  value =", value
     return length
         
 ##======@Compute the similiarity using Khattar Matrix==============#
-def calculate_ngram_and_khattar_sim(string1, string2, size1, size2):
+def calculate_normalized_ngram_and_khattar_sim(string1, string2, size1, size2):
     n1= size1
     n2= size2
     
@@ -54,14 +55,53 @@ def calculate_ngram_and_khattar_sim(string1, string2, size1, size2):
     len_ngram_str1 = compute_len(ngram_str1_list)
     len_ngram_str2 = compute_len(ngram_str2_list)
     
-    #print "sim=", sim            
-    #print "str1", ngram_str1_list
-    #print "str2", ngram_str2_list
+   
+    print "sim=", sim 
     sim = sim/(len_ngram_str1* len_ngram_str2) 
-    print " final sim=", sim
-    return sim   
+           
+    print "str1", ngram_str1_list
+    print "str2", ngram_str2_list
     
-#calculate_ngram_and_khattar_sim("str str", "string2", 2, 4)
+    print " final sim=", sim
+    
+    return sim  
+
+#e===============@This fuction will return the similiarity matrix==========$
+def compute_normalized_khattar_sim_matrix(string_list, initial_size, final_size):
+    final_sim_matrix = []
+    temp_sim_matrix=   []
+    
+    first_string=" "
+    for temp in string_list:
+        first_string = temp
+        break
+    
+    for temp in string_list:
+        sim_val = calculate_normalized_ngram_and_khattar_sim(first_string, temp,initial_size, final_size)
+        temp_sim_matrix.append(sim_val)
+    
+    final_sim_matrix.append(temp_sim_matrix)    
+    
+    return final_sim_matrix 
+        
+##======@Compute khattar sim Matrix==============#
+def create_khattar_all_sim_matrix_normalized(title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, initial_size, final_size):
+        
+   # tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
+    tfidf_vectorizer = TfidfVectorizer()
+                         
+    title_rev_log_sim_matrix      = compute_normalized_khattar_sim_matrix(title_rev_log,   initial_size, final_size)
+    desc_rev_log_sim_matrix       = compute_normalized_khattar_sim_matrix(desc_rev_log,    initial_size, final_size)
+    cr_area_top_level_sim_matrix  = compute_normalized_khattar_sim_matrix(cr_area_top_level,initial_size, final_size)
+    title_file_name_sim_matrix    = compute_normalized_khattar_sim_matrix(title_file_name,  initial_size, final_size)
+
+    return  title_rev_log_sim_matrix , desc_rev_log_sim_matrix , cr_area_top_level_sim_matrix, title_file_name_sim_matrix
+    
+temp = list()
+temp.append("anan")
+temp.append("san")
+output = create_khattar_all_sim_matrix_normalized(temp, temp, temp, temp,  2, 4)
+print "output", output
 
 
 #####@=========== get rank()======================================================================================================================================#######
@@ -120,12 +160,6 @@ def create_tf_idf_sim_matrix( title_rev_log, desc_rev_log, cr_area_top_level, ti
 
 
 
-
-
-
-
-
-
 def check_for_show_all(web_page_data, revid):
     start_index =  web_page_data.index("Changed paths:")
     end_index = web_page_data.index("</tr>", start_index)
@@ -181,8 +215,17 @@ def remove_operator_camel_stem(input_str):
     #===stemming==========#
     temp = " ".join(PorterStemmer().stem_word(word) for word in final.split(" "))
     #print "temp=", temp
-    return temp 
     
+    #========stop words============#
+    stop = stopwords.words('english')
+    new_temp =" ".join(i for i in temp.split() if i not in stop)
+     
+    #======@ remove hexa decimal===========#
+    re.sub('\\\\x\d\d', ' ', new_temp)
+       
+    return new_temp 
+
+#print remove_operator_camel_stem("HelloSangeeta")   
 
 def remove_quote_new_line(rev_log_message):     
    rev_log_message =  rev_log_message.replace("'", " ")
