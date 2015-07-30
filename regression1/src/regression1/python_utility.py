@@ -56,13 +56,14 @@ def calculate_normalized_ngram_and_khattar_sim(string1, string2, size1, size2):
     len_ngram_str2 = compute_len(ngram_str2_list)
     
    
-    #print "sim=", sim 
-    sim = sim/(len_ngram_str1* len_ngram_str2) 
+    if sim>0.0:
+        #print "sim=", sim 
+        sim = sim/(len_ngram_str1* len_ngram_str2) 
            
-    print "len 1=", len_ngram_str1
-    print "Len 2=", len_ngram_str2
+        #print "len 1=", len_ngram_str1
+        #print "Len 2=", len_ngram_str2
     
-   # print " final sim=", sim
+    # print " final sim=", sim
     
     return sim  
 
