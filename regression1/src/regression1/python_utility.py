@@ -67,7 +67,38 @@ def calculate_normalized_ngram_and_khattar_sim(string1, string2, size1, size2):
     
     return sim  
 
-#e===============@This fuction will return the similiarity matrix==========$
+
+##======@Compute the similiarity using JACCOB Matrix==============#
+def calculate_normalized_ngram_and_jaccob_sim(string1, string2, size1, size2):
+    n1= size1
+    n2= size2
+    
+    sim = 0.0  #sim value
+    
+    ngram_str1_list = compute_ngram(string1, n1, n2)
+    ngram_str2_list = compute_ngram(string2, n1, n2)
+ 
+    for t1 in ngram_str1_list:
+        for t2 in ngram_str2_list:
+            if t1==t2:
+                sim = sim+ 1
+    
+    len_ngram_str1 = compute_len(ngram_str1_list)
+    len_ngram_str2 = compute_len(ngram_str2_list)
+    
+   
+    if sim>0.0:
+        #print "sim=", sim 
+        sim = sim/(len_ngram_str1* len_ngram_str2) 
+           
+        #print "len 1=", len_ngram_str1
+        #print "Len 2=", len_ngram_str2
+    
+    # print " final sim=", sim
+    
+    return sim  
+
+#e===============@This fuction will return the khattar similiarity matrix==========$
 def compute_normalized_khattar_sim_matrix(string_list, initial_size, final_size):
     final_sim_matrix = []
     temp_sim_matrix=   []
@@ -79,6 +110,27 @@ def compute_normalized_khattar_sim_matrix(string_list, initial_size, final_size)
     
     for temp in string_list:
         sim_val = calculate_normalized_ngram_and_khattar_sim(first_string, temp,initial_size, final_size)
+        temp_sim_matrix.append(sim_val)
+        
+        #print  " first string", first_string, "  second string", temp
+        
+    final_sim_matrix.append(temp_sim_matrix)    
+    
+    return final_sim_matrix 
+
+
+#e===============@This fuction will return the JACCOB similiarity matrix==========$
+def compute_normalized_jaccob_sim_matrix(string_list, initial_size, final_size):
+    final_sim_matrix = []
+    temp_sim_matrix=   []
+    
+    first_string=" "
+    for temp in string_list:
+        first_string = temp
+        break
+    
+    for temp in string_list:
+        sim_val = calculate_normalized_ngram_and_jaccob_sim(first_string, temp,initial_size, final_size)
         temp_sim_matrix.append(sim_val)
         
         #print  " first string", first_string, "  second string", temp
@@ -99,6 +151,21 @@ def create_khattar_all_sim_matrix_normalized(title_rev_log, desc_rev_log, cr_are
     title_file_name_sim_matrix    = compute_normalized_khattar_sim_matrix(title_file_name,  initial_size, final_size)
 
     return  title_rev_log_sim_matrix , desc_rev_log_sim_matrix , cr_area_top_level_sim_matrix, title_file_name_sim_matrix
+ 
+ 
+##======@Compute Jaccob sim Matrix==============#
+def create_jaccob_all_sim_matrix_normalized(title_rev_log, desc_rev_log, cr_area_top_level, title_file_name, initial_size, final_size):
+        
+   # tfidf_vectorizer = TfidfVectorizer(stop_words='english',decode_error='ignore')
+    #tfidf_vectorizer = TfidfVectorizer()
+                         
+    title_rev_log_sim_matrix      = compute_normalized_jaccob_sim_matrix(title_rev_log,   initial_size, final_size)
+    desc_rev_log_sim_matrix       = compute_normalized_jaccob_sim_matrix(desc_rev_log,    initial_size, final_size)
+    cr_area_top_level_sim_matrix  = compute_normalized_jaccob_sim_matrix(cr_area_top_level,initial_size, final_size)
+    title_file_name_sim_matrix    = compute_normalized_jaccob_sim_matrix(title_file_name,  initial_size, final_size)
+
+    return  title_rev_log_sim_matrix , desc_rev_log_sim_matrix , cr_area_top_level_sim_matrix, title_file_name_sim_matrix
+  
  
 """   
 temp = list()
