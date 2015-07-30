@@ -81,7 +81,7 @@ def compute_normalized_khattar_sim_matrix(string_list, initial_size, final_size)
         sim_val = calculate_normalized_ngram_and_khattar_sim(first_string, temp,initial_size, final_size)
         temp_sim_matrix.append(sim_val)
         
-        print  " first string", first_string, "  second string", temp
+        #print  " first string", first_string, "  second string", temp
         
     final_sim_matrix.append(temp_sim_matrix)    
     
