@@ -240,7 +240,7 @@ def  training():
                         precision =  (total_revids_found*100)/total_training_bugs
                         print "precsion = ", precision
                       
-                        insert_str =  "insert into "+learning_table+   " values ("+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+","+ model+","+(str)(threshold)\
+                        insert_str =  "insert into "+learning_table+   " values ("+ (str)(w1)+","+ (str)(w2)+","+(str)(w3)+","+(str)(w4)+",\'VCB\',"+(str)(threshold)\
                         +","+(str)(precision)+","+(str)(total_bugs)+","+(str)(total_revids_found)+ ")" 
         
                         #print "insert str=", insert_str
