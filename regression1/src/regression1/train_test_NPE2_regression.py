@@ -21,17 +21,20 @@ import python_utility as pu
 
 project   = "chromium"
 
-#"""
+"""
 model =  "NPE"
 w1=w2=w3=w4=1.0
 days = 30
-#"""
-
 """
-model =  "NPB"
-w1=w2=w3=w4=NOT GIVEN
-days = 30
+
 #"""
+model =  "NPB"
+w1=0.4
+w2=0.3
+w3=0.1
+w4=0.2
+days = 30
+"""
 
 #"""
 port=3307
